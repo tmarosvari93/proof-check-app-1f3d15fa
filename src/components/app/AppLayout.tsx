@@ -31,9 +31,8 @@ export function AppLayout({ role, children }: { role: keyof typeof workingAs; ch
   const s = useSession();
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (st) => st.location.pathname });
-  const dev = useRouterState({
-    select: (st) => (st.location.search as Record<string, unknown>)["dev"] === "1",
-  });
+  const search = useSearch({ strict: false }) as Record<string, unknown>;
+  const dev = search["dev"] === "1";
 
   const devSearch: Record<string, string> = dev ? { dev: "1" } : {};
   const nav = (to: string) => navigate({ to, search: devSearch });
