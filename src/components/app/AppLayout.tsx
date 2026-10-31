@@ -35,7 +35,8 @@ export function AppLayout({ role, children }: { role: keyof typeof workingAs; ch
     select: (st) => (st.location.search as Record<string, unknown>)["dev"] === "1",
   });
 
-  const nav = (to: string) => navigate({ to, search: dev ? { dev: "1" } : {} });
+  const devSearch: Record<string, string> = dev ? { dev: "1" } : {};
+  const nav = (to: string) => navigate({ to, search: devSearch });
 
   const itemClass = (active: boolean) =>
     `block w-full text-left px-3 py-2 rounded text-sm ${active ? "bg-primary text-primary-foreground" : ""}`;

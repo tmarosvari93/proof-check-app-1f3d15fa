@@ -26,7 +26,7 @@ function renderOp(op: DiffOp, i: number) {
 
 interface FindingRowProps {
   finding: CheckFinding;
-  result?: FieldResult;
+  result: FieldResult | undefined;
   decision: Decision;
   expanded: boolean;
   onToggle: () => void;
