@@ -13,6 +13,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SessionProvider } from "../state/SessionProvider";
+import { AppLayout } from "../components/app/AppLayout";
 
 function NotFoundComponent() {
   return (
@@ -82,7 +83,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "Proof Check" },
       { name: "description", content: "Packaging artwork proof checker (prototype)" },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
+      { property: "og:title", content: "Proof Check" },
       { property: "og:description", content: "Packaging artwork proof checker (prototype)" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -95,6 +96,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
+  }),
+  validateSearch: (search: Record<string, unknown>): { dev?: "1"; screen?: string } => ({
+    ...(search.dev === "1" ? { dev: "1" as const } : {}),
+    ...(typeof search.screen === "string" ? { screen: search.screen } : {}),
   }),
   shellComponent: RootShell,
   component: RootComponent,
@@ -123,7 +128,9 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <SessionProvider>
-        <Outlet />
+        <AppLayout>
+          <Outlet />
+        </AppLayout>
       </SessionProvider>
     </QueryClientProvider>
   );
