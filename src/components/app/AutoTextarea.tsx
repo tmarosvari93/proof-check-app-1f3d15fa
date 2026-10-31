@@ -1,5 +1,7 @@
-import { useEffect, useRef } from "react";
-import { Textarea, type TextareaProps } from "@/components/ui/textarea";
+import { useEffect, useRef, type TextareaHTMLAttributes } from "react";
+import { Textarea } from "@/components/ui/textarea";
+
+type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement>;
 
 /** A textarea that grows with its content. */
 export function AutoTextarea(props: TextareaProps) {
