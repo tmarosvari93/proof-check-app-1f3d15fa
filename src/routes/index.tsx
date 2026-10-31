@@ -51,7 +51,7 @@ function Home() {
 
       <div className="mt-6 grid grid-cols-4 gap-4">
         {LINK_CARDS.map((c) => (
-          <Link key={c.title} to={c.to} search={c.screen ? { screen: c.screen } : undefined} className="border rounded p-4">
+          <Link key={c.title} to={c.to} search={c.screen ? { screen: c.screen } : {}} className="border rounded p-4">
             <span className="block font-bold">{c.title}</span>
             <span className="block text-sm text-muted-foreground mt-1">{c.text}</span>
           </Link>

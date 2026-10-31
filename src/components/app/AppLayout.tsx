@@ -32,10 +32,10 @@ export function AppLayout({ role, children }: { role: keyof typeof workingAs; ch
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (st) => st.location.pathname });
   const dev = useRouterState({
-    select: (st) => (st.location.search as Record<string, unknown>).dev === "1",
+    select: (st) => (st.location.search as Record<string, unknown>)["dev"] === "1",
   });
 
-  const nav = (to: string) => navigate({ to, search: dev ? { dev: "1" } : undefined });
+  const nav = (to: string) => navigate({ to, search: dev ? { dev: "1" } : {} });
 
   const itemClass = (active: boolean) =>
     `block w-full text-left px-3 py-2 rounded text-sm ${active ? "bg-primary text-primary-foreground" : ""}`;
@@ -102,7 +102,7 @@ export function AppLayout({ role, children }: { role: keyof typeof workingAs; ch
                   className="border rounded px-2 py-0.5 text-xs"
                   onClick={() => {
                     s.jumpTo(n);
-                    void navigate({ to: stepPath[mockSession(n).step], search: { dev: "1" } });
+                    nav(stepPath[mockSession(n).step]);
                   }}
                 >
                   {n}

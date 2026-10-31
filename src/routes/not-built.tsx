@@ -3,7 +3,7 @@ import { AppLayout } from "@/components/app/AppLayout";
 
 export const Route = createFileRoute("/not-built")({
   validateSearch: (search: Record<string, unknown>) => ({
-    screen: typeof search.screen === "string" ? search.screen : undefined,
+    screen: typeof search["screen"] === "string" ? search["screen"] : undefined,
   }),
   component: NotBuilt,
   head: () => ({
