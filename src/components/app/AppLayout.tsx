@@ -34,12 +34,13 @@ export function AppLayout({ role, children }: { role: keyof typeof workingAs; ch
   // The ?dev=1 flag is read from the URL after mount: routes without a search schema
   // do not expose it through the router state.
   const [dev, setDev] = useState(false);
+  const urlDev = () => (new URLSearchParams(window.location.search).get("dev") ?? "").replaceAll('"', "");
   useEffect(() => {
-    setDev(new URLSearchParams(window.location.search).get("dev") === "1");
+    setDev(urlDev() === "1");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
-  const devSearch = (): Record<string, string> =>
-    new URLSearchParams(window.location.search).get("dev") === "1" ? { dev: "1" } : {};
+  const devSearch = (): Record<string, string> => (urlDev() === "1" ? { dev: "1" } : {});
   const nav = (to: string) => navigate({ to, search: devSearch() });
 
   const itemClass = (active: boolean) =>
