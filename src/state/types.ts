@@ -61,6 +61,8 @@ export interface UnrequestedItem {
   where?: string;
   /** Code of a spec finding about the same problem, e.g. "F5". Then it is listed once. */
   linkedTo?: string;
+  /** Spec fields whose printed text changed (set by unrequested.ts). */
+  fieldIds?: string[];
 }
 
 export type Decision = CheckFinding["decision"];
