@@ -7,6 +7,7 @@ import type { ParsedSpec } from "../core/parseSpec";
 import type { FieldResult } from "../core/compare";
 import type { CheckFinding } from "../core/findings";
 import type { SendBackItem } from "../core/sendBack";
+import type { Block } from "../core/textLayer";
 
 export type { ParsedSpec, FieldResult, CheckFinding, SendBackItem };
 
@@ -96,6 +97,12 @@ export interface Round {
   finished: boolean;
   /** ISO timestamp of Finish review. */
   finishedAt?: string;
+  /**
+   * Text blocks read from this proof and the page size. Kept only so the next round can be diffed against
+   * this one. Pages never read them. Absent on the prepared (jumpTo) states: then round 2 has no diff.
+   */
+  blocks?: Block[];
+  page?: { width: number; height: number };
 }
 
 export type Step =

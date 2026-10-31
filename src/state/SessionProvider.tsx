@@ -2,12 +2,12 @@
  * React wrapper around the pure actions in actions.ts. Pages use useSession(); they never import
  * the actions, the services or the mocks directly. Actions return an error message or undefined.
  * loadSpec and uploadProof are async (reading files takes time in the real version): await them.
- * Claude owns this file. In memory only: a page refresh starts over (known limitation 1).
+ * Claude owns this file. Step 3: loadSpec and uploadProof are real (parseSpecWorkbook, runCheck); jumpTo still uses the prepared mock states. In memory only: a page refresh starts over (known limitation 1).
  */
 import { createContext, useCallback, useContext, useMemo, useRef, useState, type ReactNode } from "react";
 import type { Edit } from "../core/sendBack";
 import * as A from "./actions";
-import { mockSession, mockRoundFor, mockSpec, type MockName } from "../mocks/mockSession";
+import { mockSession, type MockName } from "../mocks/mockSession";
 import { decisionOf, dismissalsOf, openCount, previousLines, reviewItems, type Dismissal, type PreviousLine, type ReviewItem } from "./roundLogic";
 import { emptySession, type Decision, type Round, type Session } from "./types";
 
@@ -50,7 +50,6 @@ export interface SessionApi {
 
 const Ctx = createContext<SessionApi | null>(null);
 const now = () => new Date().toISOString();
-const pause = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export function SessionProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session>(emptySession);
@@ -77,24 +76,41 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       dismissals: dismissalsOf(session.rounds),
       previousLines: previousLines(session.rounds, session.current),
       busy,
-      // MOCK until step 3: any .xlsx gives the demo spec; step 3 calls parseSpecWorkbook.
+      // Real: the spec workbook is parsed in the browser (blue cells). exceljs is loaded on demand.
       loadSpec: async (f) => {
         const bad = A.checkSpecFile(f);
         if (bad) return bad;
         setBusy(true);
-        await pause(300);
-        setBusy(false);
-        return apply((s) => A.setPendingSpec(s, mockSpec));
+        try {
+          const { parseSpecWorkbook } = await import("../core/parseSpec");
+          const spec = await parseSpecWorkbook(new Uint8Array(await f!.arrayBuffer()));
+          return apply((s) => A.setPendingSpec(s, spec));
+        } catch (e) {
+          return e instanceof Error && e.name === "SpecParseError" ? e.message : "This file is not a readable .xlsx workbook";
+        } finally {
+          setBusy(false);
+        }
       },
       createRequest: () => apply((s) => A.createRequest(s, now())),
-      // MOCK until step 3: any .pdf gives the demo result for the current round; step 3 calls runCheck.
+      // Real: runCheck reads the PDF and runs compare, diff and the send-back re-check (src/services/runCheck.ts).
       uploadProof: async (f, note) => {
         const bad = A.checkProofFile(f);
         if (bad) return bad;
+        const s0 = latest.current;
+        if (!s0.request) return "Create a request first";
         setBusy(true);
-        await pause(1200);
-        setBusy(false);
-        return apply((s) => A.addRound(s, { ...mockRoundFor(s.current, s.rounds[s.current - 2]), fileName: f!.name, designerNote: (note ?? "").trim() }));
+        try {
+          const { runCheck } = await import("../services/runCheck");
+          const round = await runCheck({
+            file: f!, spec: s0.request.spec, no: s0.current, fileName: f!.name,
+            designerNote: (note ?? "").trim(), previous: s0.rounds[s0.current - 2],
+          });
+          return apply((s) => A.addRound(s, round));
+        } catch (e) {
+          return e instanceof Error ? e.message : "This file could not be checked";
+        } finally {
+          setBusy(false);
+        }
       },
       decide: (c, d, r) => apply((s) => A.decide(s, c, d, r)),
       finishReview: () => apply((s) => A.finishReview(s, now())),
