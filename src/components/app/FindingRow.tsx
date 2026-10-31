@@ -12,7 +12,7 @@ export function FindingRow({
   onDecided,
 }: {
   finding: CheckFinding;
-  result?: FieldResult;
+  result?: FieldResult | undefined;
   decision: Decision;
   expanded: boolean;
   onToggle: () => void;

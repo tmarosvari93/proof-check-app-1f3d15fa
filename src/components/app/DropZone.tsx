@@ -13,10 +13,10 @@ export function DropZone({
   label: string;
   accept: string;
   hint: string;
-  busy?: boolean;
-  busyText?: string;
-  error?: string;
-  chosenName?: string;
+  busy?: boolean | undefined;
+  busyText?: string | undefined;
+  error?: string | undefined;
+  chosenName?: string | undefined;
   onFile: (file: File | null) => void;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);

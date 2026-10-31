@@ -98,8 +98,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
   }),
   validateSearch: (search: Record<string, unknown>): { dev?: "1"; screen?: string } => ({
-    ...(search.dev === "1" ? { dev: "1" as const } : {}),
-    ...(typeof search.screen === "string" ? { screen: search.screen } : {}),
+    ...(search["dev"] === "1" ? { dev: "1" as const } : {}),
+    ...(typeof search["screen"] === "string" ? { screen: search["screen"] } : {}),
   }),
   shellComponent: RootShell,
   component: RootComponent,

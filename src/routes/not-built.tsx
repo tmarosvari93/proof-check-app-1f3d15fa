@@ -13,6 +13,9 @@ const names: Record<string, string> = {
 };
 
 export const Route = createFileRoute("/not-built")({
+  validateSearch: (search: Record<string, unknown>): { screen?: string } => ({
+    ...(typeof search["screen"] === "string" ? { screen: search["screen"] } : {}),
+  }),
   head: () => ({
     meta: [
       { title: "Proof Check — Designed, not built" },
