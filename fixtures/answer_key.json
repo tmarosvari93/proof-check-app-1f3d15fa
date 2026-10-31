@@ -1,0 +1,1166 @@
+{
+  "product": "Mezőlak Mangós instant zabkása 400 g (fictional)",
+  "piece": "box CS-20931",
+  "spec": "SP-2026-0417 v3",
+  "spec_blue_fields": [
+    {
+      "id": "name",
+      "label": "Termék megnevezése",
+      "value": "Mangós instant zabkása szárított mangódarabokkal"
+    },
+    {
+      "id": "net_qty",
+      "label": "Nettó tömeg",
+      "value": "400 g"
+    },
+    {
+      "id": "servings",
+      "label": "Adagok száma",
+      "value": "A csomag 8 adagot tartalmaz."
+    },
+    {
+      "id": "ingredients",
+      "label": "Összetevők",
+      "value": "ZABPEHELY (68%), cukor, szárított mangó (12%), TELJES TEJPOR, rizsliszt, természetes aroma, só."
+    },
+    {
+      "id": "may_contain",
+      "label": "Keresztszennyeződés",
+      "value": "Nyomokban szóját és diófélét tartalmazhat."
+    },
+    {
+      "id": "energy",
+      "label": "Energia",
+      "value": "1602 kJ / 380 kcal"
+    },
+    {
+      "id": "fat",
+      "label": "Zsír",
+      "value": "6,8 g"
+    },
+    {
+      "id": "saturates",
+      "label": "ebből telített zsírsavak",
+      "value": "2,1 g"
+    },
+    {
+      "id": "carbs",
+      "label": "Szénhidrát",
+      "value": "64,5 g"
+    },
+    {
+      "id": "sugars",
+      "label": "ebből cukrok",
+      "value": "22,4 g"
+    },
+    {
+      "id": "fibre",
+      "label": "Rost",
+      "value": "7,9 g"
+    },
+    {
+      "id": "protein",
+      "label": "Fehérje",
+      "value": "11,2 g"
+    },
+    {
+      "id": "salt",
+      "label": "Só",
+      "value": "0,18 g"
+    },
+    {
+      "id": "per_serving",
+      "label": "Energia adagonként (50 g)",
+      "value": "801 kJ / 190 kcal"
+    },
+    {
+      "id": "preparation",
+      "label": "Felhasználási javaslat",
+      "value": "50 g zabkásához adjon 150 ml forró tejet vagy vizet, keverje el, és hagyja állni 2 percig."
+    },
+    {
+      "id": "storage",
+      "label": "Tárolás",
+      "value": "Száraz, hűvös helyen, közvetlen napfénytől védve tárolandó. Felbontás után légmentesen zárva tartandó."
+    },
+    {
+      "id": "best_before",
+      "label": "Minőségmegőrzés jelölése",
+      "value": "Minőségét megőrzi: a jelölt mezőben feltüntetett napig."
+    },
+    {
+      "id": "manufacturer",
+      "label": "Gyártó",
+      "value": "Gyártja: Mezőlak Élelmiszer Kft., 9999 Mintaváros, Malom utca 7."
+    },
+    {
+      "id": "origin",
+      "label": "Előállítás helye",
+      "value": "Magyarországon előállítva."
+    }
+  ],
+  "spec_black_fields_count": 12,
+  "case_1_round1_v1_vs_spec": {
+    "proof": "proof_v1.pdf (and proof_v1_flat.pdf)",
+    "expected_findings": [
+      {
+        "field": "name",
+        "verdict": "mismatch",
+        "spec": "Mangós instant zabkása szárított mangódarabokkal",
+        "proof": "Sárgabarackos instant zabkása szárított mangódarabokkal",
+        "note": "leftover flavour from reused design"
+      },
+      {
+        "field": "carbs",
+        "verdict": "mismatch",
+        "spec": "64,5 g",
+        "proof": "46,5 g",
+        "note": "swapped digits"
+      },
+      {
+        "field": "salt",
+        "verdict": "mismatch",
+        "spec": "0,18 g",
+        "proof": "0,18 mg",
+        "note": "unit g vs mg"
+      },
+      {
+        "field": "servings",
+        "verdict": "mismatch",
+        "spec": "A csomag 8 adagot tartalmaz.",
+        "proof": "A csomag 10 adagot tartalmaz."
+      },
+      {
+        "field": "may_contain",
+        "verdict": "missing",
+        "spec": "Nyomokban szóját és diófélét tartalmazhat.",
+        "proof": null
+      },
+      {
+        "field": "ingredients",
+        "verdict": "allergen_not_emphasised",
+        "word": "TELJES TEJPOR",
+        "note": "text matches case-insensitively; emphasis missing"
+      }
+    ],
+    "expected_matches": [
+      "net_qty",
+      "ingredients",
+      "energy",
+      "fat",
+      "saturates",
+      "sugars",
+      "fibre",
+      "protein",
+      "per_serving",
+      "preparation",
+      "storage",
+      "best_before",
+      "manufacturer",
+      "origin"
+    ],
+    "not_in_mvp_scope": [
+      "claim 'Erősíti az immunrendszert!' is an unauthorised-looking health claim; MVP does not check claims, a reviewer should"
+    ]
+  },
+  "case_2_round2_v2_vs_v1": {
+    "proof": "proof_v2.pdf (and proof_v2_flat.pdf)",
+    "previous": "proof_v1_commented.pdf",
+    "comments": [
+      {
+        "id": "C1",
+        "expected": "done"
+      },
+      {
+        "id": "C2",
+        "expected": "done"
+      },
+      {
+        "id": "C3",
+        "expected": "done"
+      },
+      {
+        "id": "C4",
+        "expected": "not_done",
+        "note": "tejpor still not emphasised"
+      },
+      {
+        "id": "C5",
+        "expected": "done"
+      },
+      {
+        "id": "C6",
+        "expected": "done"
+      }
+    ],
+    "expected_unrequested_changes": [
+      {
+        "block": "preparation",
+        "before": "50 g zabkásához adjon 150 ml forró tejet vagy vizet, keverje el, és hagyja állni 2 percig.",
+        "after": "50 g zabkásához adjon 200 ml forró tejet vagy vizet, keverje el, és hagyja állni 2 percig.",
+        "note": "150 ml -> 200 ml; also a spec mismatch"
+      },
+      {
+        "block": "claim_2",
+        "before": null,
+        "after": "Hozzáadott cukor nélkül",
+        "note": "new claim added; contradicts 'cukor' in ingredients"
+      }
+    ],
+    "expected_moved_not_changed": [
+      "preparation (panel only, content changed separately)",
+      "storage",
+      "best_before",
+      "manufacturer",
+      "origin"
+    ],
+    "expected_spec_findings_v2": [
+      {
+        "field": "preparation",
+        "verdict": "mismatch",
+        "spec": "50 g zabkásához adjon 150 ml forró tejet vagy vizet, keverje el, és hagyja állni 2 percig.",
+        "proof": "50 g zabkásához adjon 200 ml forró tejet vagy vizet, keverje el, és hagyja állni 2 percig."
+      },
+      {
+        "field": "ingredients",
+        "verdict": "allergen_not_emphasised",
+        "word": "TELJES TEJPOR"
+      }
+    ]
+  },
+  "case_3_round3_v3_vs_v2": {
+    "proof": "proof_v3.pdf (and proof_v3_flat.pdf)",
+    "previous": "proof_v2.pdf",
+    "comments": [
+      {
+        "id": "C1",
+        "expected": "done"
+      },
+      {
+        "id": "C2",
+        "expected": "done"
+      },
+      {
+        "id": "C3",
+        "expected": "done"
+      },
+      {
+        "id": "C4",
+        "expected": "done"
+      },
+      {
+        "id": "C5",
+        "expected": "done"
+      },
+      {
+        "id": "C6",
+        "expected": "done"
+      }
+    ],
+    "expected_unrequested_changes": [],
+    "expected_spec_findings_v3": [],
+    "note": "[assumption] v3 reverts preparation to 150 ml and removes claim_2. Against v2 the diff sees both, but the round 2 send-back lines ask for exactly these reverts, so they count as requested."
+  },
+  "reviewer_comments_v1": [
+    {
+      "id": "C1",
+      "anchor_block": "name",
+      "author": "Ellenőr 1 (fiktív)",
+      "text": "A termék mangós, nem sárgabarackos. Kérjük a megnevezést a specifikáció szerint javítani."
+    },
+    {
+      "id": "C2",
+      "anchor_block": "nut_carbs",
+      "author": "Ellenőr 1 (fiktív)",
+      "text": "Szénhidrát: a specifikáció szerint 64,5 g (a terven 46,5 g szerepel)."
+    },
+    {
+      "id": "C3",
+      "anchor_block": "nut_salt",
+      "author": "Ellenőr 2 (fiktív)",
+      "text": "Só: 0,18 g, nem mg. Kérjük a mértékegységet javítani."
+    },
+    {
+      "id": "C4",
+      "anchor_block": "ingredients",
+      "author": "Ellenőr 2 (fiktív)",
+      "text": "Az allergén TELJES TEJPOR nincs kiemelve. Kérjük félkövérrel kiemelni, mint a zabpelyhet."
+    },
+    {
+      "id": "C5",
+      "anchor_block": "servings",
+      "author": "Ellenőr 1 (fiktív)",
+      "text": "A csomag 8 adagot tartalmaz (400 g / 50 g), nem 10-et."
+    },
+    {
+      "id": "C6",
+      "anchor_block": "ingredients",
+      "author": "Ellenőr 2 (fiktív)",
+      "text": "Hiányzik a keresztszennyeződési mondat: 'Nyomokban szóját és diófélét tartalmazhat.' Az összetevők után kérjük feltüntetni."
+    }
+  ],
+  "blocks_v1": [
+    {
+      "id": "brand",
+      "panel": "front",
+      "kind": "brand",
+      "field": null,
+      "text": "MEZŐLAK",
+      "bbox_pt": [
+        246.6,
+        713.2,
+        416.7,
+        733.2
+      ]
+    },
+    {
+      "id": "name",
+      "panel": "front",
+      "kind": "name",
+      "field": "name",
+      "text": "Sárgabarackos instant zabkása szárított mangódarabokkal",
+      "bbox_pt": [
+        246.6,
+        651.5,
+        575.4,
+        693.5
+      ]
+    },
+    {
+      "id": "claim_1",
+      "panel": "front",
+      "kind": "claim",
+      "field": null,
+      "text": "Erősíti az immunrendszert!",
+      "bbox_pt": [
+        246.6,
+        289.1,
+        399.7,
+        326.0
+      ]
+    },
+    {
+      "id": "net_front",
+      "panel": "front",
+      "kind": "net_qty",
+      "field": "net_qty",
+      "text": "400 g",
+      "bbox_pt": [
+        490.4,
+        143.4,
+        575.4,
+        161.4
+      ]
+    },
+    {
+      "id": "name_back",
+      "panel": "back",
+      "kind": "name",
+      "field": "name",
+      "text": "Sárgabarackos instant zabkása szárított mangódarabokkal",
+      "bbox_pt": [
+        841.9,
+        719.8,
+        1170.7,
+        732.8
+      ]
+    },
+    {
+      "id": "ingredients",
+      "panel": "back",
+      "kind": "ingredients",
+      "field": "ingredients",
+      "text": "Összetevők: ZABPEHELY (68%), cukor, szárított mangó (12%), teljes tejpor, rizsliszt, természetes aroma, só.",
+      "bbox_pt": [
+        841.9,
+        683.5,
+        1170.7,
+        702.5
+      ]
+    },
+    {
+      "id": "nut_energy",
+      "panel": "back",
+      "kind": "nutrition_row",
+      "field": "energy",
+      "text": "Energia 1602 kJ / 380 kcal",
+      "bbox_pt": [
+        841.9,
+        633.1,
+        1170.7,
+        644.1
+      ]
+    },
+    {
+      "id": "nut_fat",
+      "panel": "back",
+      "kind": "nutrition_row",
+      "field": "fat",
+      "text": "Zsír 6,8 g",
+      "bbox_pt": [
+        841.9,
+        622.1,
+        1170.7,
+        633.1
+      ]
+    },
+    {
+      "id": "nut_saturates",
+      "panel": "back",
+      "kind": "nutrition_row",
+      "field": "saturates",
+      "text": "ebből telített zsírsavak 2,1 g",
+      "bbox_pt": [
+        841.9,
+        611.1,
+        1170.7,
+        622.1
+      ]
+    },
+    {
+      "id": "nut_carbs",
+      "panel": "back",
+      "kind": "nutrition_row",
+      "field": "carbs",
+      "text": "Szénhidrát 46,5 g",
+      "bbox_pt": [
+        841.9,
+        600.1,
+        1170.7,
+        611.1
+      ]
+    },
+    {
+      "id": "nut_sugars",
+      "panel": "back",
+      "kind": "nutrition_row",
+      "field": "sugars",
+      "text": "ebből cukrok 22,4 g",
+      "bbox_pt": [
+        841.9,
+        589.1,
+        1170.7,
+        600.1
+      ]
+    },
+    {
+      "id": "nut_fibre",
+      "panel": "back",
+      "kind": "nutrition_row",
+      "field": "fibre",
+      "text": "Rost 7,9 g",
+      "bbox_pt": [
+        841.9,
+        578.1,
+        1170.7,
+        589.1
+      ]
+    },
+    {
+      "id": "nut_protein",
+      "panel": "back",
+      "kind": "nutrition_row",
+      "field": "protein",
+      "text": "Fehérje 11,2 g",
+      "bbox_pt": [
+        841.9,
+        567.1,
+        1170.7,
+        578.1
+      ]
+    },
+    {
+      "id": "nut_salt",
+      "panel": "back",
+      "kind": "nutrition_row",
+      "field": "salt",
+      "text": "Só 0,18 mg",
+      "bbox_pt": [
+        841.9,
+        556.1,
+        1170.7,
+        567.1
+      ]
+    },
+    {
+      "id": "per_serving",
+      "panel": "back",
+      "kind": "nutrition_row",
+      "field": "per_serving",
+      "text": "Energia adagonként (50 g): 801 kJ / 190 kcal",
+      "bbox_pt": [
+        841.9,
+        523.6,
+        1170.7,
+        533.1
+      ]
+    },
+    {
+      "id": "servings",
+      "panel": "back",
+      "kind": "servings",
+      "field": "servings",
+      "text": "A csomag 10 adagot tartalmaz.",
+      "bbox_pt": [
+        841.9,
+        514.1,
+        1170.7,
+        523.6
+      ]
+    },
+    {
+      "id": "preparation",
+      "panel": "side_a",
+      "kind": "preparation",
+      "field": "preparation",
+      "text": "50 g zabkásához adjon 150 ml forró tejet vagy vizet, keverje el, és hagyja állni 2 percig.",
+      "bbox_pt": [
+        19.8,
+        689.2,
+        206.9,
+        708.2
+      ]
+    },
+    {
+      "id": "storage",
+      "panel": "side_a",
+      "kind": "storage",
+      "field": "storage",
+      "text": "Száraz, hűvös helyen, közvetlen napfénytől védve tárolandó. Felbontás után légmentesen zárva tartandó.",
+      "bbox_pt": [
+        19.8,
+        621.0,
+        206.9,
+        649.5
+      ]
+    },
+    {
+      "id": "best_before",
+      "panel": "side_b",
+      "kind": "best_before",
+      "field": "best_before",
+      "text": "Minőségét megőrzi: a jelölt mezőben feltüntetett napig.",
+      "bbox_pt": [
+        615.1,
+        706.2,
+        802.2,
+        725.2
+      ]
+    },
+    {
+      "id": "manufacturer",
+      "panel": "side_b",
+      "kind": "manufacturer",
+      "field": "manufacturer",
+      "text": "Gyártja: Mezőlak Élelmiszer Kft., 9999 Mintaváros, Malom utca 7.",
+      "bbox_pt": [
+        615.1,
+        613.5,
+        802.2,
+        632.5
+      ]
+    },
+    {
+      "id": "origin",
+      "panel": "side_b",
+      "kind": "origin",
+      "field": "origin",
+      "text": "Magyarországon előállítva.",
+      "bbox_pt": [
+        615.1,
+        592.6,
+        802.2,
+        602.1
+      ]
+    }
+  ],
+  "blocks_v2": [
+    {
+      "id": "brand",
+      "panel": "front",
+      "kind": "brand",
+      "field": null,
+      "text": "MEZŐLAK",
+      "bbox_pt": [
+        246.6,
+        713.2,
+        416.7,
+        733.2
+      ]
+    },
+    {
+      "id": "name",
+      "panel": "front",
+      "kind": "name",
+      "field": "name",
+      "text": "Mangós instant zabkása szárított mangódarabokkal",
+      "bbox_pt": [
+        246.6,
+        651.5,
+        575.4,
+        693.5
+      ]
+    },
+    {
+      "id": "claim_1",
+      "panel": "front",
+      "kind": "claim",
+      "field": null,
+      "text": "Erősíti az immunrendszert!",
+      "bbox_pt": [
+        246.6,
+        289.1,
+        399.7,
+        326.0
+      ]
+    },
+    {
+      "id": "claim_2",
+      "panel": "front",
+      "kind": "claim",
+      "field": null,
+      "text": "Hozzáadott cukor nélkül",
+      "bbox_pt": [
+        411.0,
+        289.1,
+        564.1,
+        326.0
+      ]
+    },
+    {
+      "id": "net_front",
+      "panel": "front",
+      "kind": "net_qty",
+      "field": "net_qty",
+      "text": "400 g",
+      "bbox_pt": [
+        490.4,
+        143.4,
+        575.4,
+        161.4
+      ]
+    },
+    {
+      "id": "name_back",
+      "panel": "back",
+      "kind": "name",
+      "field": "name",
+      "text": "Mangós instant zabkása szárított mangódarabokkal",
+      "bbox_pt": [
+        841.9,
+        719.8,
+        1170.7,
+        732.8
+      ]
+    },
+    {
+      "id": "ingredients",
+      "panel": "back",
+      "kind": "ingredients",
+      "field": "ingredients",
+      "text": "Összetevők: ZABPEHELY (68%), cukor, szárított mangó (12%), teljes tejpor, rizsliszt, természetes aroma, só.",
+      "bbox_pt": [
+        841.9,
+        683.5,
+        1170.7,
+        702.5
+      ]
+    },
+    {
+      "id": "may_contain",
+      "panel": "back",
+      "kind": "allergen_statement",
+      "field": "may_contain",
+      "text": "Nyomokban szóját és diófélét tartalmazhat.",
+      "bbox_pt": [
+        841.9,
+        674.0,
+        1170.7,
+        683.5
+      ]
+    },
+    {
+      "id": "nut_energy",
+      "panel": "back",
+      "kind": "nutrition_row",
+      "field": "energy",
+      "text": "Energia 1602 kJ / 380 kcal",
+      "bbox_pt": [
+        841.9,
+        623.6,
+        1170.7,
+        634.6
+      ]
+    },
+    {
+      "id": "nut_fat",
+      "panel": "back",
+      "kind": "nutrition_row",
+      "field": "fat",
+      "text": "Zsír 6,8 g",
+      "bbox_pt": [
+        841.9,
+        612.6,
+        1170.7,
+        623.6
+      ]
+    },
+    {
+      "id": "nut_saturates",
+      "panel": "back",
+      "kind": "nutrition_row",
+      "field": "saturates",
+      "text": "ebből telített zsírsavak 2,1 g",
+      "bbox_pt": [
+        841.9,
+        601.6,
+        1170.7,
+        612.6
+      ]
+    },
+    {
+      "id": "nut_carbs",
+      "panel": "back",
+      "kind": "nutrition_row",
+      "field": "carbs",
+      "text": "Szénhidrát 64,5 g",
+      "bbox_pt": [
+        841.9,
+        590.6,
+        1170.7,
+        601.6
+      ]
+    },
+    {
+      "id": "nut_sugars",
+      "panel": "back",
+      "kind": "nutrition_row",
+      "field": "sugars",
+      "text": "ebből cukrok 22,4 g",
+      "bbox_pt": [
+        841.9,
+        579.6,
+        1170.7,
+        590.6
+      ]
+    },
+    {
+      "id": "nut_fibre",
+      "panel": "back",
+      "kind": "nutrition_row",
+      "field": "fibre",
+      "text": "Rost 7,9 g",
+      "bbox_pt": [
+        841.9,
+        568.6,
+        1170.7,
+        579.6
+      ]
+    },
+    {
+      "id": "nut_protein",
+      "panel": "back",
+      "kind": "nutrition_row",
+      "field": "protein",
+      "text": "Fehérje 11,2 g",
+      "bbox_pt": [
+        841.9,
+        557.6,
+        1170.7,
+        568.6
+      ]
+    },
+    {
+      "id": "nut_salt",
+      "panel": "back",
+      "kind": "nutrition_row",
+      "field": "salt",
+      "text": "Só 0,18 g",
+      "bbox_pt": [
+        841.9,
+        546.6,
+        1170.7,
+        557.6
+      ]
+    },
+    {
+      "id": "per_serving",
+      "panel": "back",
+      "kind": "nutrition_row",
+      "field": "per_serving",
+      "text": "Energia adagonként (50 g): 801 kJ / 190 kcal",
+      "bbox_pt": [
+        841.9,
+        514.1,
+        1170.7,
+        523.6
+      ]
+    },
+    {
+      "id": "servings",
+      "panel": "back",
+      "kind": "servings",
+      "field": "servings",
+      "text": "A csomag 8 adagot tartalmaz.",
+      "bbox_pt": [
+        841.9,
+        504.6,
+        1170.7,
+        514.1
+      ]
+    },
+    {
+      "id": "preparation",
+      "panel": "side_a",
+      "kind": "preparation",
+      "field": "preparation",
+      "text": "50 g zabkásához adjon 200 ml forró tejet vagy vizet, keverje el, és hagyja állni 2 percig.",
+      "bbox_pt": [
+        615.1,
+        689.2,
+        802.2,
+        708.2
+      ]
+    },
+    {
+      "id": "storage",
+      "panel": "side_a",
+      "kind": "storage",
+      "field": "storage",
+      "text": "Száraz, hűvös helyen, közvetlen napfénytől védve tárolandó. Felbontás után légmentesen zárva tartandó.",
+      "bbox_pt": [
+        615.1,
+        621.0,
+        802.2,
+        649.5
+      ]
+    },
+    {
+      "id": "best_before",
+      "panel": "side_b",
+      "kind": "best_before",
+      "field": "best_before",
+      "text": "Minőségét megőrzi: a jelölt mezőben feltüntetett napig.",
+      "bbox_pt": [
+        19.8,
+        706.2,
+        206.9,
+        725.2
+      ]
+    },
+    {
+      "id": "manufacturer",
+      "panel": "side_b",
+      "kind": "manufacturer",
+      "field": "manufacturer",
+      "text": "Gyártja: Mezőlak Élelmiszer Kft., 9999 Mintaváros, Malom utca 7.",
+      "bbox_pt": [
+        19.8,
+        613.5,
+        206.9,
+        632.5
+      ]
+    },
+    {
+      "id": "origin",
+      "panel": "side_b",
+      "kind": "origin",
+      "field": "origin",
+      "text": "Magyarországon előállítva.",
+      "bbox_pt": [
+        19.8,
+        592.6,
+        206.9,
+        602.1
+      ]
+    }
+  ],
+  "blocks_v3": [
+    {
+      "id": "brand",
+      "panel": "front",
+      "kind": "brand",
+      "field": null,
+      "text": "MEZŐLAK",
+      "bbox_pt": [
+        246.6,
+        713.2,
+        416.7,
+        733.2
+      ]
+    },
+    {
+      "id": "name",
+      "panel": "front",
+      "kind": "name",
+      "field": "name",
+      "text": "Mangós instant zabkása szárított mangódarabokkal",
+      "bbox_pt": [
+        246.6,
+        651.5,
+        575.4,
+        693.5
+      ]
+    },
+    {
+      "id": "claim_1",
+      "panel": "front",
+      "kind": "claim",
+      "field": null,
+      "text": "Erősíti az immunrendszert!",
+      "bbox_pt": [
+        246.6,
+        289.1,
+        399.7,
+        326.0
+      ]
+    },
+    {
+      "id": "net_front",
+      "panel": "front",
+      "kind": "net_qty",
+      "field": "net_qty",
+      "text": "400 g",
+      "bbox_pt": [
+        490.4,
+        143.4,
+        575.4,
+        161.4
+      ]
+    },
+    {
+      "id": "name_back",
+      "panel": "back",
+      "kind": "name",
+      "field": "name",
+      "text": "Mangós instant zabkása szárított mangódarabokkal",
+      "bbox_pt": [
+        841.9,
+        719.8,
+        1170.7,
+        732.8
+      ]
+    },
+    {
+      "id": "ingredients",
+      "panel": "back",
+      "kind": "ingredients",
+      "field": "ingredients",
+      "text": "Összetevők: ZABPEHELY (68%), cukor, szárított mangó (12%), TELJES TEJPOR, rizsliszt, természetes aroma, só.",
+      "bbox_pt": [
+        841.9,
+        683.5,
+        1170.7,
+        702.5
+      ]
+    },
+    {
+      "id": "may_contain",
+      "panel": "back",
+      "kind": "allergen_statement",
+      "field": "may_contain",
+      "text": "Nyomokban szóját és diófélét tartalmazhat.",
+      "bbox_pt": [
+        841.9,
+        674.0,
+        1170.7,
+        683.5
+      ]
+    },
+    {
+      "id": "nut_energy",
+      "panel": "back",
+      "kind": "nutrition_row",
+      "field": "energy",
+      "text": "Energia 1602 kJ / 380 kcal",
+      "bbox_pt": [
+        841.9,
+        623.6,
+        1170.7,
+        634.6
+      ]
+    },
+    {
+      "id": "nut_fat",
+      "panel": "back",
+      "kind": "nutrition_row",
+      "field": "fat",
+      "text": "Zsír 6,8 g",
+      "bbox_pt": [
+        841.9,
+        612.6,
+        1170.7,
+        623.6
+      ]
+    },
+    {
+      "id": "nut_saturates",
+      "panel": "back",
+      "kind": "nutrition_row",
+      "field": "saturates",
+      "text": "ebből telített zsírsavak 2,1 g",
+      "bbox_pt": [
+        841.9,
+        601.6,
+        1170.7,
+        612.6
+      ]
+    },
+    {
+      "id": "nut_carbs",
+      "panel": "back",
+      "kind": "nutrition_row",
+      "field": "carbs",
+      "text": "Szénhidrát 64,5 g",
+      "bbox_pt": [
+        841.9,
+        590.6,
+        1170.7,
+        601.6
+      ]
+    },
+    {
+      "id": "nut_sugars",
+      "panel": "back",
+      "kind": "nutrition_row",
+      "field": "sugars",
+      "text": "ebből cukrok 22,4 g",
+      "bbox_pt": [
+        841.9,
+        579.6,
+        1170.7,
+        590.6
+      ]
+    },
+    {
+      "id": "nut_fibre",
+      "panel": "back",
+      "kind": "nutrition_row",
+      "field": "fibre",
+      "text": "Rost 7,9 g",
+      "bbox_pt": [
+        841.9,
+        568.6,
+        1170.7,
+        579.6
+      ]
+    },
+    {
+      "id": "nut_protein",
+      "panel": "back",
+      "kind": "nutrition_row",
+      "field": "protein",
+      "text": "Fehérje 11,2 g",
+      "bbox_pt": [
+        841.9,
+        557.6,
+        1170.7,
+        568.6
+      ]
+    },
+    {
+      "id": "nut_salt",
+      "panel": "back",
+      "kind": "nutrition_row",
+      "field": "salt",
+      "text": "Só 0,18 g",
+      "bbox_pt": [
+        841.9,
+        546.6,
+        1170.7,
+        557.6
+      ]
+    },
+    {
+      "id": "per_serving",
+      "panel": "back",
+      "kind": "nutrition_row",
+      "field": "per_serving",
+      "text": "Energia adagonként (50 g): 801 kJ / 190 kcal",
+      "bbox_pt": [
+        841.9,
+        514.1,
+        1170.7,
+        523.6
+      ]
+    },
+    {
+      "id": "servings",
+      "panel": "back",
+      "kind": "servings",
+      "field": "servings",
+      "text": "A csomag 8 adagot tartalmaz.",
+      "bbox_pt": [
+        841.9,
+        504.6,
+        1170.7,
+        514.1
+      ]
+    },
+    {
+      "id": "preparation",
+      "panel": "side_a",
+      "kind": "preparation",
+      "field": "preparation",
+      "text": "50 g zabkásához adjon 150 ml forró tejet vagy vizet, keverje el, és hagyja állni 2 percig.",
+      "bbox_pt": [
+        615.1,
+        689.2,
+        802.2,
+        708.2
+      ]
+    },
+    {
+      "id": "storage",
+      "panel": "side_a",
+      "kind": "storage",
+      "field": "storage",
+      "text": "Száraz, hűvös helyen, közvetlen napfénytől védve tárolandó. Felbontás után légmentesen zárva tartandó.",
+      "bbox_pt": [
+        615.1,
+        621.0,
+        802.2,
+        649.5
+      ]
+    },
+    {
+      "id": "best_before",
+      "panel": "side_b",
+      "kind": "best_before",
+      "field": "best_before",
+      "text": "Minőségét megőrzi: a jelölt mezőben feltüntetett napig.",
+      "bbox_pt": [
+        19.8,
+        706.2,
+        206.9,
+        725.2
+      ]
+    },
+    {
+      "id": "manufacturer",
+      "panel": "side_b",
+      "kind": "manufacturer",
+      "field": "manufacturer",
+      "text": "Gyártja: Mezőlak Élelmiszer Kft., 9999 Mintaváros, Malom utca 7.",
+      "bbox_pt": [
+        19.8,
+        613.5,
+        206.9,
+        632.5
+      ]
+    },
+    {
+      "id": "origin",
+      "panel": "side_b",
+      "kind": "origin",
+      "field": "origin",
+      "text": "Magyarországon előállítva.",
+      "bbox_pt": [
+        19.8,
+        592.6,
+        206.9,
+        602.1
+      ]
+    }
+  ]
+}
