@@ -1,5 +1,5 @@
-import { Link, useLocation, useNavigate, useSearch } from "@tanstack/react-router";
-import { useEffect, useRef, type ReactNode } from "react";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useSession } from "@/state/SessionProvider";
 import { workingAs } from "@/state/demo";
 import { stepPath } from "@/state/labels";
@@ -52,8 +52,10 @@ const moreScreens = [
 export function AppLayout({ children }: { children: ReactNode }) {
   const s = useSession();
   const { pathname } = useLocation();
-  const search = useSearch({ strict: false }) as { dev?: string };
-  const dev = search.dev === "1";
+  const [dev, setDev] = useState(false);
+  useEffect(() => {
+    setDev(new URLSearchParams(window.location.search).get("dev") === "1");
+  }, [pathname]);
   const navigate = useNavigate();
   const pendingJump = useRef(false);
 
