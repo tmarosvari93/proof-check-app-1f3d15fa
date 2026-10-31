@@ -10,33 +10,128 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as Checker2RouteImport } from './routes/checker-2'
+import { Route as LeadRouteImport } from './routes/lead'
+import { Route as NewRouteImport } from './routes/new'
+import { Route as NotBuiltRouteImport } from './routes/not-built'
+import { Route as ReviewRouteImport } from './routes/review'
+import { Route as SendBackRouteImport } from './routes/send-back'
+import { Route as UploadRouteImport } from './routes/upload'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const Checker2Route = Checker2RouteImport.update({
+  id: '/checker-2',
+  path: '/checker-2',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LeadRoute = LeadRouteImport.update({
+  id: '/lead',
+  path: '/lead',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewRoute = NewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotBuiltRoute = NotBuiltRouteImport.update({
+  id: '/not-built',
+  path: '/not-built',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReviewRoute = ReviewRouteImport.update({
+  id: '/review',
+  path: '/review',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SendBackRoute = SendBackRouteImport.update({
+  id: '/send-back',
+  path: '/send-back',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UploadRoute = UploadRouteImport.update({
+  id: '/upload',
+  path: '/upload',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/checker-2': typeof Checker2Route
+  '/lead': typeof LeadRoute
+  '/new': typeof NewRoute
+  '/not-built': typeof NotBuiltRoute
+  '/review': typeof ReviewRoute
+  '/send-back': typeof SendBackRoute
+  '/upload': typeof UploadRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/checker-2': typeof Checker2Route
+  '/lead': typeof LeadRoute
+  '/new': typeof NewRoute
+  '/not-built': typeof NotBuiltRoute
+  '/review': typeof ReviewRoute
+  '/send-back': typeof SendBackRoute
+  '/upload': typeof UploadRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/checker-2': typeof Checker2Route
+  '/lead': typeof LeadRoute
+  '/new': typeof NewRoute
+  '/not-built': typeof NotBuiltRoute
+  '/review': typeof ReviewRoute
+  '/send-back': typeof SendBackRoute
+  '/upload': typeof UploadRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/checker-2'
+    | '/lead'
+    | '/new'
+    | '/not-built'
+    | '/review'
+    | '/send-back'
+    | '/upload'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/checker-2'
+    | '/lead'
+    | '/new'
+    | '/not-built'
+    | '/review'
+    | '/send-back'
+    | '/upload'
+  id:
+    | '__root__'
+    | '/'
+    | '/checker-2'
+    | '/lead'
+    | '/new'
+    | '/not-built'
+    | '/review'
+    | '/send-back'
+    | '/upload'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  Checker2Route: typeof Checker2Route
+  LeadRoute: typeof LeadRoute
+  NewRoute: typeof NewRoute
+  NotBuiltRoute: typeof NotBuiltRoute
+  ReviewRoute: typeof ReviewRoute
+  SendBackRoute: typeof SendBackRoute
+  UploadRoute: typeof UploadRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +143,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/checker-2': {
+      id: '/checker-2'
+      path: '/checker-2'
+      fullPath: '/checker-2'
+      preLoaderRoute: typeof Checker2RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lead': {
+      id: '/lead'
+      path: '/lead'
+      fullPath: '/lead'
+      preLoaderRoute: typeof LeadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/new': {
+      id: '/new'
+      path: '/new'
+      fullPath: '/new'
+      preLoaderRoute: typeof NewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/not-built': {
+      id: '/not-built'
+      path: '/not-built'
+      fullPath: '/not-built'
+      preLoaderRoute: typeof NotBuiltRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/review': {
+      id: '/review'
+      path: '/review'
+      fullPath: '/review'
+      preLoaderRoute: typeof ReviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/send-back': {
+      id: '/send-back'
+      path: '/send-back'
+      fullPath: '/send-back'
+      preLoaderRoute: typeof SendBackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/upload': {
+      id: '/upload'
+      path: '/upload'
+      fullPath: '/upload'
+      preLoaderRoute: typeof UploadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  Checker2Route: Checker2Route,
+  LeadRoute: LeadRoute,
+  NewRoute: NewRoute,
+  NotBuiltRoute: NotBuiltRoute,
+  ReviewRoute: ReviewRoute,
+  SendBackRoute: SendBackRoute,
+  UploadRoute: UploadRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
