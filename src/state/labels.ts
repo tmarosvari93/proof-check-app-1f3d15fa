@@ -44,6 +44,11 @@ export const readBanner: Record<ReadMode, string> = {
   failed: "This proof could not be read. Every field shows Could not read.",
 };
 
+export const diffUnavailableBanner = {
+  no_previous_blocks: "Not compared with the previous round: its content was not stored. Earlier requests were re-checked, but changes nobody asked for are not shown. Check this proof against the last one by hand.",
+  read_failed: "Not compared with the previous round: this proof's content could not be read. Changes nobody asked for are not shown. Check this proof against the last one by hand.",
+} as const;
+
 export const lowResolutionBanner =
   "Low resolution (under 100 dpi): numbers and units are shown as Could not read, because the AI can misread them at this size.";
 

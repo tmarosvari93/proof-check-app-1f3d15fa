@@ -133,11 +133,17 @@ export interface RoundInput {
   /** This round's spec comparison (compareAll) and its findings (toFindings). */
   results: FieldResult[];
   findings: Pick<CheckFinding, "code" | "fieldId">[];
+  /** Share of the page a block must shift to count as moved. AI-read blocks report rough centres: use more (0.08, spike). */
+  moveThreshold?: number | undefined;
 }
 
 export function compareRounds(input: RoundInput) {
   const headings = input.fields.map((f) => f.label);
-  const { items, unchanged } = diffBlocks(input.previous, input.current, { page: input.page, headings });
+  const { items, unchanged } = diffBlocks(input.previous, input.current, {
+    page: input.page,
+    headings,
+    ...(input.moveThreshold !== undefined ? { moveThreshold: input.moveThreshold } : {}),
+  });
   const prevMap = fieldMap(input.fields, input.previous);
   const curMap = fieldMap(input.fields, input.current);
   const labels = Object.fromEntries(input.fields.map((f) => [f.id, f.label]));

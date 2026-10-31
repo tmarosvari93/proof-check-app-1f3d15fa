@@ -103,6 +103,12 @@ export interface Round {
    */
   blocks?: Block[];
   page?: { width: number; height: number };
+  /**
+   * Round 2 and later: why this round was NOT compared with the previous one. Then there is no diff and the
+   * page must say so, never "no changes". no_previous_blocks: the previous round has no stored blocks (a prepared
+   * demo state, or its AI block read failed). read_failed: this proof's blocks could not be read.
+   */
+  diffUnavailable?: "no_previous_blocks" | "read_failed";
 }
 
 export type Step =

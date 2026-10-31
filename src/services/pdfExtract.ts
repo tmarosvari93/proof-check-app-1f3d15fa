@@ -77,3 +77,26 @@ export async function extractPageText(page: PdfPageLike, setFontOp: number): Pro
   }
   return { width: vp.width, height: vp.height, items, fonts, fontNamesRead };
 }
+
+/**
+ * Width in pixels of the largest image painted on the page, or 0 when there is none.
+ * A flat proof is one image over the whole page, so this gives its real resolution (effectiveDpi).
+ * `ops` is pdfjs.OPS. Painted-image operator arguments: [objectId, width, height], or [{ width }] for inline images.
+ */
+export async function embeddedImageWidth(
+  page: Pick<PdfPageLike, "getOperatorList">,
+  ops: { paintImageXObject: number; paintInlineImageXObject: number; paintImageMaskXObject: number },
+): Promise<number> {
+  const list = await page.getOperatorList();
+  let widest = 0;
+  list.fnArray.forEach((fn, i) => {
+    const a = list.argsArray[i] ?? [];
+    if (fn === ops.paintImageXObject || fn === ops.paintImageMaskXObject) {
+      if (typeof a[1] === "number") widest = Math.max(widest, a[1]);
+    } else if (fn === ops.paintInlineImageXObject) {
+      const w = (a[0] as { width?: number } | undefined)?.width;
+      if (typeof w === "number") widest = Math.max(widest, w);
+    }
+  });
+  return widest;
+}

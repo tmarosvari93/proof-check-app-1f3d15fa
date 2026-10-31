@@ -62,13 +62,16 @@ export function blocksFromReply(reply: BlocksReply, page: { width: number; heigh
     const cy = (1 - b.y_percent / 100) * page.height;
     const emph = new Set(b.emphasised_words.map((w) => w.toLowerCase()));
     const words: Word[] = b.text.split(/\s+/).filter(Boolean).map((t) => ({ text: t, bold: emph.has(t.toLowerCase()) }));
+    const box: [number, number, number, number] = [cx - 5, cy - 5, cx + 5, cy + 5];
     return {
       id: `ai${i + 1}`,
       page: 1,
       text: b.text,
-      box: [cx - 5, cy - 5, cx + 5, cy + 5],
+      box,
       fontSize: 0,
-      lines: [],
+      // One line per block: locate.ts finds a field by the lines of a block (a label such as "Szénhidrát" starts a line).
+      // Without it no field is found in an AI block and every change looks unrequested.
+      lines: [{ text: b.text, box, fontSize: 0, words }],
       words,
       boldWords: words.filter((w) => w.bold).map((w) => w.text),
     };
