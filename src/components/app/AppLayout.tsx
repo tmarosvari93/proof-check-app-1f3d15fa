@@ -1,4 +1,4 @@
-import { Link, useNavigate, useSearch } from "@tanstack/react-router";
+import { Link, useNavigate, useRouterState, useSearch } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { mockNames, mockSession } from "@/mocks/mockSession";
 import { workingAs } from "@/state/demo";
