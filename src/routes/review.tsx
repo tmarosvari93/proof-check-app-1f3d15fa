@@ -267,8 +267,8 @@ function Review() {
     else advanceFrom(code);
   };
   const advanceFrom = (code: string) => {
-    const idx = s.undecided.findIndex((i) => i.code === code);
-    setExpanded(s.undecided.slice(idx + 1)[0]?.code ?? null);
+    const rest = s.undecided.filter((i) => i.code !== code);
+    setExpanded(rest[0]?.code ?? null);
   };
   const finish = () => {
     const e = s.finishReview();
