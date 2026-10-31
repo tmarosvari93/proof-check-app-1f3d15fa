@@ -5,6 +5,7 @@
 import { buildSendBack, type Finding, type SendBackItem } from "../core/sendBack";
 import { sendable, type CheckFinding } from "../core/findings";
 import type { Decision, LineCheck, Round, UnrequestedItem } from "./types";
+import { kindLabel } from "./labels";
 
 export type ItemKind = "finding" | "line" | "unrequested";
 
@@ -82,11 +83,55 @@ export function buildRoundSendBack(round: Round): SendBackItem[] {
   return buildSendBack(sendable(list as unknown as CheckFinding[])).items;
 }
 
-/** All dismissals across rounds, for Checker 2. */
-export function dismissalsOf(rounds: Round[]): { round: number; code: string; reason: string }[] {
+export interface Dismissal {
+  /** Unique across rounds: "2:U2". Key for checker2Agreed. */
+  key: string;
+  round: number;
+  code: string;
+  /** What the item is about, e.g. "Allergen emphasis" or "New claim added". */
+  label: string;
+  /** What the check said, e.g. "Allergen not emphasised: TELJES TEJPOR". */
+  summary: string;
+  reason: string;
+}
+
+function describe(round: Round, code: string): { label: string; summary: string } {
+  const f = round.findings.find((x) => x.code === code);
+  if (f) {
+    const what = kindLabel[f.kind];
+    const detail = f.words?.length ? `: ${f.words.join(", ")}` : f.foundValue ? `: ${f.foundValue}` : "";
+    return { label: f.label ?? f.fieldId, summary: what + detail };
+  }
+  const u = (round.unrequested ?? []).find((x) => x.code === code);
+  if (u) return { label: u.what, summary: `${u.change.before ?? "(nothing)"} → ${u.change.after ?? "(removed)"}` };
+  const i = (round.lineChecks ?? []).findIndex((_, n) => lineCode(n) === code);
+  if (i >= 0) return { label: "Earlier comment", summary: round.lineChecks![i]!.text };
+  return { label: code, summary: "" };
+}
+
+/** All dismissals (decision not_error) across rounds, for Checker 2 and the lead. */
+export function dismissalsOf(rounds: Round[]): Dismissal[] {
   return rounds.flatMap((r) =>
     Object.entries(r.decisions)
       .filter(([, d]) => d === "not_error")
-      .map(([code]) => ({ round: r.no, code, reason: r.dismissals[code] ?? "" })),
+      .map(([code]) => ({ key: `${r.no}:${code}`, round: r.no, code, reason: r.dismissals[code] ?? "", ...describe(r, code) })),
   );
+}
+
+export interface PreviousLine {
+  n: number;
+  code: string;
+  text: string;
+  /** Panel of the finding the line came from, when known. */
+  where?: string;
+}
+
+/** The lines sent back in the previous round, as the designer sees them on the upload page. */
+export function previousLines(rounds: Round[], current: number): PreviousLine[] {
+  const prev = rounds[current - 2];
+  if (!prev) return [];
+  return prev.sendBack.map((it, i) => {
+    const where = prev.findings.find((f) => f.code === it.code)?.where ?? prev.unrequested?.find((u) => u.code === it.code)?.where;
+    return { n: i + 1, code: it.code, text: it.text, ...(where ? { where } : {}) };
+  });
 }

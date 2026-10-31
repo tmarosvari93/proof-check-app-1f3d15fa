@@ -1,85 +1,94 @@
 # 03 Data and the session store
 
-You do not write any logic. Everything the pages show and do comes from one hook:
+You write no logic. Every page reads from one hook and calls its actions:
 
 ```ts
-import { useSession } from "@/state/SessionProvider";   // or a relative import
+import { useSession } from "../state/SessionProvider"; // adjust the relative path, or use the @/ alias if configured
 const s = useSession();
 ```
-`<SessionProvider>` is already mounted in `src/routes/__root.tsx`. State is in memory only.
+`<SessionProvider>` is already mounted in `src/routes/__root.tsx`. Keep it there. State lives in memory only.
 
-## What `useSession()` returns (see `src/state/SessionProvider.tsx`)
-| Name | What it is |
-|---|---|
-| `session` | The whole state: `request`, `rounds`, `current` (round number being worked on, 1-based), `step`, `checker2Agreed`, `checker2SignedOff`, `approved` |
-| `round` | `session.rounds[session.current - 1]` or `undefined` before a proof is uploaded |
-| `items` | Things the checker looks at in the current round: `{ code, kind: "finding"|"line"|"unrequested", needsDecision, linkedTo?, decision }`. `decision` is `"open"|"real_error"|"not_error"|"needs_discussion"` |
-| `open` | How many items still need a decision (Finish is blocked above 0) |
-| `dismissals` | `{ round, code, reason }[]` across all rounds, for Checker 2 |
-| `createRequest(file)` | A5. Returns an error string or `undefined` |
-| `uploadProof(file)` | B2.1. Same |
-| `decide(code, decision, reason?)` | Checker's decision. Dismissing (`"not_error"`) needs a reason |
-| `finishReview()` | Blocked while `open > 0` |
-| `editSendBack(edits)` | `edits`: `{ code, text?, remove? }[]` |
-| `addManualLine(text)` | Adds a line coded M1, M2… |
-| `sendToDesigner()` | Moves to the next round's upload page |
-| `checker2Agree(code, agree)`, `checker2SignOff()`, `approve()` | Clickable pages |
-| `startOver()` | Clears everything |
-| `jumpTo(name)` | Demo shortcut to a prepared state (see below) |
+## `useSession()` (source: `src/state/SessionProvider.tsx`)
 
-Every action that can fail returns a message string. Show it. If it returns `undefined` it worked; then navigate to `stepPath[session.step]` where the step may have changed.
+| Name | Type | Meaning |
+|---|---|---|
+| `session` | `Session` | Everything: `pendingSpec`, `request`, `rounds`, `current`, `step`, `checker2Agreed`, `checker2SignedOff`, `checker2SignedAt`, `approved`, `approvedAt` |
+| `round` | `Round \| undefined` | The round being worked on (`session.rounds[session.current - 1]`); undefined before its proof is uploaded |
+| `items` | `ItemView[]` | Everything in the current round the checker looks at: `{ code, kind: "finding"\|"line"\|"unrequested", needsDecision, linkedTo?, decision }` |
+| `undecided` | `ItemView[]` | Items that still need a decision. Finish review is disabled while not empty |
+| `open` | `number` | `undecided.length` |
+| `dismissals` | `Dismissal[]` | Every item marked not an error, all rounds: `{ key, round, code, label, summary, reason }`. `key` (like `"2:U2"`) is what `checker2Agree` takes |
+| `previousLines` | `PreviousLine[]` | The previous round's send-back lines for the upload page: `{ n, code, text, where? }`. Empty in round 1 |
+| `busy` | `boolean` | True while `loadSpec` or `uploadProof` runs |
 
-## Types you will use (all in `src/state/types.ts`; read the file, it has comments)
+| Action | Returns | Notes |
+|---|---|---|
+| `loadSpec(file)` | `Promise<string \| undefined>` | **await it.** Reads the spec into `session.pendingSpec`. Errors: "Choose the spec Excel file first", "This file is not a readable .xlsx workbook" |
+| `createRequest()` | `string \| undefined` | Needs `pendingSpec`. Moves to `upload_proof` |
+| `uploadProof(file, note?)` | `Promise<string \| undefined>` | **await it.** Runs the check, stores the round, moves to `review`. Error: "This file is not a PDF" |
+| `decide(code, decision, reason?)` | `string \| undefined` | `decision`: `"real_error"` or `"not_error"`. Not an error needs a reason (use `reasonText(chip, note)`), except U codes ("Change accepted" is stored) |
+| `finishReview()` | `string \| undefined` | Blocked while items are open. Builds the Hungarian send-back list. Moves to `send_back`, or to `checker2` when nothing is a real error |
+| `backToReview()` | `string \| undefined` | From the send-back list. Finishing again rebuilds the list |
+| `editSendBack(edits)` | `string \| undefined` | `edits`: `{ code, text?, remove? }[]` |
+| `addManualLine(text)` | `string \| undefined` | Adds line M1, M2… |
+| `sendToDesigner()` | `string \| undefined` | Error "The send-back list is empty". Moves to the next round's `upload_proof` |
+| `checker2Agree(key, agree)` | `string \| undefined` | `key` from `dismissals` |
+| `checker2SignOff()` | `string \| undefined` | Needs every dismissal agreed. Moves to `lead` |
+| `approve()` | `string \| undefined` | Needs Checker 2's sign-off. Moves to `approved` |
+| `startOver()` | `void` | Clears everything |
+| `jumpTo(name)` | `void` | Loads a prepared state (table below) |
+
+**After every action:** if it returned a string, show it; otherwise navigate to `stepPath[session.step]` when the step changed. Read `session` on the next render, not right after the call.
+
+## The data (source: `src/state/types.ts`, read it, it has comments)
 ```ts
+Session { pendingSpec: ParsedSpec|null; request: RequestInfo|null; rounds: Round[]; current: number; step: Step; ... }
+RequestInfo { workId, product, productCode, piece, requestedBy, partner, projectOwner, designer, dueDate, notes, createdAt, spec }
+ParsedSpec { meta: { specNumber, version, validFrom, erpCode, packagingCode, productName }, fields: { id, label, value, row }[] }
 Round {
-  no, fileName, readMode: "text_layer"|"ai"|"failed", dpi?, seconds,
-  results: FieldResult[],        // one per spec field (19)
-  findings: CheckFinding[],      // spec findings F1.. (matches are not findings)
+  no, fileName, designerNote, readMode: "text_layer"|"ai"|"failed", dpi?, seconds,
+  results: FieldResult[],          // one per spec field (19)
+  findings: CheckFinding[],        // F1.. spec findings; matches are not findings
   matches: number,
-  diff?: DiffItem[],             // round 2+: modified / added / removed / moved / unchanged
-  lineChecks?: LineCheck[],      // round 2+: earlier send-back lines, Done / Not done / Check by hand
-  unrequested?: UnrequestedItem[], // round 2+: U1.. with optional linkedTo
-  sendBack: { code, text }[],    // Hungarian lines, built when the review is finished
-  decisions: Record<code, Decision>, dismissals: Record<code, reason>, finished: boolean
+  diff?: DiffItem[],               // round 2+: { id, type: modified|added|removed|moved|unchanged, before, after }
+  lineChecks?: LineCheck[],        // round 2+: { code, text, verdict: done|not_done|check_by_hand, fieldId? }
+  unrequested?: UnrequestedItem[], // round 2+: { code: "U1", change: DiffItem, what, where?, linkedTo? }
+  sendBack: { code, text }[],      // Hungarian lines, built by finishReview
+  decisions, dismissals, finished, finishedAt?
 }
-FieldResult {                    // src/core/compare.ts
-  id, label, specValue, verdict: "match"|"mismatch"|"missing"|"could_not_read",
-  foundValue: string|null,
-  diff: { type: "same"|"del"|"ins", text }[],   // word difference spec -> proof
-  occurrences: { verdict, occurrence: { text, ... } }[],
-  reason?: "low_resolution"|"read_failed"|"unreadable",
-  allergen?: { status: "ok"|"not_emphasised"|"could_not_check", words: string[] }
-}
-CheckFinding {                   // src/core/findings.ts
-  code: "F1", kind, fieldId, label, specValue, foundValue, words?, occurrences?
-}
+FieldResult  { id, label, specValue, verdict: match|mismatch|missing|could_not_read, foundValue, diff: {type: same|del|ins, text}[], reason?, allergen? }
+CheckFinding { code, kind, fieldId, label, specValue, foundValue, words?, occurrences?, where? }
 ```
-The item codes: spec findings are **F**, earlier lines are **C** (C1 is the first earlier line, in list order), unrequested changes are **U**. A line `Cn` is `lineChecks[n-1]`.
+Item codes: **F** = spec finding, **C{n}** = the n-th line of the previous send-back list (`lineChecks[n-1]`), **U** = unrequested change, **M** = a line the checker typed.
 
-## Wording
-Do not invent labels. Use the maps in `src/state/labels.ts`: `kindLabel`, `verdictLabel`, `lineVerdictLabel`, `diffLabel`, `readBanner`, `lowResolutionBanner`, `reasonLabel`, `stepPath`.
+## Fixed values, wording and helpers (import, never retype)
+- `src/state/demo.ts`: `people`, `workingAs`, `demoRequestFields`, `dismissReasons`.
+- `src/state/labels.ts`: `kindLabel`, `verdictLabel`, `lineVerdictLabel`, `diffLabel`, `readBanner`, `lowResolutionBanner`, `reasonLabel`, `stepPath`.
+- `src/state/format.ts`: `badgeOf(finding)`, `summaryOf(finding, result)`, `sourceOf(code)`, `formatTime(iso)`, `daysBetween(fromIso)`, `reasonText(chip, note)`.
 
-## Mock data you can use right now
-`jumpTo(name)` loads a prepared, realistic session. The data is real output of the real logic on the demo files (round 1 and the spec) or matches the expected results (round 2 and 3). Names:
+## Prepared states for building and checking pages
+`jumpTo(name)` (or the `?dev=1` shortcut row). Round 1 and the spec are real output of the real code on the demo files; rounds 2 and 3 match the expected results.
 
-| `jumpTo` name | Where it puts you |
-|---|---|
-| `empty` | Home, nothing started |
-| `new_request` | New request page |
-| `r1_review` | Round 1 review: 6 findings, 14 matches, all open |
-| `r1_review_flat` | Round 1 read by AI from an image (150 dpi) |
-| `r1_review_lowres` | Same at 75 dpi: numbers and units are Could not read |
-| `r1_review_failed` | Read failed: everything is Could not read |
-| `r1_sendback` | Round 1 finished: 6 Hungarian lines to review |
-| `r2_upload` | Upload page for round 2 (shows the lines sent) |
-| `r2_review` | Round 2 review: earlier lines (5 Done, 1 Not done), changes, unrequested changes |
-| `r2_sendback` | Round 2 send-back list |
-| `r3_review` | Round 3 review: clean, nothing open |
-| `checker2` | Checker 2 with one dismissal to agree with |
-| `lead` | Lead approval page |
-| `approved` | After approval |
+| Name | Page | What you see |
+|---|---|---|
+| `empty` | `/` | Nothing started |
+| `new_request` | `/new` | Empty form |
+| `new_request_spec_read` | `/new` | Spec read: 19 fields, Create request enabled |
+| `r1_upload` | `/upload` | Round 1 upload, nothing requested yet |
+| `r1_review` | `/review` | Round 1: 6 findings undecided, 14 matches |
+| `r1_review_flat` | `/review` | Read by AI from an image at 150 dpi |
+| `r1_review_lowres` | `/review` | 75 dpi: amber banner, number fields Could not read |
+| `r1_review_failed` | `/review` | Read failed: red banner, 19 Could-not-read findings |
+| `r1_sendback` | `/send-back` | 6 Hungarian lines |
+| `r2_upload` | `/upload` | Round 2 upload with the 6 lines requested |
+| `r2_review` | `/review` | Round 2: 2 spec findings, 5 comments done and 1 not done (linked to F1), 2 unrequested (U1 linked to F2), 4 moved only. 3 undecided: F1, F2, U2 |
+| `r2_sendback` | `/send-back` | Round 2: 3 lines |
+| `r3_review` | `/review` | Round 3: clean, 19 matches, nothing to decide |
+| `checker2` | `/checker-2` | One dismissal to agree with (U2, change accepted) |
+| `lead` | `/lead` | Ready to approve |
+| `approved` | `/lead` | Approved |
 
-Build each page against the matching state and check it. The real flow (uploading files and clicking through) also works end to end with the mock check: any `.xlsx` creates the demo request; any `.pdf` gives the demo result for the current round.
+The real flow also works end to end without `jumpTo`: any `.xlsx` gives the demo spec, any `.pdf` gives the demo result for the current round (in step 3 these become the real check; your pages do not change).
 
-## Not your job
-Parsing Excel, reading PDFs, comparing, diffing, calling an AI, building the Hungarian lines: all done elsewhere. Do not add any of it. If something you need is missing from the store, **do not work around it**: write it in a short "Missing from the store" list in your final message.
+## If something is missing
+Do not compute it and do not add state. Use what exists, and list what you needed under "Missing from the store" in your final message.

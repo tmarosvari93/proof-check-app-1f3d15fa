@@ -16,6 +16,8 @@ export interface CheckFinding extends Omit<Finding, "kind"> {
   fieldId: string;
   /** How many times the value is printed and wrong (name: front and back = 2). */
   occurrences?: number;
+  /** Where on the packaging, e.g. "Back, nutrition table". Filled when the panel is known. */
+  where?: string;
 }
 
 const SENDABLE: ReadonlySet<string> = new Set<FindingKind>([

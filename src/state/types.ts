@@ -14,13 +14,17 @@ export type { ParsedSpec, FieldResult, CheckFinding, SendBackItem };
 export type ReadMode = "text_layer" | "ai" | "failed";
 
 export interface RequestInfo {
-  workId: string; // fixed demo value, e.g. "WRK-0417"
-  product: string; // fixed dropdown value
-  piece: string; // "Doboz" (box)
+  workId: string; // "WRK-0142" (fixed demo value)
+  product: string; // "Mangós instant zabkása 400 g"
+  productCode: string; // "MZL-10482"
+  piece: string; // "Box CS-20931"
+  requestedBy: "Partner" | "Own graphics team";
   partner: string;
-  owner: string; // project owner
-  designer: string;
+  projectOwner: string;
+  designer: string; // "External: Studio Fiktív, design desk"
   dueDate: string; // ISO date
+  notes: string; // notes for the designer
+  createdAt: string; // ISO timestamp
   spec: ParsedSpec; // the only real input on the New request screen
 }
 
@@ -51,6 +55,10 @@ export interface LineCheck {
 export interface UnrequestedItem {
   code: string; // "U1"
   change: DiffItem;
+  /** Short description, e.g. "Preparation text changed". */
+  what: string;
+  /** Panel, e.g. "Side panel". */
+  where?: string;
   /** Code of a spec finding about the same problem, e.g. "F5". Then it is listed once. */
   linkedTo?: string;
 }
@@ -60,6 +68,8 @@ export type Decision = CheckFinding["decision"];
 export interface Round {
   no: number; // 1, 2, 3
   fileName: string;
+  /** The designer's note typed on the upload page. */
+  designerNote: string;
   readMode: ReadMode;
   /** Effective dpi of a flat proof; undefined for a vector proof. */
   dpi?: number;
@@ -82,6 +92,8 @@ export interface Round {
   dismissals: Record<string, string>;
   /** Review finished (the checker pressed Finish). */
   finished: boolean;
+  /** ISO timestamp of Finish review. */
+  finishedAt?: string;
 }
 
 export type Step =
@@ -95,6 +107,8 @@ export type Step =
   | "approved";
 
 export interface Session {
+  /** Spec read on the New request page, before Create request is pressed. */
+  pendingSpec: ParsedSpec | null;
   request: RequestInfo | null;
   rounds: Round[];
   /** The round being worked on, 1-based. */
@@ -102,10 +116,13 @@ export interface Session {
   step: Step;
   checker2Agreed: Record<string, boolean>; // by finding code
   checker2SignedOff: boolean;
+  checker2SignedAt?: string;
   approved: boolean;
+  approvedAt?: string;
 }
 
 export const emptySession: Session = {
+  pendingSpec: null,
   request: null,
   rounds: [],
   current: 1,
