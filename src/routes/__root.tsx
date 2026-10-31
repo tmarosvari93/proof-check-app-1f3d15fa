@@ -82,7 +82,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "Proof Check" },
       { name: "description", content: "Packaging artwork proof checker (prototype)" },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
+      { property: "og:title", content: "Proof Check" },
       { property: "og:description", content: "Packaging artwork proof checker (prototype)" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
