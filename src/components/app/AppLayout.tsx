@@ -54,7 +54,8 @@ export function AppLayout({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
   const [dev, setDev] = useState(false);
   useEffect(() => {
-    setDev(new URLSearchParams(window.location.search).get("dev") === "1");
+    const raw = new URLSearchParams(window.location.search).get("dev") ?? "";
+    setDev(raw.replaceAll('"', "") === "1");
   }, [pathname]);
   const navigate = useNavigate();
   const pendingJump = useRef(false);
