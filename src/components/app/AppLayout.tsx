@@ -1,5 +1,5 @@
-import { Link, useNavigate, useRouterState, useSearch } from "@tanstack/react-router";
-import type { ReactNode } from "react";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import { useEffect, useState, type ReactNode } from "react";
 import { mockNames, mockSession } from "@/mocks/mockSession";
 import { workingAs } from "@/state/demo";
 import { stepPath } from "@/state/labels";
@@ -31,11 +31,16 @@ export function AppLayout({ role, children }: { role: keyof typeof workingAs; ch
   const s = useSession();
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (st) => st.location.pathname });
-  const search = useSearch({ strict: false }) as Record<string, unknown>;
-  const dev = search["dev"] === "1";
+  // The ?dev=1 flag is read from the URL after mount: routes without a search schema
+  // do not expose it through the router state.
+  const [dev, setDev] = useState(false);
+  useEffect(() => {
+    setDev(new URLSearchParams(window.location.search).get("dev") === "1");
+  }, [pathname]);
 
-  const devSearch: Record<string, string> = dev ? { dev: "1" } : {};
-  const nav = (to: string) => navigate({ to, search: devSearch });
+  const devSearch = (): Record<string, string> =>
+    new URLSearchParams(window.location.search).get("dev") === "1" ? { dev: "1" } : {};
+  const nav = (to: string) => navigate({ to, search: devSearch() });
 
   const itemClass = (active: boolean) =>
     `block w-full text-left px-3 py-2 rounded text-sm ${active ? "bg-primary text-primary-foreground" : ""}`;
