@@ -1,0 +1,1830 @@
+{
+ "spec": {
+  "meta": {
+   "specNumber": "SP-2026-0417",
+   "version": "3",
+   "validFrom": "2026-10-15",
+   "erpCode": "MZL-10482",
+   "packagingCode": "CS-20931",
+   "productName": "Mangós instant zabkása szárított mangódarabokkal"
+  },
+  "fields": [
+   {
+    "id": "name",
+    "label": "Termék megnevezése",
+    "value": "Mangós instant zabkása szárított mangódarabokkal",
+    "row": 13
+   },
+   {
+    "id": "net_qty",
+    "label": "Nettó tömeg",
+    "value": "400 g",
+    "row": 15
+   },
+   {
+    "id": "servings",
+    "label": "Adagok száma",
+    "value": "A csomag 8 adagot tartalmaz.",
+    "row": 16
+   },
+   {
+    "id": "ingredients",
+    "label": "Összetevők",
+    "value": "ZABPEHELY (68%), cukor, szárított mangó (12%), TELJES TEJPOR, rizsliszt, természetes aroma, só.",
+    "row": 19
+   },
+   {
+    "id": "may_contain",
+    "label": "Keresztszennyeződés",
+    "value": "Nyomokban szóját és diófélét tartalmazhat.",
+    "row": 21
+   },
+   {
+    "id": "energy",
+    "label": "Energia",
+    "value": "1602 kJ / 380 kcal",
+    "row": 23
+   },
+   {
+    "id": "fat",
+    "label": "Zsír",
+    "value": "6,8 g",
+    "row": 24
+   },
+   {
+    "id": "saturates",
+    "label": "ebből telített zsírsavak",
+    "value": "2,1 g",
+    "row": 25
+   },
+   {
+    "id": "carbs",
+    "label": "Szénhidrát",
+    "value": "64,5 g",
+    "row": 26
+   },
+   {
+    "id": "sugars",
+    "label": "ebből cukrok",
+    "value": "22,4 g",
+    "row": 27
+   },
+   {
+    "id": "fibre",
+    "label": "Rost",
+    "value": "7,9 g",
+    "row": 28
+   },
+   {
+    "id": "protein",
+    "label": "Fehérje",
+    "value": "11,2 g",
+    "row": 29
+   },
+   {
+    "id": "salt",
+    "label": "Só",
+    "value": "0,18 g",
+    "row": 30
+   },
+   {
+    "id": "per_serving",
+    "label": "Energia adagonként (50 g)",
+    "value": "801 kJ / 190 kcal",
+    "row": 31
+   },
+   {
+    "id": "preparation",
+    "label": "Felhasználási javaslat",
+    "value": "50 g zabkásához adjon 150 ml forró tejet vagy vizet, keverje el, és hagyja állni 2 percig.",
+    "row": 40
+   },
+   {
+    "id": "storage",
+    "label": "Tárolás",
+    "value": "Száraz, hűvös helyen, közvetlen napfénytől védve tárolandó. Felbontás után légmentesen zárva tartandó.",
+    "row": 41
+   },
+   {
+    "id": "best_before",
+    "label": "Minőségmegőrzés jelölése",
+    "value": "Minőségét megőrzi: a jelölt mezőben feltüntetett napig.",
+    "row": 43
+   },
+   {
+    "id": "manufacturer",
+    "label": "Gyártó",
+    "value": "Gyártja: Mezőlak Élelmiszer Kft., 9999 Mintaváros, Malom utca 7.",
+    "row": 45
+   },
+   {
+    "id": "origin",
+    "label": "Előállítás helye",
+    "value": "Magyarországon előállítva.",
+    "row": 46
+   }
+  ]
+ },
+ "v1": {
+  "results": [
+   {
+    "id": "name",
+    "label": "Termék megnevezése",
+    "specValue": "Mangós instant zabkása szárított mangódarabokkal",
+    "verdict": "mismatch",
+    "foundValue": "Sárgabarackos instant zabkása szárított mangódarabokkal",
+    "diff": [
+     {
+      "type": "del",
+      "text": "Mangós"
+     },
+     {
+      "type": "ins",
+      "text": "Sárgabarackos"
+     },
+     {
+      "type": "same",
+      "text": "instant zabkása szárított mangódarabokkal"
+     }
+    ],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b8",
+       "page": 1,
+       "text": "Sárgabarackos instant zabkása szárított mangódarabokkal",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": [
+        "Sárgabarackos",
+        "instant",
+        "zabkása",
+        "szárított",
+        "mangódarabokkal"
+       ]
+      },
+      "verdict": "mismatch"
+     },
+     {
+      "occurrence": {
+       "blockId": "p1b18",
+       "page": 1,
+       "text": "Sárgabarackos instant zabkása szárított mangódarabokkal",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": [
+        "Sárgabarackos",
+        "instant",
+        "zabkása",
+        "szárított",
+        "mangódarabokkal"
+       ]
+      },
+      "verdict": "mismatch"
+     }
+    ]
+   },
+   {
+    "id": "net_qty",
+    "label": "Nettó tömeg",
+    "specValue": "400 g",
+    "verdict": "match",
+    "foundValue": "400 g",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b11",
+       "page": 1,
+       "text": "400 g",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": [
+        "400",
+        "g"
+       ]
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "servings",
+    "label": "Adagok száma",
+    "specValue": "A csomag 8 adagot tartalmaz.",
+    "verdict": "mismatch",
+    "foundValue": "A csomag 10 adagot tartalmaz.",
+    "diff": [
+     {
+      "type": "same",
+      "text": "A csomag"
+     },
+     {
+      "type": "del",
+      "text": "8"
+     },
+     {
+      "type": "ins",
+      "text": "10"
+     },
+     {
+      "type": "same",
+      "text": "adagot tartalmaz."
+     }
+    ],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b29",
+       "page": 1,
+       "text": "A csomag 10 adagot tartalmaz.",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "mismatch"
+     }
+    ]
+   },
+   {
+    "id": "ingredients",
+    "label": "Összetevők",
+    "specValue": "ZABPEHELY (68%), cukor, szárított mangó (12%), TELJES TEJPOR, rizsliszt, természetes aroma, só.",
+    "verdict": "match",
+    "foundValue": "ZABPEHELY (68%), cukor, szárított mangó (12%), teljes tejpor, rizsliszt, természetes aroma, só.",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b19",
+       "page": 1,
+       "text": "ZABPEHELY (68%), cukor, szárított mangó (12%), teljes tejpor, rizsliszt, természetes aroma, só.",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": [
+        "Összetevők:",
+        "ZABPEHELY"
+       ]
+      },
+      "verdict": "match"
+     }
+    ],
+    "allergen": {
+     "status": "not_emphasised",
+     "words": [
+      "TELJES TEJPOR"
+     ]
+    }
+   },
+   {
+    "id": "may_contain",
+    "label": "Keresztszennyeződés",
+    "specValue": "Nyomokban szóját és diófélét tartalmazhat.",
+    "verdict": "missing",
+    "foundValue": null,
+    "diff": [],
+    "occurrences": []
+   },
+   {
+    "id": "energy",
+    "label": "Energia",
+    "specValue": "1602 kJ / 380 kcal",
+    "verdict": "match",
+    "foundValue": "1602 kJ / 380 kcal",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b21",
+       "page": 1,
+       "text": "1602 kJ / 380 kcal",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "fat",
+    "label": "Zsír",
+    "specValue": "6,8 g",
+    "verdict": "match",
+    "foundValue": "6,8 g",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b22",
+       "page": 1,
+       "text": "6,8 g",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "saturates",
+    "label": "ebből telített zsírsavak",
+    "specValue": "2,1 g",
+    "verdict": "match",
+    "foundValue": "2,1 g",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b23",
+       "page": 1,
+       "text": "2,1 g",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "carbs",
+    "label": "Szénhidrát",
+    "specValue": "64,5 g",
+    "verdict": "mismatch",
+    "foundValue": "46,5 g",
+    "diff": [
+     {
+      "type": "del",
+      "text": "64,5"
+     },
+     {
+      "type": "ins",
+      "text": "46,5"
+     },
+     {
+      "type": "same",
+      "text": "g"
+     }
+    ],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b24",
+       "page": 1,
+       "text": "46,5 g",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "mismatch"
+     }
+    ]
+   },
+   {
+    "id": "sugars",
+    "label": "ebből cukrok",
+    "specValue": "22,4 g",
+    "verdict": "match",
+    "foundValue": "22,4 g",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b25",
+       "page": 1,
+       "text": "22,4 g",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "fibre",
+    "label": "Rost",
+    "specValue": "7,9 g",
+    "verdict": "match",
+    "foundValue": "7,9 g",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b26",
+       "page": 1,
+       "text": "7,9 g",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "protein",
+    "label": "Fehérje",
+    "specValue": "11,2 g",
+    "verdict": "match",
+    "foundValue": "11,2 g",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b27",
+       "page": 1,
+       "text": "11,2 g",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "salt",
+    "label": "Só",
+    "specValue": "0,18 g",
+    "verdict": "mismatch",
+    "foundValue": "0,18 mg",
+    "diff": [
+     {
+      "type": "same",
+      "text": "0,18"
+     },
+     {
+      "type": "del",
+      "text": "g"
+     },
+     {
+      "type": "ins",
+      "text": "mg"
+     }
+    ],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b28",
+       "page": 1,
+       "text": "0,18 mg",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "mismatch"
+     }
+    ]
+   },
+   {
+    "id": "per_serving",
+    "label": "Energia adagonként (50 g)",
+    "specValue": "801 kJ / 190 kcal",
+    "verdict": "match",
+    "foundValue": "801 kJ / 190 kcal",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b29",
+       "page": 1,
+       "text": "801 kJ / 190 kcal",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "preparation",
+    "label": "Felhasználási javaslat",
+    "specValue": "50 g zabkásához adjon 150 ml forró tejet vagy vizet, keverje el, és hagyja állni 2 percig.",
+    "verdict": "match",
+    "foundValue": "50 g zabkásához adjon 150 ml forró tejet vagy vizet, keverje el, és hagyja állni 2 percig.",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b3",
+       "page": 1,
+       "text": "50 g zabkásához adjon 150 ml forró tejet vagy vizet, keverje el, és hagyja állni 2 percig.",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "storage",
+    "label": "Tárolás",
+    "specValue": "Száraz, hűvös helyen, közvetlen napfénytől védve tárolandó. Felbontás után légmentesen zárva tartandó.",
+    "verdict": "match",
+    "foundValue": "Száraz, hűvös helyen, közvetlen napfénytől védve tárolandó. Felbontás után légmentesen zárva tartandó.",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b5",
+       "page": 1,
+       "text": "Száraz, hűvös helyen, közvetlen napfénytől védve tárolandó. Felbontás után légmentesen zárva tartandó.",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "best_before",
+    "label": "Minőségmegőrzés jelölése",
+    "specValue": "Minőségét megőrzi: a jelölt mezőben feltüntetett napig.",
+    "verdict": "match",
+    "foundValue": "Minőségét megőrzi: a jelölt mezőben feltüntetett napig.",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b13",
+       "page": 1,
+       "text": "Minőségét megőrzi: a jelölt mezőben feltüntetett napig.",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "manufacturer",
+    "label": "Gyártó",
+    "specValue": "Gyártja: Mezőlak Élelmiszer Kft., 9999 Mintaváros, Malom utca 7.",
+    "verdict": "match",
+    "foundValue": "Gyártja: Mezőlak Élelmiszer Kft., 9999 Mintaváros, Malom utca 7.",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b15",
+       "page": 1,
+       "text": "Gyártja: Mezőlak Élelmiszer Kft., 9999 Mintaváros, Malom utca 7.",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "origin",
+    "label": "Előállítás helye",
+    "specValue": "Magyarországon előállítva.",
+    "verdict": "match",
+    "foundValue": "Magyarországon előállítva.",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b16",
+       "page": 1,
+       "text": "Magyarországon előállítva.",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   }
+  ],
+  "findings": [
+   {
+    "code": "F1",
+    "decision": "open",
+    "fieldId": "name",
+    "label": "Termék megnevezése",
+    "specValue": "Mangós instant zabkása szárított mangódarabokkal",
+    "kind": "spec_mismatch",
+    "foundValue": "Sárgabarackos instant zabkása szárított mangódarabokkal",
+    "occurrences": 2
+   },
+   {
+    "code": "F2",
+    "decision": "open",
+    "fieldId": "servings",
+    "label": "Adagok száma",
+    "specValue": "A csomag 8 adagot tartalmaz.",
+    "kind": "spec_mismatch",
+    "foundValue": "A csomag 10 adagot tartalmaz.",
+    "occurrences": 1
+   },
+   {
+    "code": "F3",
+    "decision": "open",
+    "fieldId": "ingredients",
+    "label": "Összetevők",
+    "specValue": "ZABPEHELY (68%), cukor, szárított mangó (12%), TELJES TEJPOR, rizsliszt, természetes aroma, só.",
+    "kind": "allergen_not_emphasised",
+    "foundValue": "ZABPEHELY (68%), cukor, szárított mangó (12%), teljes tejpor, rizsliszt, természetes aroma, só.",
+    "words": [
+     "TELJES TEJPOR"
+    ]
+   },
+   {
+    "code": "F4",
+    "decision": "open",
+    "fieldId": "may_contain",
+    "label": "Keresztszennyeződés",
+    "specValue": "Nyomokban szóját és diófélét tartalmazhat.",
+    "kind": "spec_missing",
+    "foundValue": null
+   },
+   {
+    "code": "F5",
+    "decision": "open",
+    "fieldId": "carbs",
+    "label": "Szénhidrát",
+    "specValue": "64,5 g",
+    "kind": "spec_mismatch",
+    "foundValue": "46,5 g",
+    "occurrences": 1
+   },
+   {
+    "code": "F6",
+    "decision": "open",
+    "fieldId": "salt",
+    "label": "Só",
+    "specValue": "0,18 g",
+    "kind": "spec_mismatch",
+    "foundValue": "0,18 mg",
+    "occurrences": 1
+   }
+  ],
+  "matches": 14
+ },
+ "v2": {
+  "results": [
+   {
+    "id": "name",
+    "label": "Termék megnevezése",
+    "specValue": "Mangós instant zabkása szárított mangódarabokkal",
+    "verdict": "match",
+    "foundValue": "Mangós instant zabkása szárított mangódarabokkal",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b8",
+       "page": 1,
+       "text": "Mangós instant zabkása szárított mangódarabokkal",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": [
+        "Mangós",
+        "instant",
+        "zabkása",
+        "szárított",
+        "mangódarabokkal"
+       ]
+      },
+      "verdict": "match"
+     },
+     {
+      "occurrence": {
+       "blockId": "p1b18",
+       "page": 1,
+       "text": "Mangós instant zabkása szárított mangódarabokkal",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": [
+        "Mangós",
+        "instant",
+        "zabkása",
+        "szárított",
+        "mangódarabokkal"
+       ]
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "net_qty",
+    "label": "Nettó tömeg",
+    "specValue": "400 g",
+    "verdict": "match",
+    "foundValue": "400 g",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b11",
+       "page": 1,
+       "text": "400 g",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": [
+        "400",
+        "g"
+       ]
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "servings",
+    "label": "Adagok száma",
+    "specValue": "A csomag 8 adagot tartalmaz.",
+    "verdict": "match",
+    "foundValue": "A csomag 8 adagot tartalmaz.",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b30",
+       "page": 1,
+       "text": "A csomag 8 adagot tartalmaz.",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "ingredients",
+    "label": "Összetevők",
+    "specValue": "ZABPEHELY (68%), cukor, szárított mangó (12%), TELJES TEJPOR, rizsliszt, természetes aroma, só.",
+    "verdict": "match",
+    "foundValue": "ZABPEHELY (68%), cukor, szárított mangó (12%), teljes tejpor, rizsliszt, természetes aroma, só.",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b19",
+       "page": 1,
+       "text": "ZABPEHELY (68%), cukor, szárított mangó (12%), teljes tejpor, rizsliszt, természetes aroma, só.",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": [
+        "Összetevők:",
+        "ZABPEHELY"
+       ]
+      },
+      "verdict": "match"
+     }
+    ],
+    "allergen": {
+     "status": "not_emphasised",
+     "words": [
+      "TELJES TEJPOR"
+     ]
+    }
+   },
+   {
+    "id": "may_contain",
+    "label": "Keresztszennyeződés",
+    "specValue": "Nyomokban szóját és diófélét tartalmazhat.",
+    "verdict": "match",
+    "foundValue": "Nyomokban szóját és diófélét tartalmazhat.",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b20",
+       "page": 1,
+       "text": "Nyomokban szóját és diófélét tartalmazhat.",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "energy",
+    "label": "Energia",
+    "specValue": "1602 kJ / 380 kcal",
+    "verdict": "match",
+    "foundValue": "1602 kJ / 380 kcal",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b22",
+       "page": 1,
+       "text": "1602 kJ / 380 kcal",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "fat",
+    "label": "Zsír",
+    "specValue": "6,8 g",
+    "verdict": "match",
+    "foundValue": "6,8 g",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b23",
+       "page": 1,
+       "text": "6,8 g",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "saturates",
+    "label": "ebből telített zsírsavak",
+    "specValue": "2,1 g",
+    "verdict": "match",
+    "foundValue": "2,1 g",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b24",
+       "page": 1,
+       "text": "2,1 g",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "carbs",
+    "label": "Szénhidrát",
+    "specValue": "64,5 g",
+    "verdict": "match",
+    "foundValue": "64,5 g",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b25",
+       "page": 1,
+       "text": "64,5 g",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "sugars",
+    "label": "ebből cukrok",
+    "specValue": "22,4 g",
+    "verdict": "match",
+    "foundValue": "22,4 g",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b26",
+       "page": 1,
+       "text": "22,4 g",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "fibre",
+    "label": "Rost",
+    "specValue": "7,9 g",
+    "verdict": "match",
+    "foundValue": "7,9 g",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b27",
+       "page": 1,
+       "text": "7,9 g",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "protein",
+    "label": "Fehérje",
+    "specValue": "11,2 g",
+    "verdict": "match",
+    "foundValue": "11,2 g",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b28",
+       "page": 1,
+       "text": "11,2 g",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "salt",
+    "label": "Só",
+    "specValue": "0,18 g",
+    "verdict": "match",
+    "foundValue": "0,18 g",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b29",
+       "page": 1,
+       "text": "0,18 g",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "per_serving",
+    "label": "Energia adagonként (50 g)",
+    "specValue": "801 kJ / 190 kcal",
+    "verdict": "match",
+    "foundValue": "801 kJ / 190 kcal",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b30",
+       "page": 1,
+       "text": "801 kJ / 190 kcal",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "preparation",
+    "label": "Felhasználási javaslat",
+    "specValue": "50 g zabkásához adjon 150 ml forró tejet vagy vizet, keverje el, és hagyja állni 2 percig.",
+    "verdict": "mismatch",
+    "foundValue": "50 g zabkásához adjon 200 ml forró tejet vagy vizet, keverje el, és hagyja állni 2 percig.",
+    "diff": [
+     {
+      "type": "same",
+      "text": "50 g zabkásához adjon"
+     },
+     {
+      "type": "del",
+      "text": "150"
+     },
+     {
+      "type": "ins",
+      "text": "200"
+     },
+     {
+      "type": "same",
+      "text": "ml forró tejet vagy vizet, keverje el, és hagyja állni 2 percig."
+     }
+    ],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b14",
+       "page": 1,
+       "text": "50 g zabkásához adjon 200 ml forró tejet vagy vizet, keverje el, és hagyja állni 2 percig.",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "mismatch"
+     }
+    ]
+   },
+   {
+    "id": "storage",
+    "label": "Tárolás",
+    "specValue": "Száraz, hűvös helyen, közvetlen napfénytől védve tárolandó. Felbontás után légmentesen zárva tartandó.",
+    "verdict": "match",
+    "foundValue": "Száraz, hűvös helyen, közvetlen napfénytől védve tárolandó. Felbontás után légmentesen zárva tartandó.",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b16",
+       "page": 1,
+       "text": "Száraz, hűvös helyen, közvetlen napfénytől védve tárolandó. Felbontás után légmentesen zárva tartandó.",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "best_before",
+    "label": "Minőségmegőrzés jelölése",
+    "specValue": "Minőségét megőrzi: a jelölt mezőben feltüntetett napig.",
+    "verdict": "match",
+    "foundValue": "Minőségét megőrzi: a jelölt mezőben feltüntetett napig.",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b2",
+       "page": 1,
+       "text": "Minőségét megőrzi: a jelölt mezőben feltüntetett napig.",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "manufacturer",
+    "label": "Gyártó",
+    "specValue": "Gyártja: Mezőlak Élelmiszer Kft., 9999 Mintaváros, Malom utca 7.",
+    "verdict": "match",
+    "foundValue": "Gyártja: Mezőlak Élelmiszer Kft., 9999 Mintaváros, Malom utca 7.",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b4",
+       "page": 1,
+       "text": "Gyártja: Mezőlak Élelmiszer Kft., 9999 Mintaváros, Malom utca 7.",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "origin",
+    "label": "Előállítás helye",
+    "specValue": "Magyarországon előállítva.",
+    "verdict": "match",
+    "foundValue": "Magyarországon előállítva.",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b5",
+       "page": 1,
+       "text": "Magyarországon előállítva.",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   }
+  ],
+  "findings": [
+   {
+    "code": "F1",
+    "decision": "open",
+    "fieldId": "ingredients",
+    "label": "Összetevők",
+    "specValue": "ZABPEHELY (68%), cukor, szárított mangó (12%), TELJES TEJPOR, rizsliszt, természetes aroma, só.",
+    "kind": "allergen_not_emphasised",
+    "foundValue": "ZABPEHELY (68%), cukor, szárított mangó (12%), teljes tejpor, rizsliszt, természetes aroma, só.",
+    "words": [
+     "TELJES TEJPOR"
+    ]
+   },
+   {
+    "code": "F2",
+    "decision": "open",
+    "fieldId": "preparation",
+    "label": "Felhasználási javaslat",
+    "specValue": "50 g zabkásához adjon 150 ml forró tejet vagy vizet, keverje el, és hagyja állni 2 percig.",
+    "kind": "spec_mismatch",
+    "foundValue": "50 g zabkásához adjon 200 ml forró tejet vagy vizet, keverje el, és hagyja állni 2 percig.",
+    "occurrences": 1
+   }
+  ],
+  "matches": 18
+ },
+ "v3": {
+  "results": [
+   {
+    "id": "name",
+    "label": "Termék megnevezése",
+    "specValue": "Mangós instant zabkása szárított mangódarabokkal",
+    "verdict": "match",
+    "foundValue": "Mangós instant zabkása szárított mangódarabokkal",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b8",
+       "page": 1,
+       "text": "Mangós instant zabkása szárított mangódarabokkal",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": [
+        "Mangós",
+        "instant",
+        "zabkása",
+        "szárított",
+        "mangódarabokkal"
+       ]
+      },
+      "verdict": "match"
+     },
+     {
+      "occurrence": {
+       "blockId": "p1b18",
+       "page": 1,
+       "text": "Mangós instant zabkása szárított mangódarabokkal",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": [
+        "Mangós",
+        "instant",
+        "zabkása",
+        "szárított",
+        "mangódarabokkal"
+       ]
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "net_qty",
+    "label": "Nettó tömeg",
+    "specValue": "400 g",
+    "verdict": "match",
+    "foundValue": "400 g",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b11",
+       "page": 1,
+       "text": "400 g",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": [
+        "400",
+        "g"
+       ]
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "servings",
+    "label": "Adagok száma",
+    "specValue": "A csomag 8 adagot tartalmaz.",
+    "verdict": "match",
+    "foundValue": "A csomag 8 adagot tartalmaz.",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b30",
+       "page": 1,
+       "text": "A csomag 8 adagot tartalmaz.",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "ingredients",
+    "label": "Összetevők",
+    "specValue": "ZABPEHELY (68%), cukor, szárított mangó (12%), TELJES TEJPOR, rizsliszt, természetes aroma, só.",
+    "verdict": "match",
+    "foundValue": "ZABPEHELY (68%), cukor, szárított mangó (12%), TELJES TEJPOR, rizsliszt, természetes aroma, só.",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b19",
+       "page": 1,
+       "text": "ZABPEHELY (68%), cukor, szárított mangó (12%), TELJES TEJPOR, rizsliszt, természetes aroma, só.",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": [
+        "Összetevők:",
+        "ZABPEHELY",
+        "TELJES",
+        "TEJPOR,"
+       ]
+      },
+      "verdict": "match"
+     }
+    ],
+    "allergen": {
+     "status": "ok",
+     "words": []
+    }
+   },
+   {
+    "id": "may_contain",
+    "label": "Keresztszennyeződés",
+    "specValue": "Nyomokban szóját és diófélét tartalmazhat.",
+    "verdict": "match",
+    "foundValue": "Nyomokban szóját és diófélét tartalmazhat.",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b20",
+       "page": 1,
+       "text": "Nyomokban szóját és diófélét tartalmazhat.",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "energy",
+    "label": "Energia",
+    "specValue": "1602 kJ / 380 kcal",
+    "verdict": "match",
+    "foundValue": "1602 kJ / 380 kcal",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b22",
+       "page": 1,
+       "text": "1602 kJ / 380 kcal",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "fat",
+    "label": "Zsír",
+    "specValue": "6,8 g",
+    "verdict": "match",
+    "foundValue": "6,8 g",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b23",
+       "page": 1,
+       "text": "6,8 g",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "saturates",
+    "label": "ebből telített zsírsavak",
+    "specValue": "2,1 g",
+    "verdict": "match",
+    "foundValue": "2,1 g",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b24",
+       "page": 1,
+       "text": "2,1 g",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "carbs",
+    "label": "Szénhidrát",
+    "specValue": "64,5 g",
+    "verdict": "match",
+    "foundValue": "64,5 g",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b25",
+       "page": 1,
+       "text": "64,5 g",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "sugars",
+    "label": "ebből cukrok",
+    "specValue": "22,4 g",
+    "verdict": "match",
+    "foundValue": "22,4 g",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b26",
+       "page": 1,
+       "text": "22,4 g",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "fibre",
+    "label": "Rost",
+    "specValue": "7,9 g",
+    "verdict": "match",
+    "foundValue": "7,9 g",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b27",
+       "page": 1,
+       "text": "7,9 g",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "protein",
+    "label": "Fehérje",
+    "specValue": "11,2 g",
+    "verdict": "match",
+    "foundValue": "11,2 g",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b28",
+       "page": 1,
+       "text": "11,2 g",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "salt",
+    "label": "Só",
+    "specValue": "0,18 g",
+    "verdict": "match",
+    "foundValue": "0,18 g",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b29",
+       "page": 1,
+       "text": "0,18 g",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "per_serving",
+    "label": "Energia adagonként (50 g)",
+    "specValue": "801 kJ / 190 kcal",
+    "verdict": "match",
+    "foundValue": "801 kJ / 190 kcal",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b30",
+       "page": 1,
+       "text": "801 kJ / 190 kcal",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "preparation",
+    "label": "Felhasználási javaslat",
+    "specValue": "50 g zabkásához adjon 150 ml forró tejet vagy vizet, keverje el, és hagyja állni 2 percig.",
+    "verdict": "match",
+    "foundValue": "50 g zabkásához adjon 150 ml forró tejet vagy vizet, keverje el, és hagyja állni 2 percig.",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b14",
+       "page": 1,
+       "text": "50 g zabkásához adjon 150 ml forró tejet vagy vizet, keverje el, és hagyja állni 2 percig.",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "storage",
+    "label": "Tárolás",
+    "specValue": "Száraz, hűvös helyen, közvetlen napfénytől védve tárolandó. Felbontás után légmentesen zárva tartandó.",
+    "verdict": "match",
+    "foundValue": "Száraz, hűvös helyen, közvetlen napfénytől védve tárolandó. Felbontás után légmentesen zárva tartandó.",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b16",
+       "page": 1,
+       "text": "Száraz, hűvös helyen, közvetlen napfénytől védve tárolandó. Felbontás után légmentesen zárva tartandó.",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "best_before",
+    "label": "Minőségmegőrzés jelölése",
+    "specValue": "Minőségét megőrzi: a jelölt mezőben feltüntetett napig.",
+    "verdict": "match",
+    "foundValue": "Minőségét megőrzi: a jelölt mezőben feltüntetett napig.",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b2",
+       "page": 1,
+       "text": "Minőségét megőrzi: a jelölt mezőben feltüntetett napig.",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "manufacturer",
+    "label": "Gyártó",
+    "specValue": "Gyártja: Mezőlak Élelmiszer Kft., 9999 Mintaváros, Malom utca 7.",
+    "verdict": "match",
+    "foundValue": "Gyártja: Mezőlak Élelmiszer Kft., 9999 Mintaváros, Malom utca 7.",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b4",
+       "page": 1,
+       "text": "Gyártja: Mezőlak Élelmiszer Kft., 9999 Mintaváros, Malom utca 7.",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   },
+   {
+    "id": "origin",
+    "label": "Előállítás helye",
+    "specValue": "Magyarországon előállítva.",
+    "verdict": "match",
+    "foundValue": "Magyarországon előállítva.",
+    "diff": [],
+    "occurrences": [
+     {
+      "occurrence": {
+       "blockId": "p1b5",
+       "page": 1,
+       "text": "Magyarországon előállítva.",
+       "box": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "boldWords": []
+      },
+      "verdict": "match"
+     }
+    ]
+   }
+  ],
+  "findings": [],
+  "matches": 19
+ }
+}
