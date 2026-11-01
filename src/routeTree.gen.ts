@@ -13,9 +13,9 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as Checker2RouteImport } from './routes/checker-2'
 import { Route as LeadRouteImport } from './routes/lead'
 import { Route as NewRouteImport } from './routes/new'
-import { Route as NotBuiltRouteImport } from './routes/not-built'
 import { Route as ReviewRouteImport } from './routes/review'
 import { Route as SendBackRouteImport } from './routes/send-back'
+import { Route as TrackAllRouteImport } from './routes/track-all'
 import { Route as UploadRouteImport } from './routes/upload'
 
 const IndexRoute = IndexRouteImport.update({
@@ -38,11 +38,6 @@ const NewRoute = NewRouteImport.update({
   path: '/new',
   getParentRoute: () => rootRouteImport,
 } as any)
-const NotBuiltRoute = NotBuiltRouteImport.update({
-  id: '/not-built',
-  path: '/not-built',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ReviewRoute = ReviewRouteImport.update({
   id: '/review',
   path: '/review',
@@ -51,6 +46,11 @@ const ReviewRoute = ReviewRouteImport.update({
 const SendBackRoute = SendBackRouteImport.update({
   id: '/send-back',
   path: '/send-back',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TrackAllRoute = TrackAllRouteImport.update({
+  id: '/track-all',
+  path: '/track-all',
   getParentRoute: () => rootRouteImport,
 } as any)
 const UploadRoute = UploadRouteImport.update({
@@ -64,9 +64,9 @@ export interface FileRoutesByFullPath {
   '/checker-2': typeof Checker2Route
   '/lead': typeof LeadRoute
   '/new': typeof NewRoute
-  '/not-built': typeof NotBuiltRoute
   '/review': typeof ReviewRoute
   '/send-back': typeof SendBackRoute
+  '/track-all': typeof TrackAllRoute
   '/upload': typeof UploadRoute
 }
 export interface FileRoutesByTo {
@@ -74,9 +74,9 @@ export interface FileRoutesByTo {
   '/checker-2': typeof Checker2Route
   '/lead': typeof LeadRoute
   '/new': typeof NewRoute
-  '/not-built': typeof NotBuiltRoute
   '/review': typeof ReviewRoute
   '/send-back': typeof SendBackRoute
+  '/track-all': typeof TrackAllRoute
   '/upload': typeof UploadRoute
 }
 export interface FileRoutesById {
@@ -85,9 +85,9 @@ export interface FileRoutesById {
   '/checker-2': typeof Checker2Route
   '/lead': typeof LeadRoute
   '/new': typeof NewRoute
-  '/not-built': typeof NotBuiltRoute
   '/review': typeof ReviewRoute
   '/send-back': typeof SendBackRoute
+  '/track-all': typeof TrackAllRoute
   '/upload': typeof UploadRoute
 }
 export interface FileRouteTypes {
@@ -97,9 +97,9 @@ export interface FileRouteTypes {
     | '/checker-2'
     | '/lead'
     | '/new'
-    | '/not-built'
     | '/review'
     | '/send-back'
+    | '/track-all'
     | '/upload'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -107,9 +107,9 @@ export interface FileRouteTypes {
     | '/checker-2'
     | '/lead'
     | '/new'
-    | '/not-built'
     | '/review'
     | '/send-back'
+    | '/track-all'
     | '/upload'
   id:
     | '__root__'
@@ -117,9 +117,9 @@ export interface FileRouteTypes {
     | '/checker-2'
     | '/lead'
     | '/new'
-    | '/not-built'
     | '/review'
     | '/send-back'
+    | '/track-all'
     | '/upload'
   fileRoutesById: FileRoutesById
 }
@@ -128,9 +128,9 @@ export interface RootRouteChildren {
   Checker2Route: typeof Checker2Route
   LeadRoute: typeof LeadRoute
   NewRoute: typeof NewRoute
-  NotBuiltRoute: typeof NotBuiltRoute
   ReviewRoute: typeof ReviewRoute
   SendBackRoute: typeof SendBackRoute
+  TrackAllRoute: typeof TrackAllRoute
   UploadRoute: typeof UploadRoute
 }
 
@@ -164,13 +164,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NewRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/not-built': {
-      id: '/not-built'
-      path: '/not-built'
-      fullPath: '/not-built'
-      preLoaderRoute: typeof NotBuiltRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/review': {
       id: '/review'
       path: '/review'
@@ -183,6 +176,13 @@ declare module '@tanstack/react-router' {
       path: '/send-back'
       fullPath: '/send-back'
       preLoaderRoute: typeof SendBackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/track-all': {
+      id: '/track-all'
+      path: '/track-all'
+      fullPath: '/track-all'
+      preLoaderRoute: typeof TrackAllRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/upload': {
@@ -200,9 +200,9 @@ const rootRouteChildren: RootRouteChildren = {
   Checker2Route: Checker2Route,
   LeadRoute: LeadRoute,
   NewRoute: NewRoute,
-  NotBuiltRoute: NotBuiltRoute,
   ReviewRoute: ReviewRoute,
   SendBackRoute: SendBackRoute,
+  TrackAllRoute: TrackAllRoute,
   UploadRoute: UploadRoute,
 }
 export const routeTree = rootRouteImport
