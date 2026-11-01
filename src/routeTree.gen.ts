@@ -12,10 +12,12 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as Checker2RouteImport } from './routes/checker-2'
 import { Route as LeadRouteImport } from './routes/lead'
+import { Route as MyTasksRouteImport } from './routes/my-tasks'
 import { Route as NewRouteImport } from './routes/new'
 import { Route as ReviewRouteImport } from './routes/review'
 import { Route as SendBackRouteImport } from './routes/send-back'
 import { Route as TrackAllRouteImport } from './routes/track-all'
+import { Route as UnclaimedRouteImport } from './routes/unclaimed'
 import { Route as UploadRouteImport } from './routes/upload'
 
 const IndexRoute = IndexRouteImport.update({
@@ -31,6 +33,11 @@ const Checker2Route = Checker2RouteImport.update({
 const LeadRoute = LeadRouteImport.update({
   id: '/lead',
   path: '/lead',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MyTasksRoute = MyTasksRouteImport.update({
+  id: '/my-tasks',
+  path: '/my-tasks',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NewRoute = NewRouteImport.update({
@@ -53,6 +60,11 @@ const TrackAllRoute = TrackAllRouteImport.update({
   path: '/track-all',
   getParentRoute: () => rootRouteImport,
 } as any)
+const UnclaimedRoute = UnclaimedRouteImport.update({
+  id: '/unclaimed',
+  path: '/unclaimed',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UploadRoute = UploadRouteImport.update({
   id: '/upload',
   path: '/upload',
@@ -63,20 +75,24 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/checker-2': typeof Checker2Route
   '/lead': typeof LeadRoute
+  '/my-tasks': typeof MyTasksRoute
   '/new': typeof NewRoute
   '/review': typeof ReviewRoute
   '/send-back': typeof SendBackRoute
   '/track-all': typeof TrackAllRoute
+  '/unclaimed': typeof UnclaimedRoute
   '/upload': typeof UploadRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/checker-2': typeof Checker2Route
   '/lead': typeof LeadRoute
+  '/my-tasks': typeof MyTasksRoute
   '/new': typeof NewRoute
   '/review': typeof ReviewRoute
   '/send-back': typeof SendBackRoute
   '/track-all': typeof TrackAllRoute
+  '/unclaimed': typeof UnclaimedRoute
   '/upload': typeof UploadRoute
 }
 export interface FileRoutesById {
@@ -84,10 +100,12 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/checker-2': typeof Checker2Route
   '/lead': typeof LeadRoute
+  '/my-tasks': typeof MyTasksRoute
   '/new': typeof NewRoute
   '/review': typeof ReviewRoute
   '/send-back': typeof SendBackRoute
   '/track-all': typeof TrackAllRoute
+  '/unclaimed': typeof UnclaimedRoute
   '/upload': typeof UploadRoute
 }
 export interface FileRouteTypes {
@@ -96,30 +114,36 @@ export interface FileRouteTypes {
     | '/'
     | '/checker-2'
     | '/lead'
+    | '/my-tasks'
     | '/new'
     | '/review'
     | '/send-back'
     | '/track-all'
+    | '/unclaimed'
     | '/upload'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/checker-2'
     | '/lead'
+    | '/my-tasks'
     | '/new'
     | '/review'
     | '/send-back'
     | '/track-all'
+    | '/unclaimed'
     | '/upload'
   id:
     | '__root__'
     | '/'
     | '/checker-2'
     | '/lead'
+    | '/my-tasks'
     | '/new'
     | '/review'
     | '/send-back'
     | '/track-all'
+    | '/unclaimed'
     | '/upload'
   fileRoutesById: FileRoutesById
 }
@@ -127,10 +151,12 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   Checker2Route: typeof Checker2Route
   LeadRoute: typeof LeadRoute
+  MyTasksRoute: typeof MyTasksRoute
   NewRoute: typeof NewRoute
   ReviewRoute: typeof ReviewRoute
   SendBackRoute: typeof SendBackRoute
   TrackAllRoute: typeof TrackAllRoute
+  UnclaimedRoute: typeof UnclaimedRoute
   UploadRoute: typeof UploadRoute
 }
 
@@ -155,6 +181,13 @@ declare module '@tanstack/react-router' {
       path: '/lead'
       fullPath: '/lead'
       preLoaderRoute: typeof LeadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/my-tasks': {
+      id: '/my-tasks'
+      path: '/my-tasks'
+      fullPath: '/my-tasks'
+      preLoaderRoute: typeof MyTasksRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/new': {
@@ -185,6 +218,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TrackAllRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/unclaimed': {
+      id: '/unclaimed'
+      path: '/unclaimed'
+      fullPath: '/unclaimed'
+      preLoaderRoute: typeof UnclaimedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/upload': {
       id: '/upload'
       path: '/upload'
@@ -199,10 +239,12 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   Checker2Route: Checker2Route,
   LeadRoute: LeadRoute,
+  MyTasksRoute: MyTasksRoute,
   NewRoute: NewRoute,
   ReviewRoute: ReviewRoute,
   SendBackRoute: SendBackRoute,
   TrackAllRoute: TrackAllRoute,
+  UnclaimedRoute: UnclaimedRoute,
   UploadRoute: UploadRoute,
 }
 export const routeTree = rootRouteImport
