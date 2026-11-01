@@ -1,11 +1,21 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSession } from "@/state/SessionProvider";
 import { diffUnavailableBanner, lineVerdictLabel, lowResolutionBanner, readBanner } from "@/state/labels";
-import type { CheckFinding } from "@/state/types";
-import { ProofPlaceholder } from "@/components/app/ProofPlaceholder";
+import type { CheckFinding, Decision } from "@/state/types";
+import { ProofView } from "@/components/app/ProofView";
+import { decisionOf as decisionIn, reviewItems } from "@/state/roundLogic";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { EmptyState } from "@/components/app/EmptyState";
 import { FindingRow } from "@/components/app/FindingRow";
 import { DecisionButtons } from "@/components/app/DecisionButtons";
@@ -32,8 +42,22 @@ function Review() {
   const [expanded, setExpanded] = useState<string | null>(null);
   const [showMoved, setShowMoved] = useState(false);
   const [showMatches, setShowMatches] = useState(false);
-  const round = s.round;
+  const [pickedNo, setPickedNo] = useState<number | null>(null);
+  const [tab, setTab] = useState<string | null>(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const rounds = s.session.rounds;
+  const latest = s.round;
+  const round = (pickedNo != null ? rounds[pickedNo - 1] : undefined) ?? latest;
   const req = s.session.request;
+  const readOnly = !!round && !!latest && round.no !== latest.no;
+
+  const undecided = readOnly ? [] : s.undecided;
+  const openFindings = undecided.filter((i) => i.kind === "finding");
+  const openChanges = undecided.filter((i) => i.kind !== "finding");
+  const defaultTab = !round || round.no === 1 ? "undecided" : openFindings.length || !openChanges.length ? "findings" : "changes";
+  const roundKey = round ? `${round.no}` : "";
+  useEffect(() => setTab(null), [roundKey]);
+  const activeTab = tab ?? defaultTab;
 
   if (!round || !req) return <EmptyState />;
   if (!s.claimed)
@@ -47,11 +71,14 @@ function Review() {
     );
 
   const resultOf = (f: CheckFinding) => round.results.find((r) => r.id === f.fieldId);
-  const decisionOf = (code: string) => s.items.find((i) => i.code === code)?.decision ?? "open";
+  const decisionOf = (code: string): Decision => decisionIn(round, code);
+  const itemsOfRound = reviewItems(round);
   const onDecided = (code: string) => {
-    const rest = s.undecided.filter((i) => i.code !== code);
+    const rest = s.undecided.filter((i) => i.code !== code && i.kind === "finding");
     setExpanded(rest[0]?.code ?? null);
   };
+  const isOpenDec = (d: Decision) => d === "open" || d === "needs_discussion";
+  const plural = (n: number) => (n === 1 ? "1 item" : `${n} items`);
 
   const findingRow = (f: CheckFinding) => (
     <FindingRow
@@ -62,6 +89,7 @@ function Review() {
       expanded={expanded === f.code}
       onToggle={() => setExpanded(expanded === f.code ? null : f.code)}
       onDecided={() => onDecided(f.code)}
+      readOnly={readOnly}
     />
   );
 
@@ -77,7 +105,7 @@ function Review() {
     </div>
   );
 
-  const undecidedFindings = round.findings.filter((f) => s.undecided.some((i) => i.code === f.code));
+  const undecidedFindings = round.findings.filter((f) => isOpenDec(decisionOf(f.code)));
 
   const lines = round.lineChecks ?? [];
   const done = lines.filter((l) => l.verdict === "done").length;
@@ -85,8 +113,25 @@ function Review() {
   const unreq = round.unrequested ?? [];
   const moved = (round.diff ?? []).filter((d) => d.type === "moved");
 
-  const open = s.open;
-  const byKind = (k: string) => s.undecided.filter((i) => i.kind === k).length;
+  const open = undecided.length;
+  const tabName = (k: string) => (round.no === 1 ? "undecided" : k === "finding" ? "findings" : "changes");
+  const tabLabel = (t: string) => (t === "undecided" ? "Undecided" : t === "findings" ? "Spec findings" : "Changes");
+  const groups: { tab: string; codes: string[] }[] = [];
+  for (const i of undecided) {
+    const t = tabName(i.kind);
+    const g = groups.find((x) => x.tab === t);
+    if (g) g.codes.push(i.code);
+    else groups.push({ tab: t, codes: [i.code] });
+  }
+  const badge = (n: number) =>
+    n > 0 ? (
+      <span className="ml-1.5 rounded-full bg-neutral-900 px-1.5 text-[11px] font-semibold leading-5 text-white">{n}</span>
+    ) : null;
+  const hint = open > 0 && (
+    <p className="mx-3 mb-2 rounded-md bg-neutral-100 px-3 py-1.5 text-sm text-neutral-700">
+      Decide every item below. Real errors go back to the designer.
+    </p>
+  );
 
   return (
     <div className="max-w-6xl">
@@ -96,8 +141,22 @@ function Review() {
         </h1>
         <div className="flex items-center gap-2 text-sm">
           <span>Round</span>
-          <select disabled className="rounded-md border border-input bg-neutral-100 px-3 py-2 text-sm text-neutral-700">
-            <option>Round {round.no} (latest)</option>
+          <select
+            aria-label="Round"
+            value={round.no}
+            onChange={(e) => {
+              const no = Number(e.target.value);
+              setPickedNo(latest && no === latest.no ? null : no);
+              setExpanded(null);
+            }}
+            className="rounded-md border border-input bg-white px-3 py-2 text-sm"
+          >
+            {[...rounds].reverse().map((r, i) => (
+              <option key={r.no} value={r.no}>
+                Round {r.no}
+                {i === 0 ? " (latest)" : ""}
+              </option>
+            ))}
           </select>
         </div>
       </div>
@@ -118,6 +177,11 @@ function Review() {
         Upload › Automatic check › <strong>Checker 1 (you)</strong> › Checker 2 › Approval
       </p>
 
+      {readOnly && (
+        <div className="mt-3 rounded-md border border-neutral-300 bg-neutral-100 px-3 py-2 text-sm text-neutral-700">
+          You are looking at round {round.no}. Decisions are only possible in the latest round.
+        </div>
+      )}
       {round.readMode === "text_layer" && (
         <div className="mt-3 rounded-md border border-neutral-300 bg-neutral-50 px-3 py-2 text-sm">
           <strong>Automatic check finished.</strong> {readBanner.text_layer} ({round.seconds} s)
@@ -152,16 +216,29 @@ function Review() {
       )}
 
       <div className="mt-4 grid grid-cols-2 gap-6">
-        <ProofPlaceholder className="h-[28rem]" />
+        <ProofView
+          round={round}
+          decisionOf={decisionOf}
+          active={expanded}
+          onPick={(code) => {
+            setExpanded(code);
+            if (round.no > 1) setTab("findings");
+            else if (activeTab === "matches") setTab("all");
+          }}
+        />
 
         <div className="rounded-md border border-neutral-300">
           {round.no === 1 ? (
-            <Tabs defaultValue="undecided">
+            <Tabs value={activeTab} onValueChange={setTab}>
               <TabsList className="m-2">
-                <TabsTrigger value="undecided">Undecided {s.undecided.length}</TabsTrigger>
+                <TabsTrigger value="undecided">
+                  Undecided {undecidedFindings.length}
+                  {badge(openFindings.length)}
+                </TabsTrigger>
                 <TabsTrigger value="all">All {round.findings.length}</TabsTrigger>
                 <TabsTrigger value="matches">Matches {round.matches}</TabsTrigger>
               </TabsList>
+              {hint}
               <TabsContent value="undecided">
                 {undecidedFindings.length ? (
                   undecidedFindings.map(findingRow)
@@ -179,11 +256,14 @@ function Review() {
               <TabsContent value="matches">{matchesList}</TabsContent>
             </Tabs>
           ) : (
-            <Tabs defaultValue="findings">
+            <Tabs value={activeTab} onValueChange={setTab}>
               <TabsList className="m-2">
-                <TabsTrigger value="findings">Spec findings ({round.findings.length})</TabsTrigger>
-                <TabsTrigger value="changes">Changes</TabsTrigger>
+                <TabsTrigger value="findings">
+                  Spec findings ({round.findings.length}){badge(openFindings.length)}
+                </TabsTrigger>
+                <TabsTrigger value="changes">Changes{badge(openChanges.length)}</TabsTrigger>
               </TabsList>
+              {hint}
               <TabsContent value="findings">
                 {round.findings.length ? (
                   round.findings.map(findingRow)
@@ -214,7 +294,8 @@ function Review() {
                     <div className="divide-y divide-neutral-200 rounded-b-md border border-t-0 border-neutral-300">
                       {lines.map((l, i) => {
                         const code = `C${i + 1}`;
-                        const item = s.items.find((it) => it.code === code);
+                        const item = itemsOfRound.find((it) => it.code === code);
+                        const dec = decisionOf(code);
                         return (
                           <div key={code} className="px-3 py-2">
                             <div className="flex items-start gap-2">
@@ -231,11 +312,13 @@ function Review() {
                                   Same problem as {item.linkedTo} in Spec findings: decide it there.
                                 </p>
                               ) : (
-                                <DecisionButtons
-                                  code={code}
-                                  decision={item?.decision ?? "open"}
-                                  onDecided={() => onDecided(code)}
-                                />
+                                <ChangeableDecision
+                                  decision={dec}
+                                  readOnly={readOnly}
+                                  chip={dec === "real_error" ? <Chip tone="real">Real error</Chip> : <Chip tone="not">Not an error</Chip>}
+                                >
+                                  {(done) => <DecisionButtons code={code} decision={dec} onDecided={done} />}
+                                </ChangeableDecision>
                               ))}
                           </div>
                         );
@@ -272,30 +355,34 @@ function Review() {
                                 Same change as spec finding {u.linkedTo}: decided there, listed once.
                               </p>
                             ) : (
-                              <div className="mt-2 flex items-center gap-2">
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  onClick={() => {
-                                    s.decide(u.code, "real_error");
-                                    onDecided(u.code);
-                                  }}
-                                >
-                                  Reject: add to send-back list
-                                </Button>
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  onClick={() => {
-                                    s.decide(u.code, "not_error");
-                                    onDecided(u.code);
-                                  }}
-                                >
-                                  Accept change
-                                </Button>
-                                {dec === "real_error" && <Chip tone="red">Rejected</Chip>}
-                                {dec === "not_error" && <Chip tone="green">Accepted</Chip>}
-                              </div>
+                              <ChangeableDecision
+                                decision={dec}
+                                readOnly={readOnly}
+                                chip={dec === "real_error" ? <Chip tone="real">Rejected</Chip> : <Chip tone="not">Accepted</Chip>}
+                              >
+                                {(done) => (
+                                  <div className="mt-2 flex items-center gap-2">
+                                    <Button
+                                      size="sm"
+                                      variant={dec === "real_error" ? "default" : "outline"}
+                                      onClick={() => {
+                                        if (!s.decide(u.code, "real_error")) done();
+                                      }}
+                                    >
+                                      Reject: add to send-back list
+                                    </Button>
+                                    <Button
+                                      size="sm"
+                                      variant={dec === "not_error" ? "secondary" : "outline"}
+                                      onClick={() => {
+                                        if (!s.decide(u.code, "not_error")) done();
+                                      }}
+                                    >
+                                      Accept change
+                                    </Button>
+                                  </div>
+                                )}
+                              </ChangeableDecision>
                             )}
                           </div>
                         );
@@ -323,31 +410,93 @@ function Review() {
         </div>
       </div>
 
-      <div className="mt-6 flex items-center justify-between rounded-md border border-neutral-400 px-4 py-3">
-        <div className="text-sm">
-          {open === 0 ? (
-            <p>
-              <strong>All decided.</strong>
+      {!readOnly && (
+        <div className="mt-6 flex items-center justify-between gap-4 rounded-md border border-neutral-400 px-4 py-3">
+          <div className="text-sm">
+            {open === 0 ? (
+              <p>
+                <strong>All decided.</strong>
+              </p>
+            ) : (
+              <p>
+                <strong>{plural(open)} undecided:</strong>{" "}
+                {groups.map((g, gi) => (
+                  <span key={g.tab}>
+                    {gi > 0 ? ", " : ""}
+                    <button type="button" className="underline underline-offset-2" onClick={() => setTab(g.tab)}>
+                      {g.codes.join(", ")} on the {tabLabel(g.tab)} tab
+                    </button>
+                  </span>
+                ))}
+              </p>
+            )}
+            <p className="text-neutral-600">
+              When all are decided: any real error means Send back to designer, none means pass to Checker 2.
             </p>
-          ) : round.no === 1 ? (
-            <p>
-              <strong>{open} findings undecided:</strong> {s.undecided.map((i) => i.code).join(", ")}
-            </p>
-          ) : (
-            <p>
-              <strong>{open} items undecided:</strong> {byKind("finding")} spec findings, {byKind("line")} comments,{" "}
-              {byKind("unrequested")} unrequested changes.
-            </p>
-          )}
-          <p className="text-neutral-600">
-            When all are decided: any real error means Send back to designer, none means pass to Checker 2.
-          </p>
-          {error && <p className="text-red-700">{error}</p>}
+            {error && <p className="text-red-700">{error}</p>}
+          </div>
+          <div className="flex shrink-0 gap-2">
+            {open > 0 && (
+              <Button variant="outline" onClick={() => setConfirmOpen(true)}>
+                Finish anyway
+              </Button>
+            )}
+            <Button disabled={open > 0} onClick={() => run(() => s.finishReview())}>
+              Finish review
+            </Button>
+          </div>
         </div>
-        <Button disabled={open > 0} onClick={() => run(() => s.finishReview())}>
-          Finish review
-        </Button>
-      </div>
+      )}
+
+      <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Finish with open items?</AlertDialogTitle>
+            <AlertDialogDescription>
+              {open === 1 ? "1 item is" : `${open} items are`} not decided: {undecided.map((i) => i.code).join(", ")}. They will
+              NOT be sent to the designer. Checker 2 will see them marked as not decided.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel autoFocus>Go back and decide</AlertDialogCancel>
+            <Button
+              variant="destructive"
+              onClick={() => {
+                setConfirmOpen(false);
+                run(() => s.finishReview({ anyway: true }));
+              }}
+            >
+              Finish anyway
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </div>
+  );
+}
+
+function ChangeableDecision({
+  decision,
+  readOnly,
+  chip,
+  children,
+}: {
+  decision: Decision;
+  readOnly: boolean;
+  chip: ReactNode;
+  children: (done: () => void) => ReactNode;
+}) {
+  const [changing, setChanging] = useState(false);
+  const isOpen = decision === "open" || decision === "needs_discussion";
+  if (readOnly) return <div className="mt-2">{isOpen ? <Chip tone="undecided">Undecided</Chip> : chip}</div>;
+  return (
+    <div>
+      {!isOpen && (
+        <button type="button" className="mt-2" title="Change decision" onClick={() => setChanging((c) => !c)}>
+          {chip}
+        </button>
+      )}
+      {(isOpen || changing) && children(() => setChanging(false))}
     </div>
   );
 }
