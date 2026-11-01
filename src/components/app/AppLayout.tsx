@@ -40,8 +40,8 @@ export function AppLayout({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!pendingJump.current) return;
     pendingJump.current = false;
-    void navigate({ to: stepTo(s.session.step), search: dev ? { dev: "1" as const } : {} });
-  }, [s.session, dev, navigate]);
+    void navigate({ to: s.session.step === "review" && !s.claimed ? "/unclaimed" : stepTo(s.session.step), search: dev ? { dev: "1" as const } : {} });
+  }, [s.session, s.claimed, dev, navigate]);
 
   useEffect(() => {
     const r = roleOfPath(pathname);
