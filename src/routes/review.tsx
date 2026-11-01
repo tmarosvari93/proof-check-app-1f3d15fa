@@ -214,6 +214,7 @@ function Review() {
           One AI read failed: {round.readError}. Differences between rounds may be missing.
         </div>
       )}
+      <WarningsBox warnings={round.warnings} />
 
       <div className="mt-4 grid grid-cols-2 gap-6">
         <ProofView

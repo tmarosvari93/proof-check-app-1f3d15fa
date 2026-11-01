@@ -7,6 +7,7 @@ import { useSession } from "@/state/SessionProvider";
 import { demoRequestFields as f } from "@/state/demo";
 import { DropZone } from "@/components/app/DropZone";
 import { useAfterAction } from "@/components/app/useAfterAction";
+import { WarningsBox } from "@/components/app/WarningsBox";
 
 export const Route = createFileRoute("/new")({
   head: () => ({
@@ -134,6 +135,7 @@ function NewRequest() {
                 <p className="text-sm text-neutral-500">
                   No editing and no override in this prototype: if the Excel was read wrongly, fix the Excel and upload it again.
                 </p>
+                <WarningsBox warnings={spec.warnings} title="Check these before you create the request" />
                 <label className="flex items-center gap-2 text-sm">
                   <Checkbox checked={checked} onCheckedChange={(v) => setChecked(v === true)} />
                   I have checked these values against the signed spec
