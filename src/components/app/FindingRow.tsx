@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { CheckFinding, Decision, FieldResult } from "@/state/types";
 import { badgeOf, summaryOf } from "@/state/format";
 import { Chip, DecisionChip } from "./Chip";
@@ -10,6 +11,7 @@ export function FindingRow({
   expanded,
   onToggle,
   onDecided,
+  readOnly = false,
 }: {
   finding: CheckFinding;
   result?: FieldResult | undefined;
@@ -17,20 +19,32 @@ export function FindingRow({
   expanded: boolean;
   onToggle: () => void;
   onDecided: () => void;
+  readOnly?: boolean;
 }) {
+  const [changing, setChanging] = useState(false);
+  const isOpen = decision === "open" || decision === "needs_discussion";
+  const showButtons = !readOnly && (isOpen || changing);
   return (
-    <div className="border-b border-neutral-200 last:border-b-0">
-      <button className="flex w-full items-start gap-3 px-3 py-2 text-left hover:bg-neutral-50" onClick={onToggle}>
-        <span className="pt-0.5 text-sm font-semibold text-neutral-500">{finding.code}</span>
-        <span className="min-w-0 flex-1">
-          <span className="block text-sm font-bold">{finding.label}</span>
-          <span className="block text-sm text-neutral-600">{summaryOf(finding, result)}</span>
-        </span>
-        <Chip tone="plain">{badgeOf(finding)}</Chip>
-        <DecisionChip decision={decision} />
-      </button>
+    <div className={`border-b border-neutral-200 last:border-b-0 ${expanded ? "bg-neutral-50" : ""}`}>
+      <div className="flex w-full items-start gap-3 px-3 py-2">
+        <button className="flex min-w-0 flex-1 items-start gap-3 text-left" onClick={onToggle}>
+          <span className="pt-0.5 text-sm font-semibold text-neutral-500">{finding.code}</span>
+          <span className="min-w-0 flex-1">
+            <span className="block text-sm font-bold">{finding.label}</span>
+            <span className="block text-sm text-neutral-600">{summaryOf(finding, result)}</span>
+          </span>
+          <Chip tone="plain">{badgeOf(finding)}</Chip>
+        </button>
+        {!readOnly && !isOpen ? (
+          <button type="button" title="Change decision" onClick={() => setChanging((c) => !c)}>
+            <DecisionChip decision={decision} />
+          </button>
+        ) : (
+          <DecisionChip decision={decision} />
+        )}
+      </div>
       {expanded && (
-        <div className="border-t border-neutral-100 bg-neutral-50 px-3 py-3">
+        <div className="border-t border-neutral-100 px-3 py-3">
           <dl className="grid grid-cols-[4rem_1fr] gap-y-1 text-sm">
             <dt className="text-neutral-500">Spec</dt>
             <dd>{finding.specValue}</dd>
@@ -62,7 +76,18 @@ export function FindingRow({
           {finding.kind === "allergen_not_emphasised" && (finding.words?.length ?? 0) > 0 && (
             <p className="mt-2 text-sm">Must be bold: {finding.words!.join(", ")}</p>
           )}
-          <DecisionButtons code={finding.code} decision={decision} onDecided={onDecided} />
+        </div>
+      )}
+      {showButtons && (
+        <div className="px-3 pb-3">
+          <DecisionButtons
+            code={finding.code}
+            decision={decision}
+            onDecided={() => {
+              setChanging(false);
+              onDecided();
+            }}
+          />
         </div>
       )}
     </div>
