@@ -308,7 +308,7 @@ function Review() {
                               </p>
                             ) : (
                               <div className="mt-2 flex items-center gap-2">
-                                <Button
+                                {!readOnly && <><Button
                                   size="sm"
                                   variant="outline"
                                   onClick={() => {
