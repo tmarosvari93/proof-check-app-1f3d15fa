@@ -7,6 +7,7 @@ import { useSession } from "@/state/SessionProvider";
 import { demoRequestFields as f } from "@/state/demo";
 import { DropZone } from "@/components/app/DropZone";
 import { useAfterAction } from "@/components/app/useAfterAction";
+import { SpecFileRow } from "@/components/app/FilesRow";
 
 export const Route = createFileRoute("/new")({
   head: () => ({
@@ -107,6 +108,7 @@ function NewRequest() {
             ) : (
               <>
                 {metaLine && <p className="text-sm">{metaLine}</p>}
+                <SpecFileRow file={s.session.pendingSpecFile} />
                 <p className="text-sm">
                   Name on the label (from the spec): <span className="font-semibold">{spec.meta.productName}</span>
                 </p>

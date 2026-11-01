@@ -21,6 +21,7 @@ import { FindingRow } from "@/components/app/FindingRow";
 import { DecisionButtons } from "@/components/app/DecisionButtons";
 import { Chip } from "@/components/app/Chip";
 import { useAfterAction } from "@/components/app/useAfterAction";
+import { FilesRow } from "@/components/app/FilesRow";
 
 export const Route = createFileRoute("/review")({
   head: () => ({
@@ -176,6 +177,9 @@ function Review() {
       <p className="mt-1 text-sm text-neutral-600">
         Upload › Automatic check › <strong>Checker 1 (you)</strong> › Checker 2 › Approval
       </p>
+      <div className="mt-1">
+        <FilesRow spec={req.specFile} proof={round.proofFile} />
+      </div>
 
       {readOnly && (
         <div className="mt-3 rounded-md border border-neutral-300 bg-neutral-100 px-3 py-2 text-sm text-neutral-700">
