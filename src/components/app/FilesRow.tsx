@@ -28,7 +28,7 @@ export function FilesRow({ spec, proof }: { spec?: FileRef | null | undefined; p
 }
 
 /** "Spec file: …" for the New request page, next to the read result. */
-export function SpecFileRow({ file }: { file?: FileRef | null }) {
+export function SpecFileRow({ file }: { file?: FileRef | null | undefined }) {
   if (!file) return null;
   return (
     <p className="text-sm text-neutral-600">
