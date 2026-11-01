@@ -8,6 +8,7 @@ import { demoRequestFields as f } from "@/state/demo";
 import { DropZone } from "@/components/app/DropZone";
 import { useAfterAction } from "@/components/app/useAfterAction";
 import { WarningsBox } from "@/components/app/WarningsBox";
+import { FileLink } from "@/components/app/FilesRow";
 
 export const Route = createFileRoute("/new")({
   head: () => ({
@@ -135,6 +136,11 @@ function NewRequest() {
                 <p className="text-sm text-neutral-500">
                   No editing and no override in this prototype: if the Excel was read wrongly, fix the Excel and upload it again.
                 </p>
+                {s.session.pendingSpecFile && (
+                  <p className="text-sm text-neutral-600">
+                    Spec file: <FileLink file={s.session.pendingSpecFile} download />
+                  </p>
+                )}
                 <WarningsBox warnings={spec.warnings} title="Check these before you create the request" />
                 <label className="flex items-center gap-2 text-sm">
                   <Checkbox checked={checked} onCheckedChange={(v) => setChecked(v === true)} />
