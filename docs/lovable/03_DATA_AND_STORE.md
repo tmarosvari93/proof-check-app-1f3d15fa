@@ -12,7 +12,14 @@ const s = useSession();
 
 | Name | Type | Meaning |
 |---|---|---|
-| `session` | `Session` | Everything: `pendingSpec`, `request`, `rounds`, `current`, `step`, `checker2Agreed`, `checker2SignedOff`, `checker2SignedAt`, `approved`, `approvedAt` |
+| `session` | `Session` | Everything: `pendingSpec`, `request`, `rounds`, `current`, `step`, `claim?`, `checker2Agreed`, `checker2SignedOff`, `checker2SignedAt`, `approved`, `approvedAt` |
+| `role` | `Role` | The role in the top-bar switcher: `"requester" \| "designer" \| "checker1" \| "checker2" \| "lead"` |
+| `menu` | `MenuItem[]` | The left menu of the current role: `{ label, to }[]` |
+| `landing` | `string` | Where the current role goes when picked (its task, Unclaimed, or My tasks). To navigate right after `setRole`, use `landingOf(session, role)` from `src/state/tasks.ts` |
+| `unclaimed` | `Task[]` | Proofs uploaded and not yet claimed: `{ workId, product, piece, round, title, status, to, actionable }[]` |
+| `tasks` | `Task[]` | My tasks for the current role (same shape). `to === null`: nothing to open, waiting on someone else |
+| `claimed` | `boolean` | The proof of the current round was claimed. `/review` needs this |
+| `canClaim` | `boolean` | Only Checker 1 can claim |
 | `round` | `Round \| undefined` | The round being worked on (`session.rounds[session.current - 1]`); undefined before its proof is uploaded |
 | `items` | `ItemView[]` | Everything in the current round the checker looks at: `{ code, kind: "finding"\|"line"\|"unrequested", needsDecision, linkedTo?, decision }` |
 | `undecided` | `ItemView[]` | Items that still need a decision. Finish review is disabled while not empty |
@@ -24,8 +31,10 @@ const s = useSession();
 | Action | Returns | Notes |
 |---|---|---|
 | `loadSpec(file)` | `Promise<string \| undefined>` | **await it.** Reads the spec into `session.pendingSpec`. Errors: "Choose the spec Excel file first", "This file is not a readable .xlsx workbook" |
-| `createRequest()` | `string \| undefined` | Needs `pendingSpec`. Moves to `upload_proof` |
-| `uploadProof(file, note?)` | `Promise<string \| undefined>` | **await it.** Runs the check, stores the round, moves to `review`. Error: "This file is not a PDF" |
+| `createRequest(notes?)` | `string \| undefined` | Needs `pendingSpec`. `notes` = the requester's comments for the designer (stored in `request.notes`; the demo note when left out). Moves to `upload_proof` |
+| `uploadProof(file, note?)` | `Promise<string \| undefined>` | **await it.** Runs the check, stores the round (with `preview` and `markers`), moves to `review`, where the proof waits in Unclaimed. Error: "This file is not a PDF" |
+| `claimProof()` | `string \| undefined` | Checker 1 takes the proof of the current round. Errors: "Already claimed by …", "There is no proof waiting to be claimed" |
+| `setRole(role)` | `void` | Changes the role chip and menu. Does not navigate |
 | `decide(code, decision, reason?)` | `string \| undefined` | `decision`: `"real_error"` or `"not_error"`. Not an error needs a reason (use `reasonText(chip, note)`), except U codes ("Change accepted" is stored) |
 | `finishReview()` | `string \| undefined` | Blocked while items are open. Builds the Hungarian send-back list. Moves to `send_back`, or to `checker2` when nothing is a real error |
 | `backToReview()` | `string \| undefined` | From the send-back list. Finishing again rebuilds the list |
@@ -54,7 +63,9 @@ Round {
   lineChecks?: LineCheck[],        // round 2+: { code, text, verdict: done|not_done|check_by_hand, fieldId? }
   unrequested?: UnrequestedItem[], // round 2+: { code: "U1", change: DiffItem, what, where?, linkedTo? }
   sendBack: { code, text }[],      // Hungarian lines, built by finishReview
-  decisions, dismissals, finished, finishedAt?
+  decisions, dismissals, finished, finishedAt?,
+  preview?: string,                // JPEG data URL of the proof page
+  markers?: { code, x, y, w, h }[] // percent of the page from the top-left; one per spec finding with a known place
 }
 FieldResult  { id, label, specValue, verdict: match|mismatch|missing|could_not_read, foundValue, diff: {type: same|del|ins, text}[], reason?, allergen? }
 CheckFinding { code, kind, fieldId, label, specValue, foundValue, words?, occurrences?, where? }
@@ -62,7 +73,8 @@ CheckFinding { code, kind, fieldId, label, specValue, foundValue, words?, occurr
 Item codes: **F** = spec finding, **C{n}** = the n-th line of the previous send-back list (`lineChecks[n-1]`), **U** = unrequested change, **M** = a line the checker typed.
 
 ## Fixed values, wording and helpers (import, never retype)
-- `src/state/demo.ts`: `people`, `workingAs`, `demoRequestFields`, `dismissReasons`.
+- `src/state/demo.ts`: `people`, `workingAs`, `roleOrder`, `roleLabel`, `demoRequestFields`, `dismissReasons`, `trackAllSample`, `trackAllNote`.
+- `src/state/tasks.ts`: `landingOf`, `roleOfPath`, `notForYouText`, `menuOf`, `ownerOf` (pure; the store already calls them).
 - `src/state/labels.ts`: `kindLabel`, `verdictLabel`, `lineVerdictLabel`, `diffLabel`, `readBanner`, `lowResolutionBanner`, `reasonLabel`, `stepPath`.
 - `src/state/format.ts`: `badgeOf(finding)`, `summaryOf(finding, result)`, `sourceOf(code)`, `formatTime(iso)`, `daysBetween(fromIso)`, `reasonText(chip, note)`.
 
@@ -75,7 +87,8 @@ Item codes: **F** = spec finding, **C{n}** = the n-th line of the previous send-
 | `new_request` | `/new` | Empty form |
 | `new_request_spec_read` | `/new` | Spec read: 19 fields, Create request enabled |
 | `r1_upload` | `/upload` | Round 1 upload, nothing requested yet |
-| `r1_review` | `/review` | Round 1: 6 findings undecided, 14 matches |
+| `r1_unclaimed` | `/unclaimed` | Round 1 uploaded, not claimed: one row in Unclaimed |
+| `r1_review` | `/review` | Round 1, claimed: 6 findings undecided, 14 matches (the prepared states have no preview image, so the grey placeholder shows) |
 | `r1_review_flat` | `/review` | Read by AI from an image at 150 dpi |
 | `r1_review_lowres` | `/review` | 75 dpi: amber banner, number fields Could not read |
 | `r1_review_failed` | `/review` | Read failed: red banner, 19 Could-not-read findings |
@@ -88,7 +101,7 @@ Item codes: **F** = spec finding, **C{n}** = the n-th line of the previous send-
 | `lead` | `/lead` | Ready to approve |
 | `approved` | `/lead` | Approved |
 
-The real flow also works end to end without `jumpTo`: any `.xlsx` gives the demo spec, any `.pdf` gives the demo result for the current round (in step 3 these become the real check; your pages do not change).
+The real flow also works end to end without `jumpTo`: any `.xlsx` gives the demo spec, any `.pdf` is really checked.
 
 ## If something is missing
 Do not compute it and do not add state. Use what exists, and list what you needed under "Missing from the store" in your final message.

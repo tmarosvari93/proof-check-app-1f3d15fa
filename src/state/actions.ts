@@ -8,6 +8,7 @@ import type { ParsedSpec } from "../core/parseSpec";
 import { buildRoundSendBack, dismissalsOf, openCount } from "./roundLogic";
 import { ACCEPTED_CHANGE, demoRequestFields } from "./demo";
 import { emptySession, type Decision, type Round, type Session } from "./types";
+import { isClaimed } from "./tasks";
 
 export interface Result {
   session: Session;
@@ -48,12 +49,15 @@ export function setPendingSpec(s: Session, spec: ParsedSpec): Result {
   return ok({ ...s, pendingSpec: spec, step: "new_request" });
 }
 
-/** A5: Create request. Needs a spec read first. */
-export function createRequest(s: Session, now: string): Result {
+/**
+ * A5: Create request. Needs a spec read first. `notes` are the requester's comments for the designer; when they are
+ * not given the fixed demo note is used. The designer sees them on the Upload proof page.
+ */
+export function createRequest(s: Session, now: string, notes?: string): Result {
   if (!s.pendingSpec) return fail(s, "Upload the spec Excel first");
   return ok({
     ...s,
-    request: { ...demoRequestFields, createdAt: now, spec: s.pendingSpec },
+    request: { ...demoRequestFields, ...(notes !== undefined ? { notes: notes.trim() } : {}), createdAt: now, spec: s.pendingSpec },
     pendingSpec: null,
     rounds: [],
     current: 1,
@@ -65,6 +69,13 @@ export function createRequest(s: Session, now: string): Result {
 export function addRound(s: Session, round: Round): Result {
   if (!s.request) return fail(s, "Create a request first");
   return ok({ ...s, rounds: [...s.rounds.slice(0, s.current - 1), { ...round, no: s.current }], step: "review" });
+}
+
+/** Unclaimed: Checker 1 takes the proof of the current round. A claim belongs to one round. */
+export function claimProof(s: Session, by: string, now: string): Result {
+  if (s.step !== "review" || !cur(s)) return fail(s, "There is no proof waiting to be claimed");
+  if (isClaimed(s)) return fail(s, `Already claimed by ${s.claim!.by}`);
+  return ok({ ...s, claim: { round: s.current, by, at: now } });
 }
 
 /**

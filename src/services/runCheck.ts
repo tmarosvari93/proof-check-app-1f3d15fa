@@ -13,6 +13,7 @@ import { compareAll, compareField, type FieldResult } from "../core/compare";
 import type { FieldsReply } from "../core/schemas";
 import { toFindings, countMatches, type CheckFinding } from "../core/findings";
 import { panelOf } from "../core/diff";
+import { markersOf } from "../core/markers";
 import { compareRounds, recheckSendBack, type SendLine } from "../core/unrequested";
 import type { ParsedSpec } from "../core/parseSpec";
 import type { Block } from "../core/textLayer";
@@ -29,6 +30,8 @@ export interface ProofPage {
   fontNamesRead: boolean;
   /** Flat proofs only: the rendered page for the reader and the real resolution of the embedded image (0 = unknown). */
   flat?: { jpegBase64: string; dpi: number } | undefined;
+  /** JPEG data URL of the page, shown on the review screen. Absent when it could not be rendered (and in Node tests). */
+  preview?: string | undefined;
 }
 
 /** What the AI reader returned for a flat proof. A null part means that read failed. */
@@ -119,6 +122,8 @@ export function checkProof(input: CheckInput): Round {
   const findings = readable ? withWhere(toFindings(results), results, page.width) : toFindings(results);
   // Blocks of this proof, kept for the next round's diff: from the text layer, or from the AI block read.
   const blocks: Block[] | undefined = readable ? page.blocks : (input.ai?.blocks ?? undefined);
+  // Marks on the preview image: only where a real text box is known (text-layer read).
+  const markers = readable ? markersOf(findings, results, page) : [];
 
   const base: Round = {
     no: input.no,
@@ -135,6 +140,8 @@ export function checkProof(input: CheckInput): Round {
     dismissals: {},
     finished: false,
     ...(blocks ? { blocks, page: { width: page.width, height: page.height } } : {}),
+    ...(page.preview ? { preview: page.preview } : {}),
+    ...(markers.length ? { markers } : {}),
   };
   if (!previous) return base;
 

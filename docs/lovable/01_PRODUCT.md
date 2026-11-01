@@ -19,7 +19,7 @@ The software only highlights. Checker 1 decides each item (real error, or not an
 | Péter S. | Checker 2: second pair of eyes (4-eye check) on what Checker 1 dismissed | A3.6 Checker 2 |
 | Dr. Kovács E. | Food-safety lead: final approval | A3.7 Lead approval |
 
-In the prototype **one person plays every role**. There is no login. The "Working as" chip at the top of each page says whose page it is.
+In the prototype **one person plays every role**. There is no login. The "Working as" switcher at the top says which role you play; pick another role to change hats.
 
 The full design has 17 screens (`docs/lovable/wireframes/`, also as one PDF). This prototype builds the 8 that prove the value; the other 9 are designed only and open a "Designed, not built" page.
 

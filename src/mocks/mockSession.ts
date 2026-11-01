@@ -12,7 +12,7 @@ import { buildSendBack, type SendBackItem } from "../core/sendBack";
 import { compareField, type FieldResult } from "../core/compare";
 import { sendable, type CheckFinding } from "../core/findings";
 import { buildRoundSendBack, reviewItems } from "../state/roundLogic";
-import { demoRequestFields } from "../state/demo";
+import { demoRequestFields, people } from "../state/demo";
 import type { Decision, DiffItem, LineCheck, RequestInfo, Round, Session, UnrequestedItem } from "../state/types";
 
 export const mockSpec = real.spec as unknown as RequestInfo["spec"];
@@ -149,18 +149,20 @@ function flatRound(dpi: number): Round {
 }
 
 function base(over: Partial<Session>): Session {
-  return {
+  const s: Session = {
     pendingSpec: null, request: demoRequest, rounds: [], current: 1, step: "home",
     checker2Agreed: {}, checker2SignedOff: false, approved: false, ...over,
   };
+  // A proof in review has been claimed (otherwise the review page sends you to Unclaimed first).
+  return s.step === "review" ? { ...s, claim: { round: s.current, by: people.checker1, at: T0 } } : s;
 }
 
 export type MockName =
-  | "empty" | "new_request" | "new_request_spec_read" | "r1_upload" | "r1_review" | "r1_review_flat" | "r1_review_lowres"
+  | "empty" | "new_request" | "new_request_spec_read" | "r1_upload" | "r1_unclaimed" | "r1_review" | "r1_review_flat" | "r1_review_lowres"
   | "r1_review_failed" | "r1_sendback" | "r2_upload" | "r2_review" | "r2_sendback" | "r3_review" | "checker2" | "lead" | "approved";
 
 export const mockNames: MockName[] = [
-  "empty", "new_request", "new_request_spec_read", "r1_upload", "r1_review", "r1_review_flat", "r1_review_lowres",
+  "empty", "new_request", "new_request_spec_read", "r1_upload", "r1_unclaimed", "r1_review", "r1_review_flat", "r1_review_lowres",
   "r1_review_failed", "r1_sendback", "r2_upload", "r2_review", "r2_sendback", "r3_review", "checker2", "lead", "approved",
 ];
 
@@ -170,6 +172,12 @@ export function mockSession(name: MockName): Session {
     case "new_request": return base({ request: null, step: "new_request" });
     case "new_request_spec_read": return base({ request: null, pendingSpec: mockSpec, step: "new_request" });
     case "r1_upload": return base({ step: "upload_proof" });
+    case "r1_unclaimed": {
+      // Uploaded, nobody has claimed it yet: it shows in Unclaimed.
+      const { claim: _claim, ...unclaimed } = base({ rounds: [r1()], step: "review" });
+      void _claim;
+      return unclaimed;
+    }
     case "r1_review": return base({ rounds: [r1()], step: "review" });
     case "r1_review_flat": return base({ rounds: [flatRound(150)], step: "review" });
     case "r1_review_lowres": return base({ rounds: [flatRound(75)], step: "review" });

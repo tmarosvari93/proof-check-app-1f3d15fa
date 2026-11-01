@@ -9,7 +9,9 @@ import type { Edit } from "../core/sendBack";
 import * as A from "./actions";
 import { mockSession, type MockName } from "../mocks/mockSession";
 import { decisionOf, dismissalsOf, openCount, previousLines, reviewItems, type Dismissal, type PreviousLine, type ReviewItem } from "./roundLogic";
-import { emptySession, type Decision, type Round, type Session } from "./types";
+import { emptySession, type Decision, type Role, type Round, type Session } from "./types";
+import { canClaim, isClaimed, landingOf, menuOf, tasksOf, unclaimedOf, type MenuItem, type Task } from "./tasks";
+import { claimerName } from "./demo";
 
 type Err = string | undefined;
 export type ItemView = ReviewItem & { decision: Decision };
@@ -31,9 +33,27 @@ export interface SessionApi {
   /** True while loadSpec or uploadProof runs. */
   busy: boolean;
 
+  /** The role picked in the top bar ("Working as"). Pages that belong to one role switch it themselves. */
+  role: Role;
+  setRole(role: Role): void;
+  /** The left menu of the current role. */
+  menu: MenuItem[];
+  /** Where the current role lands when picked: its task, or My tasks. */
+  landing: string;
+  /** Unclaimed list: proofs uploaded and not yet taken by a checker. */
+  unclaimed: Task[];
+  /** My tasks for the current role. */
+  tasks: Task[];
+  /** The proof of the current round was claimed. /review needs this. */
+  claimed: boolean;
+  /** Only Checker 1 can claim in this demo. */
+  canClaim: boolean;
+
   loadSpec(file: File | null): Promise<Err>;
-  createRequest(): Err;
+  /** notes: the requester's comments for the designer (optional; the demo note is used when left out). */
+  createRequest(notes?: string): Err;
   uploadProof(file: File | null, designerNote?: string): Promise<Err>;
+  claimProof(): Err;
   decide(code: string, decision: Decision, reason?: string): Err;
   finishReview(): Err;
   backToReview(): Err;
@@ -54,6 +74,7 @@ const now = () => new Date().toISOString();
 export function SessionProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session>(emptySession);
   const [busy, setBusy] = useState(false);
+  const [role, setRole] = useState<Role>("requester");
   const latest = useRef(session);
 
   const apply = useCallback((fn: (s: Session) => A.Result): Err => {
@@ -76,6 +97,14 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       dismissals: dismissalsOf(session.rounds),
       previousLines: previousLines(session.rounds, session.current),
       busy,
+      role,
+      setRole,
+      menu: menuOf(role),
+      landing: landingOf(session, role),
+      unclaimed: unclaimedOf(session),
+      tasks: tasksOf(session, role),
+      claimed: isClaimed(session),
+      canClaim: canClaim(role),
       // Real: the spec workbook is parsed in the browser (blue cells). exceljs is loaded on demand.
       loadSpec: async (f) => {
         const bad = A.checkSpecFile(f);
@@ -91,7 +120,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
           setBusy(false);
         }
       },
-      createRequest: () => apply((s) => A.createRequest(s, now())),
+      createRequest: (notes) => apply((s) => A.createRequest(s, now(), notes)),
       // Real: runCheck reads the PDF and runs compare, diff and the send-back re-check (src/services/runCheck.ts).
       uploadProof: async (f, note) => {
         const bad = A.checkProofFile(f);
@@ -112,6 +141,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
           setBusy(false);
         }
       },
+      claimProof: () => apply((s) => A.claimProof(s, claimerName, now())),
       decide: (c, d, r) => apply((s) => A.decide(s, c, d, r)),
       finishReview: () => apply((s) => A.finishReview(s, now())),
       backToReview: () => apply(A.backToReview),
@@ -124,7 +154,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       startOver: () => void apply(() => A.startOver()),
       jumpTo: (n) => void apply(() => ({ session: mockSession(n) })),
     };
-  }, [session, busy, apply]);
+  }, [session, busy, role, apply]);
 
   return <Ctx.Provider value={api}>{children}</Ctx.Provider>;
 }

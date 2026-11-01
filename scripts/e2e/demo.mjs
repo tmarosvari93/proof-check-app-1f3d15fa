@@ -1,3 +1,4 @@
+// NOTE: written before the claim step. The flow is now Upload → My tasks → Checker 1 → Unclaimed → Claim → Review; this script does not click that yet (not part of CI).
 // Browser click-through of the demo story (vector and flat proofs) against a running dev server.
 // Not part of CI: it needs Chrome and puppeteer-core. Fictional fixtures only.
 //   npm i --no-save puppeteer-core

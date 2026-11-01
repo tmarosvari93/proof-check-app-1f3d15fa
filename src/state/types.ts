@@ -8,8 +8,9 @@ import type { FieldResult } from "../core/compare";
 import type { CheckFinding } from "../core/findings";
 import type { SendBackItem } from "../core/sendBack";
 import type { Block } from "../core/textLayer";
+import type { Marker } from "../core/markers";
 
-export type { ParsedSpec, FieldResult, CheckFinding, SendBackItem };
+export type { ParsedSpec, FieldResult, CheckFinding, SendBackItem, Marker };
 
 /** How the proof was read. Drives the banner on the review screens. */
 export type ReadMode = "text_layer" | "ai" | "failed";
@@ -103,6 +104,10 @@ export interface Round {
    */
   blocks?: Block[];
   page?: { width: number; height: number };
+  /** JPEG data URL of the proof page, for the preview on the review screen. Absent on the prepared (jumpTo) states. */
+  preview?: string;
+  /** Marks for the preview: one rectangle per spec finding whose place on the page is known (text-layer proofs only). */
+  markers?: Marker[];
   /**
    * Round 2 and later: why this round was NOT compared with the previous one. Then there is no diff and the
    * page must say so, never "no changes". no_previous_blocks: the previous round has no stored blocks (a prepared
@@ -121,6 +126,16 @@ export type Step =
   | "lead"
   | "approved";
 
+/** Who works in the demo. One person plays every role; the role decides the menu and which tasks are shown. */
+export type Role = "requester" | "designer" | "checker1" | "checker2" | "lead";
+
+/** A checker took the proof of one round from Unclaimed. */
+export interface Claim {
+  round: number;
+  by: string;
+  at: string;
+}
+
 export interface Session {
   /** Spec read on the New request page, before Create request is pressed. */
   pendingSpec: ParsedSpec | null;
@@ -129,6 +144,8 @@ export interface Session {
   /** The round being worked on, 1-based. */
   current: number;
   step: Step;
+  /** Set by "Claim" on the Unclaimed page. A claim belongs to one round: a new round is unclaimed again. */
+  claim?: Claim;
   checker2Agreed: Record<string, boolean>; // by finding code
   checker2SignedOff: boolean;
   checker2SignedAt?: string;
