@@ -92,8 +92,7 @@ function Home() {
         <p className="mt-1 text-sm text-neutral-700">
           All names and values are fictional. Download the spec Excel and the proofs: v1 with seeded
           errors, v2 with changes nobody asked for, v3 clean. Each proof also comes as a flat,
-          image-only PDF. One person plays every role; the "Working as" label shows whose page you
-          are on.
+          image-only PDF. One person plays every role; switch with "Working as" at the top.
         </p>
         <div className="mt-3 flex gap-2">
           <Button variant="outline" asChild>
