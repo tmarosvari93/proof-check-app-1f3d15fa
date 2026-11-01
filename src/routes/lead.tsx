@@ -8,6 +8,8 @@ import { ProofPlaceholder } from "@/components/app/ProofPlaceholder";
 import { EmptyState } from "@/components/app/EmptyState";
 import { StartOver } from "@/components/app/StartOver";
 import { useAfterAction } from "@/components/app/useAfterAction";
+import { SkippedOpenNote } from "@/components/app/SkippedOpenNote";
+import { useState } from "react";
 
 export const Route = createFileRoute("/lead")({
   head: () => ({
@@ -26,6 +28,8 @@ export const Route = createFileRoute("/lead")({
 function Lead() {
   const s = useSession();
   const { error, run } = useAfterAction();
+  const send = useAfterAction("/upload");
+  const [note, setNote] = useState("");
   const last = s.session.rounds[s.session.rounds.length - 1];
   const req = s.session.request;
 
@@ -43,6 +47,8 @@ function Lead() {
           {req.workId} · Round {last.no} · {s.session.checker2SignedOff ? "both checkers signed" : "Checker 1 signed"}
         </p>
       </div>
+
+      <SkippedOpenNote codes={last.skippedOpen} />
 
       <div className="mt-4 grid grid-cols-2 gap-6">
         <ProofPlaceholder className="h-[24rem]" note={`Final proof (v${last.no}). None open.`} />
@@ -100,18 +106,18 @@ function Lead() {
         <>
           <div className="mt-4">
             <label className="text-sm font-semibold">Note (required when sending back)</label>
-            <Textarea disabled title="Not built in this prototype" />
+            <Textarea value={note} onChange={(e) => setNote(e.target.value)} />
           </div>
           <div className="mt-4 flex items-center justify-end gap-2">
-            <Button variant="outline" disabled title="Not built in this prototype">
+            {send.error && <span className="text-sm text-red-700">{send.error}</span>}
+            <Button variant="outline" onClick={() => send.run(() => s.leadSendBack(note))}>
               Send back with a reason
             </Button>
             <Button onClick={() => run(() => s.approve())}>Approve</Button>
             {error && <span className="text-sm text-red-700">{error}</span>}
           </div>
           <p className="mt-4 text-sm text-neutral-500">
-            Approving closes the request. The requester sees it as approved in My tasks, with the approved proof to
-            download. The print file stage is planned for the next version.
+            Approving closes the request. Sending back starts the next round with your note.
           </p>
         </>
       )}
