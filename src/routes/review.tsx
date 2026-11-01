@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -36,6 +36,15 @@ function Review() {
   const req = s.session.request;
 
   if (!round || !req) return <EmptyState />;
+  if (!s.claimed)
+    return (
+      <div className="max-w-lg rounded-md border border-neutral-300 bg-neutral-50 p-8 text-center">
+        <p className="text-neutral-600">This proof is not claimed yet.</p>
+        <Link to="/unclaimed" className="mt-2 inline-block text-sm underline">
+          Go to Unclaimed
+        </Link>
+      </div>
+    );
 
   const resultOf = (f: CheckFinding) => round.results.find((r) => r.id === f.fieldId);
   const decisionOf = (code: string) => s.items.find((i) => i.code === code)?.decision ?? "open";

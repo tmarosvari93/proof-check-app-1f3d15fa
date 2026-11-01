@@ -23,7 +23,7 @@ export const Route = createFileRoute("/upload")({
 
 function UploadProof() {
   const s = useSession();
-  const { error, run } = useAfterAction();
+  const { error, run } = useAfterAction("/my-tasks");
   const [file, setFile] = useState<File | null>(null);
   const [fileError, setFileError] = useState<string | undefined>();
   const [note, setNote] = useState("");
@@ -82,6 +82,12 @@ function UploadProof() {
         </div>
 
         <div className="space-y-4">
+          {req.notes.trim() !== "" && (
+            <div className="rounded-md border border-neutral-300 bg-neutral-100 p-3">
+              <p className="text-sm font-semibold">Comments from the requester</p>
+              <p className="mt-1 whitespace-pre-wrap text-sm text-neutral-700">{req.notes}</p>
+            </div>
+          )}
           <div className="rounded-md border border-neutral-300 p-3">
             <p className="text-sm font-semibold">Materials</p>
             <div className="mt-2 flex flex-wrap gap-2">

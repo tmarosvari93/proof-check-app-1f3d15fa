@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useSession } from "@/state/SessionProvider";
-import { stepTo } from "./AppLayout";
+import { stepTo, type RoutePath } from "./AppLayout";
 
 /**
  * Runs a session action and, when it succeeds (no error string), navigates to
- * stepPath[session.step] once the new session state has rendered.
+ * `to` (when given) or stepPath[session.step] once the new session state has rendered.
  */
-export function useAfterAction() {
+export function useAfterAction(to?: RoutePath) {
   const s = useSession();
   const navigate = useNavigate();
   const [error, setError] = useState<string | undefined>();
@@ -16,8 +16,8 @@ export function useAfterAction() {
   useEffect(() => {
     if (!pending.current) return;
     pending.current = false;
-    void navigate({ to: stepTo(s.session.step) });
-  }, [s.session, navigate]);
+    void navigate({ to: to ?? stepTo(s.session.step) });
+  }, [s.session, navigate, to]);
 
   const run = (fn: () => string | undefined | Promise<string | undefined>) => {
     setError(undefined);
