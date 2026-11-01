@@ -9,6 +9,7 @@ import { EmptyState } from "@/components/app/EmptyState";
 import { StartOver } from "@/components/app/StartOver";
 import { useAfterAction } from "@/components/app/useAfterAction";
 import { SkippedOpenNote } from "@/components/app/SkippedOpenNote";
+import { WarningsBox } from "@/components/app/WarningsBox";
 import { useState } from "react";
 
 export const Route = createFileRoute("/lead")({
@@ -49,6 +50,7 @@ function Lead() {
       </div>
 
       <SkippedOpenNote codes={last.skippedOpen} />
+      <WarningsBox warnings={last.warnings} />
 
       <div className="mt-4 grid grid-cols-2 gap-6">
         <ProofPlaceholder className="h-[24rem]" note={`Final proof (v${last.no}). None open.`} />

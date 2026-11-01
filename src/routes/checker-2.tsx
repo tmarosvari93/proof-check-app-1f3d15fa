@@ -6,6 +6,7 @@ import { ProofPlaceholder } from "@/components/app/ProofPlaceholder";
 import { EmptyState } from "@/components/app/EmptyState";
 import { useAfterAction } from "@/components/app/useAfterAction";
 import { SkippedOpenNote } from "@/components/app/SkippedOpenNote";
+import { WarningsBox } from "@/components/app/WarningsBox";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 
@@ -58,6 +59,7 @@ function Checker2() {
       </div>
 
       <SkippedOpenNote codes={last.skippedOpen} />
+      <WarningsBox warnings={last.warnings} />
 
       <div className="mt-4 grid grid-cols-2 gap-6">
         <ProofPlaceholder className="h-[24rem]" />

@@ -21,6 +21,7 @@ import { FindingRow } from "@/components/app/FindingRow";
 import { DecisionButtons } from "@/components/app/DecisionButtons";
 import { Chip } from "@/components/app/Chip";
 import { useAfterAction } from "@/components/app/useAfterAction";
+import { WarningsBox } from "@/components/app/WarningsBox";
 
 export const Route = createFileRoute("/review")({
   head: () => ({
@@ -214,6 +215,7 @@ function Review() {
           One AI read failed: {round.readError}. Differences between rounds may be missing.
         </div>
       )}
+      <WarningsBox warnings={round.warnings} />
 
       <div className="mt-4 grid grid-cols-2 gap-6">
         <ProofView
