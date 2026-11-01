@@ -97,9 +97,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
   }),
-  validateSearch: (search: Record<string, unknown>): { dev?: "1"; screen?: string } => ({
+  validateSearch: (search: Record<string, unknown>): { dev?: "1" } => ({
     ...(search["dev"] === "1" ? { dev: "1" as const } : {}),
-    ...(typeof search["screen"] === "string" ? { screen: search["screen"] } : {}),
   }),
   shellComponent: RootShell,
   component: RootComponent,

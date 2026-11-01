@@ -1,23 +1,17 @@
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useSession } from "@/state/SessionProvider";
-import { workingAs } from "@/state/demo";
+import { roleOrder, roleLabel } from "@/state/demo";
+import { landingOf, roleOfPath } from "@/state/tasks";
+import type { Role } from "@/state/types";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { stepPath } from "@/state/labels";
 import type { Step } from "@/state/types";
 import { mockNames, type MockName } from "@/mocks/mockSession";
 import { Button } from "@/components/ui/button";
 
-export type RoutePath = "/" | "/new" | "/upload" | "/review" | "/send-back" | "/checker-2" | "/lead" | "/not-built";
+export type RoutePath = "/" | "/new" | "/upload" | "/review" | "/send-back" | "/checker-2" | "/lead" | "/track-all" | "/unclaimed" | "/my-tasks";
 export const stepTo = (step: Step): RoutePath => stepPath[step] as RoutePath;
-
-const roleFor = (path: string): string => {
-  if (path === "/new") return workingAs.requester;
-  if (path === "/upload") return workingAs.designer;
-  if (path === "/review" || path === "/send-back") return workingAs.checker1;
-  if (path === "/checker-2") return workingAs.checker2;
-  if (path === "/lead") return workingAs.lead;
-  return workingAs.anyone;
-};
 
 const stepName = (step: Step, current: number): string => {
   switch (step) {
@@ -31,23 +25,6 @@ const stepName = (step: Step, current: number): string => {
     case "approved": return "Approved";
   }
 };
-
-const menuItems: { label: string; to: RoutePath; screen?: string }[] = [
-  { label: "Home", to: "/" },
-  { label: "Unclaimed", to: "/not-built", screen: "unclaimed" },
-  { label: "My tasks", to: "/not-built", screen: "tasks-checker" },
-  { label: "Track all work", to: "/not-built", screen: "track-all" },
-  { label: "+ New request", to: "/new" },
-];
-
-const moreScreens = [
-  { screen: "process-flow", label: "Process flow" },
-  { screen: "tasks-requester", label: "My tasks: requester" },
-  { screen: "tasks-lead", label: "My tasks: lead" },
-  { screen: "task-view", label: "Task view" },
-  { screen: "designer-home", label: "Designer home" },
-  { screen: "designer-tasks", label: "Designer my tasks" },
-];
 
 export function AppLayout({ children }: { children: ReactNode }) {
   const s = useSession();
@@ -66,6 +43,17 @@ export function AppLayout({ children }: { children: ReactNode }) {
     void navigate({ to: stepTo(s.session.step), search: dev ? { dev: "1" as const } : {} });
   }, [s.session, dev, navigate]);
 
+  useEffect(() => {
+    const r = roleOfPath(pathname);
+    if (r) s.setRole(r);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
+
+  const pickRole = (role: Role) => {
+    s.setRole(role);
+    void navigate({ to: landingOf(s.session, role) as RoutePath, search: dev ? { dev: "1" as const } : {} });
+  };
+
   const jump = (name: MockName) => {
     pendingJump.current = true;
     s.jumpTo(name);
@@ -79,22 +67,29 @@ export function AppLayout({ children }: { children: ReactNode }) {
         </Link>
         <div className="flex items-center gap-2 text-sm text-neutral-600">
           Working as
-          <span className="rounded-md border border-neutral-300 bg-neutral-100 px-2.5 py-1 text-sm font-semibold text-neutral-800">
-            {roleFor(pathname)}
-          </span>
+          <Select value={s.role} onValueChange={(v) => pickRole(v as Role)}>
+            <SelectTrigger className="h-8 w-44 font-semibold text-neutral-800">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {roleOrder.map((r) => (
+                <SelectItem key={r} value={r}>
+                  {roleLabel[r]}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </header>
       <div className="flex">
         <aside className="w-56 shrink-0 border-r border-neutral-200 px-4 py-4">
           <nav className="space-y-1">
-            {menuItems.map((m) => {
-              const active =
-                m.to === "/" ? pathname === "/" : m.to === "/new" ? pathname === "/new" : false;
+            {s.menu.map((m) => {
+              const active = m.to === pathname;
               return (
                 <Link
                   key={m.label}
-                  to={m.to}
-                  search={m.screen ? { screen: m.screen } : {}}
+                  to={m.to as RoutePath}
                   className={`block rounded-md px-3 py-2 text-sm ${
                     active ? "bg-neutral-900 font-semibold text-white" : "text-neutral-700 hover:bg-neutral-100"
                   }`}
@@ -112,23 +107,6 @@ export function AppLayout({ children }: { children: ReactNode }) {
             <Link to={stepTo(s.session.step)} className="mt-1 inline-block underline">
               Continue
             </Link>
-          </div>
-          <div className="mt-6">
-            <p className="text-xs font-semibold uppercase tracking-wide text-neutral-400">
-              More designed screens
-            </p>
-            <div className="mt-1 space-y-0.5">
-              {moreScreens.map((m) => (
-                <Link
-                  key={m.screen}
-                  to="/not-built"
-                  search={{ screen: m.screen }}
-                  className="block px-1 py-0.5 text-sm text-neutral-500 hover:underline"
-                >
-                  {m.label}
-                </Link>
-              ))}
-            </div>
           </div>
         </aside>
         <main className="min-w-0 flex-1 px-6 py-5">

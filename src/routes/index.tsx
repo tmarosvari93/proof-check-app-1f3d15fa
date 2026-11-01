@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
+import type { RoutePath } from "@/components/app/AppLayout";
 import { StartOver } from "@/components/app/StartOver";
 
 export const Route = createFileRoute("/")({
@@ -16,10 +17,10 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-const cards: { title: string; text: string; to: "/new" | "/not-built"; screen?: string }[] = [
-  { title: "Unclaimed", text: "New work waiting for a checker. Claim one and it opens.", to: "/not-built", screen: "unclaimed" },
-  { title: "My tasks", text: "What you claimed, handed on, finished or requested.", to: "/not-built", screen: "tasks-checker" },
-  { title: "Track all work", text: "What everyone is working on, and the approved proofs.", to: "/not-built", screen: "track-all" },
+const cards: { title: string; text: string; to: RoutePath }[] = [
+  { title: "Unclaimed", text: "New work waiting for a checker. Claim one and it opens.", to: "/unclaimed" },
+  { title: "My tasks", text: "What you claimed, handed on, finished or requested.", to: "/my-tasks" },
+  { title: "Track all work", text: "What everyone is working on, and the approved proofs.", to: "/track-all" },
   { title: "+ New request", text: "Start a check for a packaging piece.", to: "/new" },
 ];
 
@@ -53,7 +54,6 @@ function Home() {
           <Link
             key={c.title}
             to={c.to}
-            search={c.screen ? { screen: c.screen } : {}}
             className="rounded-md border border-neutral-300 p-4 hover:bg-neutral-50"
           >
             <p className="font-semibold">{c.title}</p>
