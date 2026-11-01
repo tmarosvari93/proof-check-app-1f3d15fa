@@ -5,6 +5,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSession } from "@/state/SessionProvider";
 import { diffUnavailableBanner, lineVerdictLabel, lowResolutionBanner, readBanner } from "@/state/labels";
 import type { CheckFinding } from "@/state/types";
+import { decisionOf as decisionIn, reviewItems } from "@/state/roundLogic";
+import { ProofView } from "@/components/app/ProofView";
 import { ProofPlaceholder } from "@/components/app/ProofPlaceholder";
 import { EmptyState } from "@/components/app/EmptyState";
 import { FindingRow } from "@/components/app/FindingRow";
@@ -32,10 +34,12 @@ function Review() {
   const [expanded, setExpanded] = useState<string | null>(null);
   const [showMoved, setShowMoved] = useState(false);
   const [showMatches, setShowMatches] = useState(false);
-  const round = s.round;
+  const latest = s.round;
   const req = s.session.request;
+  const [viewNo, setViewNo] = useState<number | null>(null);
+  const round = (viewNo !== null ? s.session.rounds[viewNo - 1] : undefined) ?? latest;
 
-  if (!round || !req) return <EmptyState />;
+  if (!round || !latest || !req) return <EmptyState />;
   if (!s.claimed)
     return (
       <div className="max-w-lg rounded-md border border-neutral-300 bg-neutral-50 p-8 text-center">
@@ -46,10 +50,13 @@ function Review() {
       </div>
     );
 
+  const readOnly = round.no !== latest.no;
+  const items = reviewItems(round).map((i) => ({ ...i, decision: decisionIn(round, i.code) }));
+  const undecided = items.filter((i) => i.needsDecision && (i.decision === "open" || i.decision === "needs_discussion"));
   const resultOf = (f: CheckFinding) => round.results.find((r) => r.id === f.fieldId);
-  const decisionOf = (code: string) => s.items.find((i) => i.code === code)?.decision ?? "open";
+  const decisionOf = (code: string) => items.find((i) => i.code === code)?.decision ?? "open";
   const onDecided = (code: string) => {
-    const rest = s.undecided.filter((i) => i.code !== code);
+    const rest = undecided.filter((i) => i.code !== code);
     setExpanded(rest[0]?.code ?? null);
   };
 
@@ -62,6 +69,7 @@ function Review() {
       expanded={expanded === f.code}
       onToggle={() => setExpanded(expanded === f.code ? null : f.code)}
       onDecided={() => onDecided(f.code)}
+      readOnly={readOnly}
     />
   );
 
@@ -77,7 +85,7 @@ function Review() {
     </div>
   );
 
-  const undecidedFindings = round.findings.filter((f) => s.undecided.some((i) => i.code === f.code));
+  const undecidedFindings = round.findings.filter((f) => undecided.some((i) => i.code === f.code));
 
   const lines = round.lineChecks ?? [];
   const done = lines.filter((l) => l.verdict === "done").length;
@@ -85,8 +93,8 @@ function Review() {
   const unreq = round.unrequested ?? [];
   const moved = (round.diff ?? []).filter((d) => d.type === "moved");
 
-  const open = s.open;
-  const byKind = (k: string) => s.undecided.filter((i) => i.kind === k).length;
+  const open = undecided.length;
+  const byKind = (k: string) => undecided.filter((i) => i.kind === k).length;
 
   return (
     <div className="max-w-6xl">
@@ -96,8 +104,21 @@ function Review() {
         </h1>
         <div className="flex items-center gap-2 text-sm">
           <span>Round</span>
-          <select disabled className="rounded-md border border-input bg-neutral-100 px-3 py-2 text-sm text-neutral-700">
-            <option>Round {round.no} (latest)</option>
+          <select
+            aria-label="Round"
+            value={round.no}
+            onChange={(e) => {
+              setViewNo(Number(e.target.value));
+              setExpanded(null);
+            }}
+            className="rounded-md border border-input bg-background px-3 py-2 text-sm"
+          >
+            {[...s.session.rounds].reverse().map((r) => (
+              <option key={r.no} value={r.no}>
+                Round {r.no}
+                {r.no === latest.no ? " (latest)" : ""}
+              </option>
+            ))}
           </select>
         </div>
       </div>
@@ -141,14 +162,38 @@ function Review() {
         </div>
       )}
 
+      {readOnly && (
+        <p className="mt-3 rounded-md border border-neutral-300 bg-neutral-100 px-3 py-2 text-sm text-neutral-600">
+          You are looking at round {round.no}. Decisions are only possible in the latest round.
+        </p>
+      )}
+
       <div className="mt-4 grid grid-cols-2 gap-6">
-        <ProofPlaceholder className="h-[28rem]" />
+        {round.preview ? (
+          <ProofView
+            preview={round.preview}
+            markers={round.markers ?? []}
+            readMode={round.readMode}
+            expanded={expanded}
+            decisionOf={decisionOf}
+            onMark={(code) => setExpanded(code)}
+          />
+        ) : (
+          <div>
+            <ProofPlaceholder className="h-[28rem]" />
+            {round.readMode === "ai" && (
+              <p className="mt-2 text-sm text-neutral-500">
+                This proof is an image. The app reads it with AI but does not know exact positions, so there are no marks.
+              </p>
+            )}
+          </div>
+        )}
 
         <div className="rounded-md border border-neutral-300">
           {round.no === 1 ? (
             <Tabs defaultValue="undecided">
               <TabsList className="m-2">
-                <TabsTrigger value="undecided">Undecided {s.undecided.length}</TabsTrigger>
+                <TabsTrigger value="undecided">Undecided {undecided.length}</TabsTrigger>
                 <TabsTrigger value="all">All {round.findings.length}</TabsTrigger>
                 <TabsTrigger value="matches">Matches {round.matches}</TabsTrigger>
               </TabsList>
@@ -204,7 +249,7 @@ function Review() {
                     <div className="divide-y divide-neutral-200 rounded-b-md border border-t-0 border-neutral-300">
                       {lines.map((l, i) => {
                         const code = `C${i + 1}`;
-                        const item = s.items.find((it) => it.code === code);
+                        const item = items.find((it) => it.code === code);
                         return (
                           <div key={code} className="px-3 py-2">
                             <div className="flex items-start gap-2">
@@ -215,7 +260,7 @@ function Review() {
                                 {i + 1}. {l.text}
                               </p>
                             </div>
-                            {l.verdict !== "done" &&
+                            {l.verdict !== "done" && !readOnly &&
                               (item?.linkedTo ? (
                                 <p className="mt-1 text-sm text-neutral-500">
                                   Same problem as {item.linkedTo} in Spec findings: decide it there.
@@ -321,7 +366,7 @@ function Review() {
             </p>
           ) : round.no === 1 ? (
             <p>
-              <strong>{open} findings undecided:</strong> {s.undecided.map((i) => i.code).join(", ")}
+              <strong>{open} findings undecided:</strong> {undecided.map((i) => i.code).join(", ")}
             </p>
           ) : (
             <p>
