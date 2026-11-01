@@ -43,8 +43,15 @@ export function reviewItems(round: Round): ReviewItem[] {
 
 export const decisionOf = (round: Round, code: string): Decision => round.decisions[code] ?? "open";
 
+/** Codes of the items that still need a decision, in review order. */
+export function openCodes(round: Round): string[] {
+  return reviewItems(round)
+    .filter((i) => i.needsDecision && ["open", "needs_discussion"].includes(decisionOf(round, i.code)))
+    .map((i) => i.code);
+}
+
 export function openCount(round: Round): number {
-  return reviewItems(round).filter((i) => i.needsDecision && ["open", "needs_discussion"].includes(decisionOf(round, i.code))).length;
+  return openCodes(round).length;
 }
 
 const unrequestedKind = (u: UnrequestedItem) =>

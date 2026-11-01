@@ -104,6 +104,8 @@ export interface Round {
   decisions: Record<string, Decision>;
   /** Reason typed when an item was dismissed (decision not_error). Checker 2 reviews these. */
   dismissals: Record<string, string>;
+  /** Codes the checker left undecided when they pressed "Finish anyway". They are not sent to the designer; Checker 2 sees them. */
+  skippedOpen?: string[];
   /** Review finished (the checker pressed Finish). */
   finished: boolean;
   /** ISO timestamp of Finish review. */

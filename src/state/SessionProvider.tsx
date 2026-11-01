@@ -55,7 +55,8 @@ export interface SessionApi {
   uploadProof(file: File | null, designerNote?: string): Promise<Err>;
   claimProof(): Err;
   decide(code: string, decision: Decision, reason?: string): Err;
-  finishReview(): Err;
+  /** anyway: finish with items still open. They are not sent to the designer and Checker 2 sees them (round.skippedOpen). */
+  finishReview(opts?: { anyway?: boolean }): Err;
   backToReview(): Err;
   editSendBack(edits: Edit[]): Err;
   addManualLine(text: string): Err;
@@ -144,7 +145,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       },
       claimProof: () => apply((s) => A.claimProof(s, claimerName, now())),
       decide: (c, d, r) => apply((s) => A.decide(s, c, d, r)),
-      finishReview: () => apply((s) => A.finishReview(s, now())),
+      finishReview: (opts) => apply((s) => A.finishReview(s, now(), opts?.anyway === true)),
       backToReview: () => apply(A.backToReview),
       editSendBack: (e) => apply((s) => A.editSendBack(s, e)),
       addManualLine: (t) => apply((s) => A.addManualLine(s, t)),

@@ -5,7 +5,7 @@
  */
 import { applyEdits, type Edit } from "../core/sendBack";
 import type { ParsedSpec } from "../core/parseSpec";
-import { buildRoundSendBack, dismissalsOf, openCount } from "./roundLogic";
+import { buildRoundSendBack, dismissalsOf, openCodes, openCount } from "./roundLogic";
 import { ACCEPTED_CHANGE, demoRequestFields } from "./demo";
 import { emptySession, type Decision, type FileRef, type Round, type Session } from "./types";
 import { isClaimed } from "./tasks";
@@ -98,14 +98,23 @@ export function decide(s: Session, code: string, decision: Decision, reason?: st
   );
 }
 
-/** Finish the review. Blocked while anything is open. Rebuilds the send-back list from the decisions. */
-export function finishReview(s: Session, now: string): Result {
+/**
+ * Finish the review. Blocked while anything is open, unless `anyway` is set: then the open items count as
+ * "not an error" (they are not sent to the designer) and their codes are kept in `skippedOpen` for Checker 2.
+ * Rebuilds the send-back list from the decisions.
+ */
+export function finishReview(s: Session, now: string, anyway = false): Result {
   const r = cur(s);
   if (!r) return fail(s, "No round to review");
   const open = openCount(r);
-  if (open > 0) return fail(s, `${open} item${open === 1 ? "" : "s"} still need a decision`);
+  if (open > 0 && !anyway) return fail(s, `${open} item${open === 1 ? "" : "s"} still need a decision`);
   const sendBack = buildRoundSendBack(r);
-  const next: Session = withCur(s, (x) => ({ ...x, finished: true, finishedAt: now, sendBack }));
+  const skipped = open > 0 ? openCodes(r) : [];
+  const next: Session = withCur(s, (x) => {
+    const { skippedOpen: _old, ...rest } = x;
+    void _old;
+    return { ...rest, finished: true, finishedAt: now, sendBack, ...(skipped.length ? { skippedOpen: skipped } : {}) };
+  });
   // Nothing to send back: the proof is clean, so it goes to the second checker.
   return ok({ ...next, step: sendBack.length ? "send_back" : "checker2" });
 }

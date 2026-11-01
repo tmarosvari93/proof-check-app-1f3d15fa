@@ -233,3 +233,18 @@ describe("uploaded files are kept so they can be opened again", () => {
     expect(b.session.pendingSpecFile).toBeNull();
   });
 });
+
+describe("finish review anyway", () => {
+  it("is blocked while items are open, and with anyway it passes on and remembers what was open", async () => {
+    const { mockSession } = await import("../src/mocks/mockSession");
+    const { finishReview } = await import("../src/state/actions");
+    const s = mockSession("r2_review");
+    const blocked = finishReview(s, "2026-11-01T10:00:00Z");
+    expect(blocked.error).toMatch(/still need a decision/);
+    const forced = finishReview(s, "2026-11-01T10:00:00Z", true);
+    expect(forced.error).toBeUndefined();
+    const r = forced.session.rounds[forced.session.current - 1];
+    expect(r.finished).toBe(true);
+    expect(r.skippedOpen?.length).toBeGreaterThan(0);
+  });
+});

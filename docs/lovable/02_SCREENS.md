@@ -184,3 +184,16 @@ Show them where people decide, as plain links that open in a new tab (`<a href={
 - Checker 2 and Lead pages: the same one-line "Files" row.
 - New request page, step 2: next to the read result, "Spec file: {name}".
 When a file link is absent, show nothing (no empty label).
+
+## Review: make the open items obvious, and "Finish anyway"
+
+Problem seen in testing: the checker decided every item on the Spec findings tab, but one unrequested change (U2) on the Changes tab was still open, so Finish review stayed disabled and the reason was hidden on another tab.
+
+Page rules for /review:
+1. Each tab label shows its own open count while it is above 0, as a small dark badge: "Spec findings 2", "Changes 1". No badge when nothing is open there.
+2. The footer line names where the open items are and each name is a button that switches to that tab: "1 item undecided: U2 on the Changes tab". Use singular/plural correctly ("1 item", "2 items").
+3. Round 2 and later open on the tab that has open items (Spec findings first, then Changes).
+4. Every row that needs a decision shows its two buttons without clicking the row first (Real error / Not an error, or Reject / Accept change). A row with a decision shows it as a filled chip, and clicking the chip changes it.
+5. A short hint above the list while anything is open: "Decide every item below. Real errors go back to the designer."
+6. Finish review stays disabled while anything is open, with a second button "Finish anyway". It opens a modal: title "Finish with open items?", body "{n} item(s) are not decided: {codes}. They will NOT be sent to the designer. Checker 2 will see them marked as not decided.", buttons "Go back and decide" (default focus) and "Finish anyway". Finish anyway calls `s.finishReview({ anyway: true })`.
+7. Checker 2 and Lead pages: when `round.skippedOpen` has codes, show an amber box "Checker 1 left {codes} undecided."
