@@ -5,6 +5,9 @@ import { people } from "@/state/demo";
 import { ProofPlaceholder } from "@/components/app/ProofPlaceholder";
 import { EmptyState } from "@/components/app/EmptyState";
 import { useAfterAction } from "@/components/app/useAfterAction";
+import { SkippedOpenNote } from "@/components/app/SkippedOpenNote";
+import { Textarea } from "@/components/ui/textarea";
+import { useState } from "react";
 
 export const Route = createFileRoute("/checker-2")({
   head: () => ({
@@ -23,6 +26,9 @@ export const Route = createFileRoute("/checker-2")({
 function Checker2() {
   const s = useSession();
   const { error, run } = useAfterAction();
+  const send = useAfterAction("/upload");
+  const [text, setText] = useState("");
+  const [addError, setAddError] = useState<string | undefined>();
   const last = s.session.rounds[s.session.rounds.length - 1];
   const req = s.session.request;
 
@@ -50,6 +56,8 @@ function Checker2() {
         Checker 1 found <strong>no real errors</strong> in this round. Your job: confirm that what was dismissed is
         really fine. {last.matches} fields match, {requestsText}, {last.unrequested?.length ?? 0} unrequested changes.
       </div>
+
+      <SkippedOpenNote codes={last.skippedOpen} />
 
       <div className="mt-4 grid grid-cols-2 gap-6">
         <ProofPlaceholder className="h-[24rem]" />
@@ -87,6 +95,32 @@ function Checker2() {
               );
             })
           )}
+          <div className="border-t border-neutral-300 px-3 py-3">
+            <p className="text-sm font-semibold">Your comments for the designer ({last.sendBack.length})</p>
+            <Textarea className="mt-2" value={text} onChange={(e) => setText(e.target.value)} />
+            <Button
+              size="sm"
+              variant="outline"
+              className="mt-2"
+              onClick={() => {
+                const e = s.addManualLine(text);
+                setAddError(e);
+                if (!e) setText("");
+              }}
+            >
+              Add comment
+            </Button>
+            {addError && <p className="mt-1 text-sm text-red-700">{addError}</p>}
+            {last.sendBack.length > 0 && (
+              <ul className="mt-2 space-y-1 text-sm">
+                {last.sendBack.map((l) => (
+                  <li key={l.code}>
+                    <strong>{l.code}</strong> {l.text}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
       </div>
 
@@ -94,12 +128,24 @@ function Checker2() {
         <div className="text-sm">
           <p className="font-semibold">Your decision</p>
           <p className="text-neutral-600">
-            Disagreeing with any item turns it into a real error and opens the send-back list.
+            Add a comment and send back, or sign off to pass to approval.
           </p>
           {error && <p className="text-red-700">{error}</p>}
+          {send.error && <p className="text-red-700">{send.error}</p>}
+          {last.sendBack.length > 0 && (
+            <p className="text-amber-700">
+              You added {last.sendBack.length} comment{last.sendBack.length === 1 ? "" : "s"}. Signing off will not
+              send them. Send back to designer to use them.
+            </p>
+          )}
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" disabled title="Not built in this prototype">
+          <Button
+            variant="outline"
+            disabled={last.sendBack.length === 0}
+            title={last.sendBack.length === 0 ? "Add a comment first" : undefined}
+            onClick={() => send.run(() => s.sendToDesigner())}
+          >
             Send back to designer
           </Button>
           <Button onClick={() => run(() => s.checker2SignOff())}>Sign off and pass to approval</Button>
