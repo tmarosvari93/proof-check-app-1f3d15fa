@@ -104,6 +104,8 @@ export interface Round {
    */
   blocks?: Block[];
   page?: { width: number; height: number };
+  /** Flat proofs: why the AI read failed (first error, in plain words). Shown under the banner. Absent when the read worked. */
+  readError?: string;
   /** JPEG data URL of the proof page, for the preview on the review screen. Absent on the prepared (jumpTo) states. */
   preview?: string;
   /** Marks for the preview: one rectangle per spec finding whose place on the page is known (text-layer proofs only). */

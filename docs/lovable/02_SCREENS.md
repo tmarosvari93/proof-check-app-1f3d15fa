@@ -94,6 +94,9 @@ Replace the PNG's banner text with exactly one banner from `labels.ts`:
 - `readMode === "ai"`: grey box, bold "Automatic check finished." then `readBanner.ai` and " Resolution: {round.dpi} dpi." If `round.dpi < 100`, a second **amber** box with `lowResolutionBanner`.
 - `readMode === "failed"`: **red** box with `readBanner.failed`. (The PNG's "Run again" button is not built.)
 
+### Why a read failed
+When `round.readError` is set, show it under the check banner in small text: "Reason: {readError}". Red box when `readMode === "failed"`; amber box when `readMode === "ai"` (one of the two reads failed): "One AI read failed: {readError}. Differences between rounds may be missing."
+
 ### Guard
 If `!s.claimed` (the proof of this round was not claimed yet) show only: "This proof is not claimed yet." and a link "Go to Unclaimed" → `/unclaimed`. Do not redirect silently.
 

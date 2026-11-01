@@ -40,6 +40,8 @@ export interface AiRead {
   blocks: Block[] | null;
   /** Effective dpi of the proof image. Below 100 numbers and units become Could not read (R7). */
   dpi: number;
+  /** Why a read failed (the first failure), so the review screen can say it instead of only "could not be read". */
+  error?: string | undefined;
 }
 
 export interface CheckInput {
@@ -135,6 +137,7 @@ export function checkProof(input: CheckInput): Round {
     results,
     findings,
     matches: countMatches(results),
+    ...(input.ai?.error ? { readError: input.ai.error } : {}),
     sendBack: [],
     decisions: {},
     dismissals: {},
@@ -180,7 +183,7 @@ export async function runCheck(args: Omit<CheckInput, "page" | "seconds" | "ai">
     const fields = args.spec.fields.map((f) => ({ id: f.id, label: f.label, value: f.value }));
     // Both reads run at once. The blocks are kept so the next round can be compared with this one.
     const [f, b] = await Promise.all([readFields(cfg, page.flat.jpegBase64, fields), readBlocks(cfg, page.flat.jpegBase64, page)]);
-    ai = { fields: f.ok ? f.value : null, blocks: b.ok ? b.value : null, dpi: page.flat.dpi };
+    ai = { fields: f.ok ? f.value : null, blocks: b.ok ? b.value : null, dpi: page.flat.dpi, error: !f.ok ? f.error : !b.ok ? b.error : undefined };
   }
   const { file: _file, ...rest } = args;
   void _file;

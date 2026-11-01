@@ -221,3 +221,23 @@ describe("flat fixture", () => {
     expect(await embeddedImageWidth((await doc.getPage(1)) as unknown as PdfPageLike, pdfjs.OPS)).toBe(0);
   });
 });
+
+
+describe("a failed AI read says why", () => {
+  it("keeps the reader's error on the round, and shows every field as could not read", async () => {
+    const { checkProof } = await import("../src/services/runCheck");
+    const { parseSpecWorkbook } = await import("../src/core/parseSpec");
+    const { readFileSync } = await import("node:fs");
+    const { join } = await import("node:path");
+    const { FIXTURES } = await import("./helpers/loadPdf");
+    const spec = await parseSpecWorkbook(new Uint8Array(readFileSync(join(FIXTURES, "spec_SP-2026-0417_v3.xlsx"))));
+    const page = { width: 1190, height: 842, blocks: [], hasText: false, fontNamesRead: true };
+    const failed = checkProof({ spec, page, no: 1, fileName: "x_flat.pdf", ai: { fields: null, blocks: null, dpi: 150, error: "The reader is not configured" } });
+    expect(failed.readMode).toBe("failed");
+    expect(failed.readError).toBe("The reader is not configured");
+    expect(failed.matches).toBe(0);
+    expect(failed.findings.every((f) => f.kind === "could_not_read")).toBe(true);
+    const fine = checkProof({ spec, page, no: 1, fileName: "x_flat.pdf" });
+    expect(fine.readError).toBeUndefined();
+  });
+});
