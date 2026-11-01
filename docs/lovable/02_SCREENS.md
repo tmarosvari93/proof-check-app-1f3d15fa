@@ -212,3 +212,7 @@ Checker 2 can write their own lines for the designer, like Checker 1 on the send
 - **Send back with a reason** is enabled (no title). It calls `leadSendBack(note)`, shows the returned error if there is one (for example "Write the reason first"), and on success goes to `/upload` (round {n+1}). The note becomes a line for the designer, so it shows on the next round's send-back history like any other line.
 - **Approve** stays as it is and ignores the note.
 - Footer sentence: "Approving closes the request. Sending back starts the next round with your note."
+
+## Spec warnings (New request, step 2)
+
+`session.pendingSpec.warnings` (and `request.spec.warnings`) is an optional list of plain sentences, for example "Row 41 "Üdítő típusa" is blue but has no value, so it was skipped." When it is present, show an amber box under the read result, titled "Check these before you create the request", with one line per warning. When it is absent, show nothing. It does not block Create request.
