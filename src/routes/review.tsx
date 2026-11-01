@@ -21,6 +21,7 @@ import { FindingRow } from "@/components/app/FindingRow";
 import { DecisionButtons } from "@/components/app/DecisionButtons";
 import { Chip } from "@/components/app/Chip";
 import { useAfterAction } from "@/components/app/useAfterAction";
+import { WarningsBox } from "@/components/app/WarningsBox";
 
 export const Route = createFileRoute("/review")({
   head: () => ({
