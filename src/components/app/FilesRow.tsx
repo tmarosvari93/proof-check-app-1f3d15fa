@@ -15,7 +15,7 @@ function FileLink({ file, download, children }: { file: FileRef; download?: bool
 }
 
 /** "Files: Spec … · Proof …" — plain links that open in a new tab. Missing files show nothing. */
-export function FilesRow({ spec, proof }: { spec?: FileRef | null; proof?: FileRef | null }) {
+export function FilesRow({ spec, proof }: { spec?: FileRef | null | undefined; proof?: FileRef | null | undefined }) {
   if (!spec && !proof) return null;
   return (
     <p className="text-sm text-neutral-600">
