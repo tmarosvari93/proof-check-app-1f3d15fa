@@ -11,7 +11,7 @@ import { mockNames, type MockName } from "@/mocks/mockSession";
 import { Button } from "@/components/ui/button";
 
 export type RoutePath = "/" | "/new" | "/upload" | "/review" | "/send-back" | "/checker-2" | "/lead" | "/track-all" | "/unclaimed" | "/my-tasks";
-export const stepTo = (step: Step): RoutePath => stepPath[step] as RoutePath;
+export const stepTo = (step: Step): RoutePath => stepPath[step];
 
 const stepName = (step: Step, current: number): string => {
   switch (step) {
@@ -51,7 +51,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
 
   const pickRole = (role: Role) => {
     s.setRole(role);
-    void navigate({ to: landingOf(s.session, role) as RoutePath, search: dev ? { dev: "1" as const } : {} });
+    void navigate({ to: landingOf(s.session, role), search: dev ? { dev: "1" as const } : {} });
   };
 
   const jump = (name: MockName) => {
@@ -89,7 +89,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
               return (
                 <Link
                   key={m.label}
-                  to={m.to as RoutePath}
+                  to={m.to}
                   className={`block rounded-md px-3 py-2 text-sm ${
                     active ? "bg-neutral-900 font-semibold text-white" : "text-neutral-700 hover:bg-neutral-100"
                   }`}
