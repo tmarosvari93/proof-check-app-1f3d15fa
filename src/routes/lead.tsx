@@ -10,6 +10,7 @@ import { StartOver } from "@/components/app/StartOver";
 import { useAfterAction } from "@/components/app/useAfterAction";
 import { SkippedOpenNote } from "@/components/app/SkippedOpenNote";
 import { WarningsBox } from "@/components/app/WarningsBox";
+import { FilesRow } from "@/components/app/FilesRow";
 import { useState } from "react";
 
 export const Route = createFileRoute("/lead")({
@@ -49,6 +50,7 @@ function Lead() {
         </p>
       </div>
 
+      <FilesRow specFile={req.specFile} proofFile={last.proofFile} />
       <SkippedOpenNote codes={last.skippedOpen} />
       <WarningsBox warnings={last.warnings} />
 
