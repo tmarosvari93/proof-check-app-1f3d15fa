@@ -43,7 +43,7 @@ export async function readPdfPage(file: File): Promise<ProofPage> {
   const t = await extractPageText(page as unknown as PdfPageLike, pdfjs.OPS.setFont);
   const blocks = buildBlocks(t.items, { number: 1, width: t.width, height: t.height, fonts: t.fonts });
   const hasText = hasTextLayer(t.items);
-  const proof: ProofPage = { width: t.width, height: t.height, blocks, hasText, fontNamesRead: t.fontNamesRead };
+  const proof: ProofPage = { width: t.width, height: t.height, blocks, hasText, fontNamesRead: t.fontNamesRead, pageCount: doc.numPages };
 
   if (hasText) {
     // Preview for the review screen. A preview that fails to render never blocks the check.

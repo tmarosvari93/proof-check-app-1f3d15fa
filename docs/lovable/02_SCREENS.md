@@ -216,3 +216,7 @@ Checker 2 can write their own lines for the designer, like Checker 1 on the send
 ## Spec warnings (New request, step 2)
 
 `session.pendingSpec.warnings` (and `request.spec.warnings`) is an optional list of plain sentences, for example "Row 41 "Üdítő típusa" is blue but has no value, so it was skipped." When it is present, show an amber box under the read result, titled "Check these before you create the request", with one line per warning. When it is absent, show nothing. It does not block Create request.
+
+## Proof warnings (Review)
+
+`round.warnings` is an optional list of sentences about how the proof was read, for example "This PDF has 3 pages. Only page 1 was checked. Pages 2 to 3 were not read." When present, show an amber box under the check banner on /review (one line per warning), and the same lines on /checker-2 and /lead. When absent, show nothing. It never blocks anything.

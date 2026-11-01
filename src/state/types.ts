@@ -118,6 +118,8 @@ export interface Round {
   page?: { width: number; height: number };
   /** Flat proofs: why the AI read failed (first error, in plain words). Shown under the banner. Absent when the read worked. */
   readError?: string;
+  /** Things the checker must know about how this proof was read, for example that only page 1 of a longer PDF was checked. */
+  warnings?: string[];
   /** JPEG data URL of the proof page, for the preview on the review screen. Absent on the prepared (jumpTo) states. */
   preview?: string;
   /** Marks for the preview: one rectangle per spec finding whose place on the page is known (text-layer proofs only). */

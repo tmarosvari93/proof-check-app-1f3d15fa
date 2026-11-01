@@ -26,6 +26,8 @@ export interface ProofPage {
   blocks: Block[];
   /** False for a flat proof: no real text on the page. */
   hasText: boolean;
+  /** Pages in the PDF. Only page 1 is read. */
+  pageCount?: number | undefined;
   /** False when pdf.js could not give the real font names: bold words cannot be told apart. */
   fontNamesRead: boolean;
   /** Flat proofs only: the rendered page for the reader and the real resolution of the embedded image (0 = unknown). */
@@ -138,6 +140,9 @@ export function checkProof(input: CheckInput): Round {
     findings,
     matches: countMatches(results),
     ...(input.ai?.error ? { readError: input.ai.error } : {}),
+    ...(page.pageCount && page.pageCount > 1
+      ? { warnings: [`This PDF has ${page.pageCount} pages. Only page 1 was checked. Pages 2 to ${page.pageCount} were not read.`] }
+      : {}),
     sendBack: [],
     decisions: {},
     dismissals: {},

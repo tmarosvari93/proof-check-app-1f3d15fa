@@ -254,3 +254,19 @@ describe("a blocked request is not called a timeout", () => {
     if (!b.ok) expect(b.error).toBe("The reader did not answer in time");
   });
 });
+
+describe("a PDF with more than one page says that only page 1 was read", () => {
+  it("adds a warning for 3 pages and none for 1 page", async () => {
+    const { checkProof } = await import("../src/services/runCheck");
+    const { parseSpecWorkbook } = await import("../src/core/parseSpec");
+    const { readFileSync } = await import("node:fs");
+    const { join } = await import("node:path");
+    const { FIXTURES } = await import("./helpers/loadPdf");
+    const spec = await parseSpecWorkbook(new Uint8Array(readFileSync(join(FIXTURES, "spec_SP-2026-0417_v3.xlsx"))));
+    const page = { width: 1190, height: 842, blocks: [], hasText: false, fontNamesRead: true };
+    const three = checkProof({ spec, page: { ...page, pageCount: 3 }, no: 1, fileName: "x.pdf" });
+    expect(three.warnings).toEqual(["This PDF has 3 pages. Only page 1 was checked. Pages 2 to 3 were not read."]);
+    expect(checkProof({ spec, page: { ...page, pageCount: 1 }, no: 1, fileName: "x.pdf" }).warnings).toBeUndefined();
+    expect(checkProof({ spec, page, no: 1, fileName: "x.pdf" }).warnings).toBeUndefined();
+  });
+});
