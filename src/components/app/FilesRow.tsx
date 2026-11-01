@@ -1,6 +1,7 @@
+import type { ReactNode } from "react";
 import type { FileRef } from "@/state/types";
 
-function FileLink({ file, download, children }: { file: FileRef; download?: boolean; children: string }) {
+function FileLink({ file, download, children }: { file: FileRef; download?: boolean; children: ReactNode }) {
   return (
     <a
       href={file.url}
