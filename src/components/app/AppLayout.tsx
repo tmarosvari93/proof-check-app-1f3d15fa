@@ -11,7 +11,7 @@ import { mockNames, type MockName } from "@/mocks/mockSession";
 import { Button } from "@/components/ui/button";
 
 export type RoutePath = "/" | "/new" | "/upload" | "/review" | "/send-back" | "/checker-2" | "/lead" | "/track-all" | "/unclaimed" | "/my-tasks";
-export const stepTo = (step: Step): RoutePath => stepPath[step];
+export const stepTo = (step: Step): RoutePath => stepPath[step] as RoutePath;
 
 const stepName = (step: Step, current: number): string => {
   switch (step) {
