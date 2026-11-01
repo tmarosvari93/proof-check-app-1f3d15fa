@@ -134,6 +134,8 @@ export function editSendBack(s: Session, edits: Edit[]): Result {
 export function addManualLine(s: Session, text: string): Result {
   const r = cur(s);
   if (!r) return fail(s, "No round");
+  // Checker 1 on the send-back list, and Checker 2 on the 4-eye check page.
+  if (s.step !== "send_back" && s.step !== "checker2") return fail(s, "Comments can be added on the send-back list or the 4-eye check");
   if (!text.trim()) return fail(s, "Write the line first");
   const n = r.sendBack.filter((i) => i.code.startsWith("M")).length + 1;
   return ok(withCur(s, (x) => ({ ...x, sendBack: [...x.sendBack, { code: `M${n}`, text: text.trim() }] })));
@@ -144,6 +146,7 @@ export function sendToDesigner(s: Session): Result {
   const r = cur(s);
   if (!r) return fail(s, "No round");
   if (r.sendBack.length === 0) return fail(s, "The send-back list is empty");
+  if (s.step !== "send_back" && s.step !== "checker2") return fail(s, "Nothing to send back from here");
   return ok({ ...s, current: s.current + 1, step: "upload_proof" });
 }
 

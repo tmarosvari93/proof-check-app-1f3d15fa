@@ -248,3 +248,26 @@ describe("finish review anyway", () => {
     expect(r.skippedOpen?.length).toBeGreaterThan(0);
   });
 });
+
+describe("Checker 2 can send back with their own comments", () => {
+  it("adds a comment on the 4-eye step, and sending back opens the next round", async () => {
+    const { mockSession } = await import("../src/mocks/mockSession");
+    const { addManualLine, sendToDesigner } = await import("../src/state/actions");
+    const s = mockSession("checker2");
+    expect(s.step).toBe("checker2");
+    expect(sendToDesigner(s).error).toMatch(/empty/);
+    const a = addManualLine(s, "  Please check the sugar claim  ");
+    expect(a.error).toBeUndefined();
+    const r = a.session.rounds[a.session.current - 1];
+    expect(r.sendBack.some((i) => i.text === "Please check the sugar claim")).toBe(true);
+    const b = sendToDesigner(a.session);
+    expect(b.error).toBeUndefined();
+    expect(b.session.step).toBe("upload_proof");
+    expect(b.session.current).toBe(a.session.current + 1);
+  });
+  it("is refused on other steps", async () => {
+    const { mockSession } = await import("../src/mocks/mockSession");
+    const { addManualLine } = await import("../src/state/actions");
+    expect(addManualLine(mockSession("r1_review"), "x").error).toMatch(/send-back list or the 4-eye/);
+  });
+});

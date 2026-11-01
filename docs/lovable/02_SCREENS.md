@@ -197,3 +197,11 @@ Page rules for /review:
 5. A short hint above the list while anything is open: "Decide every item below. Real errors go back to the designer."
 6. Finish review stays disabled while anything is open, with a second button "Finish anyway". It opens a modal: title "Finish with open items?", body "{n} item(s) are not decided: {codes}. They will NOT be sent to the designer. Checker 2 will see them marked as not decided.", buttons "Go back and decide" (default focus) and "Finish anyway". Finish anyway calls `s.finishReview({ anyway: true })`.
 7. Checker 2 and Lead pages: when `round.skippedOpen` has codes, show an amber box "Checker 1 left {codes} undecided."
+
+## Checker 2 can add comments and send back (/checker-2)
+
+Checker 2 can write their own lines for the designer, like Checker 1 on the send-back list.
+- Under "Dismissed by Checker 1", a block "Your comments for the designer ({n})": a text box with the button **Add comment** (`addManualLine(text)`; show its error). Below it, the lines of `round.sendBack` as a plain list, each with its code (M1, M2 ...). Use the same small component as the send-back page for the list if there is one.
+- **Send back to designer** is enabled when `round.sendBack.length > 0` (title when disabled: "Add a comment first"). It calls `sendToDesigner()` and goes to `/upload`. The explanation line becomes: "Add a comment and send back, or sign off to pass to approval."
+- **Sign off and pass to approval** stays as it is. If comments were added, show under the buttons: "You added {n} comment(s). Signing off will not send them. Send back to designer to use them." (Both buttons stay available; this is a warning, not a block.)
+- **Disagree: real error** stays disabled (not built).
