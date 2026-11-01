@@ -5,6 +5,7 @@ import { people } from "@/state/demo";
 import { ProofPlaceholder } from "@/components/app/ProofPlaceholder";
 import { EmptyState } from "@/components/app/EmptyState";
 import { useAfterAction } from "@/components/app/useAfterAction";
+import { FilesRow } from "@/components/app/FilesRow";
 import { SkippedOpenNote } from "@/components/app/SkippedOpenNote";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
@@ -51,6 +52,9 @@ function Checker2() {
       <p className="mt-1 text-sm text-neutral-600">
         Upload › Automatic check › Checker 1 ({people.checker1}) ✓ › <strong>4-eye check (you)</strong> › Approval
       </p>
+      <div className="mt-1">
+        <FilesRow spec={req.specFile} proof={last.proofFile} />
+      </div>
 
       <div className="mt-3 rounded-md border border-neutral-300 bg-neutral-50 px-3 py-2 text-sm">
         Checker 1 found <strong>no real errors</strong> in this round. Your job: confirm that what was dismissed is

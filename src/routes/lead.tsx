@@ -8,6 +8,7 @@ import { ProofPlaceholder } from "@/components/app/ProofPlaceholder";
 import { EmptyState } from "@/components/app/EmptyState";
 import { StartOver } from "@/components/app/StartOver";
 import { useAfterAction } from "@/components/app/useAfterAction";
+import { FilesRow } from "@/components/app/FilesRow";
 import { SkippedOpenNote } from "@/components/app/SkippedOpenNote";
 import { useState } from "react";
 
@@ -46,6 +47,9 @@ function Lead() {
         <p className="text-sm text-neutral-600">
           {req.workId} · Round {last.no} · {s.session.checker2SignedOff ? "both checkers signed" : "Checker 1 signed"}
         </p>
+      </div>
+      <div className="mt-1">
+        <FilesRow spec={req.specFile} proof={last.proofFile} />
       </div>
 
       <SkippedOpenNote codes={last.skippedOpen} />
