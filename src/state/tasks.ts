@@ -102,10 +102,10 @@ export interface MenuItem {
   to: "/" | "/unclaimed" | "/my-tasks" | "/track-all" | "/new";
 }
 
-/** The left menu for a role. Every role has Home, My tasks and Track all work. */
+/** The left menu for a role. Every role has Home, My tasks and Track all work. Both checkers and the lead can see Unclaimed; only Checker 1 can claim. */
 export function menuOf(role: Role): MenuItem[] {
   const items: MenuItem[] = [{ label: "Home", to: "/" }];
-  if (role === "checker1") items.push({ label: "Unclaimed", to: "/unclaimed" });
+  if (role === "checker1" || role === "checker2" || role === "lead") items.push({ label: "Unclaimed", to: "/unclaimed" });
   items.push({ label: "My tasks", to: "/my-tasks" }, { label: "Track all work", to: "/track-all" });
   if (role === "requester") items.push({ label: "+ New request", to: "/new" });
   return items;

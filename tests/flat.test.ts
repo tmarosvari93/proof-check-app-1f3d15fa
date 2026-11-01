@@ -241,3 +241,16 @@ describe("a failed AI read says why", () => {
     expect(fine.readError).toBeUndefined();
   });
 });
+
+describe("a blocked request is not called a timeout", () => {
+  it("names the real cause when fetch throws a TypeError, and keeps the timeout text for a real timeout", async () => {
+    const { readFields } = await import("../src/services/readProof");
+    const mk = (err: Error) => ({ url: "https://x.test", apikey: "k", fetchImpl: (async () => { throw err; }) as unknown as typeof fetch });
+    const a = await readFields(mk(new TypeError("Load failed")), "AAA", [{ id: "F1", label: "l", value: "v" }]);
+    expect(a.ok).toBe(false);
+    if (!a.ok) expect(a.error).toMatch(/could not be reached \(TypeError: Load failed\)/);
+    const t = new Error("t"); t.name = "TimeoutError";
+    const b = await readFields(mk(t), "AAA", [{ id: "F1", label: "l", value: "v" }]);
+    if (!b.ok) expect(b.error).toBe("The reader did not answer in time");
+  });
+});

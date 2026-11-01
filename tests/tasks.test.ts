@@ -101,11 +101,11 @@ describe("who acts when", () => {
 });
 
 describe("menus and landing", () => {
-  it("every role has Home, My tasks and Track all work; only Checker 1 has Unclaimed; only the requester has New request", () => {
+  it("every role has Home, My tasks and Track all work; both checkers and the lead have Unclaimed; only the requester has New request", () => {
     for (const r of roleOrder) {
       const labels = menuOf(r).map((m) => m.label);
       expect(labels).toEqual(expect.arrayContaining(["Home", "My tasks", "Track all work"]));
-      expect(labels.includes("Unclaimed")).toBe(r === "checker1");
+      expect(labels.includes("Unclaimed")).toBe(r === "checker1" || r === "checker2" || r === "lead");
       expect(labels.includes("+ New request")).toBe(r === "requester");
     }
   });

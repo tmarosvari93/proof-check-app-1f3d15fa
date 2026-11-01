@@ -43,8 +43,12 @@ async function call(cfg: ReaderConfig, body: unknown): Promise<Raw> {
     const data = (await resp.json().catch(() => null)) as { ok?: boolean; result?: unknown; error?: string } | null;
     if (resp.ok && data?.ok && data.result !== undefined) return { ok: true, result: data.result };
     return { ok: false, error: data?.error ?? `The reader returned an error (${resp.status})` };
-  } catch {
-    return { ok: false, error: "The reader did not answer in time" };
+  } catch (e) {
+    // Say what really happened. A blocked request (CORS, function not deployed, offline) is not a timeout.
+    const name = e instanceof Error ? e.name : "";
+    if (name === "TimeoutError" || name === "AbortError") return { ok: false, error: "The reader did not answer in time" };
+    const detail = e instanceof Error && e.message ? e.message : "unknown";
+    return { ok: false, error: `The reader could not be reached (${name || "Error"}: ${detail}). Check that the read-proof function is deployed` };
   }
 }
 
