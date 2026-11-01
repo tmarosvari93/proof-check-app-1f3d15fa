@@ -140,6 +140,16 @@ function Review() {
           {readBanner.failed}
         </div>
       )}
+      {round.readError && round.readMode === "failed" && (
+        <div className="mt-2 rounded-md border border-red-300 bg-red-50 px-3 py-1.5 text-xs text-red-800">
+          Reason: {round.readError}
+        </div>
+      )}
+      {round.readError && round.readMode === "ai" && (
+        <div className="mt-2 rounded-md border border-amber-300 bg-amber-50 px-3 py-1.5 text-xs text-amber-900">
+          One AI read failed: {round.readError}. Differences between rounds may be missing.
+        </div>
+      )}
 
       <div className="mt-4 grid grid-cols-2 gap-6">
         <ProofPlaceholder className="h-[28rem]" />
