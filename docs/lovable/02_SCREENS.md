@@ -171,3 +171,16 @@ No PNG. **No logic, no filters, no sorting, no links.** Static data from `demo.t
 - Title "Track all work". Under it a grey info box with `trackAllNote`.
 - Table from `trackAllSample`: columns Work ID, Product, Piece, Partner, First proof received, First request sent, Rounds, Approved. Show an empty date (`""`) as "In progress". Sort order as in the array. Rows are not clickable.
 
+
+## Uploaded files can be opened again (Files section)
+
+The session keeps the files that were uploaded, as browser links that live until the tab is closed:
+- `session.request.specFile` `{ name, url }`: the spec Excel. May be absent (prepared demo states).
+- `round.proofFile` `{ name, url }`: the proof PDF of that round. May be absent.
+- `session.pendingSpecFile` `{ name, url }`: the spec on the New request page, before Create request.
+
+Show them where people decide, as plain links that open in a new tab (`<a href={url} target="_blank" rel="noreferrer">`; for the spec use the `download` attribute, because a browser cannot show an .xlsx):
+- Review header (under the work line): "Files: Spec {specFile.name} · Proof {proofFile.name}". Follows the Round select (each round has its own proof file).
+- Checker 2 and Lead pages: the same one-line "Files" row.
+- New request page, step 2: next to the read result, "Spec file: {name}".
+When a file link is absent, show nothing (no empty label).

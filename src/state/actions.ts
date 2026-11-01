@@ -7,7 +7,7 @@ import { applyEdits, type Edit } from "../core/sendBack";
 import type { ParsedSpec } from "../core/parseSpec";
 import { buildRoundSendBack, dismissalsOf, openCount } from "./roundLogic";
 import { ACCEPTED_CHANGE, demoRequestFields } from "./demo";
-import { emptySession, type Decision, type Round, type Session } from "./types";
+import { emptySession, type Decision, type FileRef, type Round, type Session } from "./types";
 import { isClaimed } from "./tasks";
 
 export interface Result {
@@ -45,8 +45,8 @@ export function checkProofFile(file: FileLike | null): string | undefined {
 }
 
 /** A5: the spec was read; show its fields. The request is not created yet. */
-export function setPendingSpec(s: Session, spec: ParsedSpec): Result {
-  return ok({ ...s, pendingSpec: spec, step: "new_request" });
+export function setPendingSpec(s: Session, spec: ParsedSpec, file?: FileRef): Result {
+  return ok({ ...s, pendingSpec: spec, pendingSpecFile: file ?? null, step: "new_request" });
 }
 
 /**
@@ -57,8 +57,9 @@ export function createRequest(s: Session, now: string, notes?: string): Result {
   if (!s.pendingSpec) return fail(s, "Upload the spec Excel first");
   return ok({
     ...s,
-    request: { ...demoRequestFields, ...(notes !== undefined ? { notes: notes.trim() } : {}), createdAt: now, spec: s.pendingSpec },
+    request: { ...demoRequestFields, ...(notes !== undefined ? { notes: notes.trim() } : {}), createdAt: now, spec: s.pendingSpec, ...(s.pendingSpecFile ? { specFile: s.pendingSpecFile } : {}) },
     pendingSpec: null,
+    pendingSpecFile: null,
     rounds: [],
     current: 1,
     step: "upload_proof",

@@ -113,7 +113,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         try {
           const { parseSpecWorkbook } = await import("../core/parseSpec");
           const spec = await parseSpecWorkbook(new Uint8Array(await f!.arrayBuffer()));
-          return apply((s) => A.setPendingSpec(s, spec));
+          return apply((s) => A.setPendingSpec(s, spec, { name: f!.name, url: URL.createObjectURL(f!) }));
         } catch (e) {
           return e instanceof Error && e.name === "SpecParseError" ? e.message : "This file is not a readable .xlsx workbook";
         } finally {
@@ -134,7 +134,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
             file: f!, spec: s0.request.spec, no: s0.current, fileName: f!.name,
             designerNote: (note ?? "").trim(), previous: s0.rounds[s0.current - 2],
           });
-          return apply((s) => A.addRound(s, round));
+          const withFile = { ...round, proofFile: { name: f!.name, url: URL.createObjectURL(f!) } };
+          return apply((s) => A.addRound(s, withFile));
         } catch (e) {
           return e instanceof Error ? e.message : "This file could not be checked";
         } finally {

@@ -220,3 +220,16 @@ describe("the Definition of Done story (04_RULES_AND_DOD.md, part B)", () => {
     expect(reviewItems(s.rounds[1]!).find((i) => i.code === `C${lc.length}`)!.needsDecision).toBe(true);
   });
 });
+
+describe("uploaded files are kept so they can be opened again", () => {
+  it("the spec file travels from the pending spec into the request", async () => {
+    const { emptySession } = await import("../src/state/types");
+    const { setPendingSpec, createRequest } = await import("../src/state/actions");
+    const { mockSession } = await import("../src/mocks/mockSession");
+    const spec = mockSession("r1_review").request!.spec;
+    const a = setPendingSpec(emptySession, spec, { name: "spec.xlsx", url: "blob:x" });
+    const b = createRequest(a.session, "2026-11-01T10:00:00Z");
+    expect(b.session.request?.specFile).toEqual({ name: "spec.xlsx", url: "blob:x" });
+    expect(b.session.pendingSpecFile).toBeNull();
+  });
+});

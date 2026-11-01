@@ -15,6 +15,12 @@ export type { ParsedSpec, FieldResult, CheckFinding, SendBackItem, Marker };
 /** How the proof was read. Drives the banner on the review screens. */
 export type ReadMode = "text_layer" | "ai" | "failed";
 
+/** An uploaded file the session keeps so that anybody can open it again: a browser object URL (lives until the tab closes). */
+export interface FileRef {
+  name: string;
+  url: string;
+}
+
 export interface RequestInfo {
   workId: string; // "WRK-0142" (fixed demo value)
   product: string; // "Mangós instant zabkása 400 g"
@@ -28,6 +34,8 @@ export interface RequestInfo {
   notes: string; // notes for the designer
   createdAt: string; // ISO timestamp
   spec: ParsedSpec; // the only real input on the New request screen
+  /** The spec workbook as uploaded, so it can be opened again. Absent on the prepared (jumpTo) states. */
+  specFile?: FileRef;
 }
 
 /** Change between two rounds (diff.ts, step 2). Moves and unchanged blocks are never open. */
@@ -72,6 +80,8 @@ export type Decision = CheckFinding["decision"];
 export interface Round {
   no: number; // 1, 2, 3
   fileName: string;
+  /** The proof PDF as uploaded, so a checker can open the exact file that was checked. Absent on the prepared states. */
+  proofFile?: FileRef;
   /** The designer's note typed on the upload page. */
   designerNote: string;
   readMode: ReadMode;
@@ -141,6 +151,7 @@ export interface Claim {
 export interface Session {
   /** Spec read on the New request page, before Create request is pressed. */
   pendingSpec: ParsedSpec | null;
+  pendingSpecFile?: FileRef | null;
   request: RequestInfo | null;
   rounds: Round[];
   /** The round being worked on, 1-based. */
