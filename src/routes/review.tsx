@@ -327,7 +327,7 @@ function Review() {
                                   }}
                                 >
                                   Accept change
-                                </Button>
+                                </Button></>}
                                 {dec === "real_error" && <Chip tone="red">Rejected</Chip>}
                                 {dec === "not_error" && <Chip tone="green">Accepted</Chip>}
                               </div>
@@ -379,9 +379,11 @@ function Review() {
           </p>
           {error && <p className="text-red-700">{error}</p>}
         </div>
-        <Button disabled={open > 0} onClick={() => run(() => s.finishReview())}>
-          Finish review
-        </Button>
+        {!readOnly && (
+          <Button disabled={open > 0} onClick={() => run(() => s.finishReview())}>
+            Finish review
+          </Button>
+        )}
       </div>
     </div>
   );

@@ -10,6 +10,7 @@ export function FindingRow({
   expanded,
   onToggle,
   onDecided,
+  readOnly,
 }: {
   finding: CheckFinding;
   result?: FieldResult | undefined;
@@ -17,6 +18,7 @@ export function FindingRow({
   expanded: boolean;
   onToggle: () => void;
   onDecided: () => void;
+  readOnly?: boolean;
 }) {
   return (
     <div className="border-b border-neutral-200 last:border-b-0">
@@ -62,7 +64,7 @@ export function FindingRow({
           {finding.kind === "allergen_not_emphasised" && (finding.words?.length ?? 0) > 0 && (
             <p className="mt-2 text-sm">Must be bold: {finding.words!.join(", ")}</p>
           )}
-          <DecisionButtons code={finding.code} decision={decision} onDecided={onDecided} />
+          {!readOnly && <DecisionButtons code={finding.code} decision={decision} onDecided={onDecided} />}
         </div>
       )}
     </div>
