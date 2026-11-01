@@ -10,8 +10,7 @@ import type { Step } from "@/state/types";
 import { mockNames, type MockName } from "@/mocks/mockSession";
 import { Button } from "@/components/ui/button";
 
-export type RoutePath = "/" | "/new" | "/upload" | "/review" | "/send-back" | "/checker-2" | "/lead" | "/track-all";
-// "/unclaimed" and "/my-tasks" come next; cast until their route files exist.
+export type RoutePath = "/" | "/new" | "/upload" | "/review" | "/send-back" | "/checker-2" | "/lead" | "/track-all" | "/unclaimed" | "/my-tasks";
 export const stepTo = (step: Step): RoutePath => stepPath[step] as RoutePath;
 
 const stepName = (step: Step, current: number): string => {
@@ -105,7 +104,10 @@ export function AppLayout({ children }: { children: ReactNode }) {
             <p className="mt-1 text-neutral-600">
               You are at: {stepName(s.session.step, s.session.current)}
             </p>
-            <Link to={stepTo(s.session.step)} className="mt-1 inline-block underline">
+            <Link
+              to={s.session.step === "review" && !s.claimed ? "/unclaimed" : stepTo(s.session.step)}
+              className="mt-1 inline-block underline"
+            >
               Continue
             </Link>
           </div>
