@@ -135,7 +135,7 @@ export function addManualLine(s: Session, text: string): Result {
   const r = cur(s);
   if (!r) return fail(s, "No round");
   // Checker 1 on the send-back list, and Checker 2 on the 4-eye check page.
-  if (s.step !== "send_back" && s.step !== "checker2") return fail(s, "Comments can be added on the send-back list or the 4-eye check");
+  if (s.step !== "send_back" && s.step !== "checker2" && s.step !== "lead") return fail(s, "Comments can be added on the send-back list, the 4-eye check or the final approval");
   if (!text.trim()) return fail(s, "Write the line first");
   const n = r.sendBack.filter((i) => i.code.startsWith("M")).length + 1;
   return ok(withCur(s, (x) => ({ ...x, sendBack: [...x.sendBack, { code: `M${n}`, text: text.trim() }] })));
@@ -160,6 +160,21 @@ export function checker2SignOff(s: Session, now: string): Result {
   const missing = dismissalsOf(s.rounds).filter((d) => !s.checker2Agreed[d.key]);
   if (missing.length) return fail(s, `Agree with ${missing.length} dismissed item${missing.length === 1 ? "" : "s"} first`);
   return ok({ ...s, checker2SignedOff: true, checker2SignedAt: now, step: "lead" });
+}
+
+/**
+ * The food-safety lead does not approve: the note goes to the designer as a line of its own (code M#), the sign-offs
+ * are cleared and the next round starts. A note is required.
+ */
+export function leadSendBack(s: Session, note: string): Result {
+  if (s.step !== "lead") return fail(s, "There is nothing waiting for the lead");
+  const text = note.trim();
+  if (!text) return fail(s, "Write the reason first");
+  const added = addManualLine(s, text);
+  if (added.error) return added;
+  const { checker2SignedAt: _at, ...rest } = added.session;
+  void _at;
+  return ok({ ...rest, checker2SignedOff: false, current: s.current + 1, step: "upload_proof" });
 }
 
 export function approve(s: Session, now: string): Result {

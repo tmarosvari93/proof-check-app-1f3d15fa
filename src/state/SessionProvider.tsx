@@ -56,6 +56,8 @@ export interface SessionApi {
   claimProof(): Err;
   decide(code: string, decision: Decision, reason?: string): Err;
   /** anyway: finish with items still open. They are not sent to the designer and Checker 2 sees them (round.skippedOpen). */
+  /** The lead sends the proof back with a required note; it becomes a line for the designer and round {n+1} starts. */
+  leadSendBack(note: string): Err;
   finishReview(opts?: { anyway?: boolean }): Err;
   backToReview(): Err;
   editSendBack(edits: Edit[]): Err;
@@ -152,6 +154,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       sendToDesigner: () => apply(A.sendToDesigner),
       checker2Agree: (k, a) => apply((s) => A.checker2Agree(s, k, a)),
       checker2SignOff: () => apply((s) => A.checker2SignOff(s, now())),
+      leadSendBack: (note) => apply((s) => A.leadSendBack(s, note)),
       approve: () => apply((s) => A.approve(s, now())),
       startOver: () => void apply(() => A.startOver()),
       jumpTo: (n) => void apply(() => ({ session: mockSession(n) })),

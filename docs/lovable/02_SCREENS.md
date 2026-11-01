@@ -205,3 +205,10 @@ Checker 2 can write their own lines for the designer, like Checker 1 on the send
 - **Send back to designer** is enabled when `round.sendBack.length > 0` (title when disabled: "Add a comment first"). It calls `sendToDesigner()` and goes to `/upload`. The explanation line becomes: "Add a comment and send back, or sign off to pass to approval."
 - **Sign off and pass to approval** stays as it is. If comments were added, show under the buttons: "You added {n} comment(s). Signing off will not send them. Send back to designer to use them." (Both buttons stay available; this is a warning, not a block.)
 - **Disagree: real error** stays disabled (not built).
+
+## Lead can send back with a reason (/lead)
+
+- The Note box is a normal, editable textarea (controlled; remove `disabled` and the "Not built" title). Label stays "Note (required when sending back)".
+- **Send back with a reason** is enabled (no title). It calls `leadSendBack(note)`, shows the returned error if there is one (for example "Write the reason first"), and on success goes to `/upload` (round {n+1}). The note becomes a line for the designer, so it shows on the next round's send-back history like any other line.
+- **Approve** stays as it is and ignores the note.
+- Footer sentence: "Approving closes the request. Sending back starts the next round with your note."

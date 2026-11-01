@@ -268,6 +268,27 @@ describe("Checker 2 can send back with their own comments", () => {
   it("is refused on other steps", async () => {
     const { mockSession } = await import("../src/mocks/mockSession");
     const { addManualLine } = await import("../src/state/actions");
-    expect(addManualLine(mockSession("r1_review"), "x").error).toMatch(/send-back list or the 4-eye/);
+    expect(addManualLine(mockSession("r1_review"), "x").error).toMatch(/send-back list, the 4-eye check or the final approval/);
+  });
+});
+
+describe("the lead can send back with a reason", () => {
+  it("needs a note, adds it as a line, clears the sign-off and starts the next round", async () => {
+    const { mockSession } = await import("../src/mocks/mockSession");
+    const { leadSendBack, approve } = await import("../src/state/actions");
+    const s = mockSession("lead");
+    expect(leadSendBack(s, "   ").error).toMatch(/reason/);
+    const r = leadSendBack(s, "Allergen line must be bolder");
+    expect(r.error).toBeUndefined();
+    expect(r.session.step).toBe("upload_proof");
+    expect(r.session.current).toBe(s.current + 1);
+    expect(r.session.checker2SignedOff).toBe(false);
+    expect(r.session.rounds[s.current - 1].sendBack.some((i) => i.text === "Allergen line must be bolder")).toBe(true);
+    expect(approve(r.session, "2026-11-01T10:00:00Z").error).toMatch(/not signed off/);
+  });
+  it("is refused when it is not the lead's turn", async () => {
+    const { mockSession } = await import("../src/mocks/mockSession");
+    const { leadSendBack } = await import("../src/state/actions");
+    expect(leadSendBack(mockSession("checker2"), "x").error).toMatch(/nothing waiting/);
   });
 });
