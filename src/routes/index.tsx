@@ -18,8 +18,8 @@ export const Route = createFileRoute("/")({
 });
 
 const cards: { title: string; text: string; to: RoutePath }[] = [
-  { title: "Unclaimed", text: "New work waiting for a checker. Claim one and it opens.", to: "/unclaimed" },
-  { title: "My tasks", text: "What you claimed, handed on, finished or requested.", to: "/my-tasks" },
+  { title: "Unclaimed", text: "New work waiting for a checker. Claim one and it opens.", to: "/unclaimed" as RoutePath },
+  { title: "My tasks", text: "What you claimed, handed on, finished or requested.", to: "/my-tasks" as RoutePath },
   { title: "Track all work", text: "What everyone is working on, and the approved proofs.", to: "/track-all" },
   { title: "+ New request", text: "Start a check for a packaging piece.", to: "/new" },
 ];
