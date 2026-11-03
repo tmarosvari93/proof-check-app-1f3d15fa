@@ -4,7 +4,7 @@ A prototype for a food manufacturer's quality team: it checks packaging artwork 
 
 Built for Adroit Group's AI Product Builder assignment, Task 02, from a real discovery call. **The client is anonymised and all product data here is fictional.**
 
-- **Live demo:** LIVE_URL_TASK02 (no login, nothing to install)
+- **Live demo:** https://design-review-nest.lovable.app (no login, nothing to install)
 - **Demo files:** download `demo_files.zip` from the home page, or from `public/demo/` in this repo
 
 ## Try it in five minutes
